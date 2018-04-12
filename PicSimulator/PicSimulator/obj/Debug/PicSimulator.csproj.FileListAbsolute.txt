@@ -1,0 +1,9 @@
+D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\bin\Debug\PicSimulator.exe.config
+D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\bin\Debug\PicSimulator.exe
+D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\bin\Debug\PicSimulator.pdb
+D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.csprojResolveAssemblyReference.cache
+D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.Properties.Resources.resources
+D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.csproj.GenerateResource.Cache
+D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.exe
+D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.pdb
+D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.UI.PicSimulatorForm.resources
