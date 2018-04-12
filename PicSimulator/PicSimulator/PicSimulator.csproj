@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Microcontroller\OperationsEnum.cs" />
     <Compile Include="Parser\LstParser.cs" />
     <Compile Include="UI\PicSimulatorForm.cs">
       <SubType>Form</SubType>
@@ -79,8 +80,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Microcontroller\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

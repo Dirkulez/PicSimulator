@@ -9,9 +9,12 @@ namespace PicSimulator.Parser
 {
     public class LstParser
     {
+        #region Fields
         private List<string> _lstContent;
-        private bool _initialized;
+        private List<string> _operationCodes;
+        #endregion
 
+        #region Properties
         public List<string> LstContent
         {
             get { return _lstContent; }
@@ -24,6 +27,20 @@ namespace PicSimulator.Parser
             }
         }
 
+        public List<string> OperationCodes
+        {
+            get { return _operationCodes; }
+            set
+            {
+                if(value != _operationCodes)
+                {
+                    _operationCodes = value;
+                }
+            }
+        }
+        #endregion
+
+        #region Constructor
         public LstParser()
         {
             //nop
@@ -33,15 +50,31 @@ namespace PicSimulator.Parser
         {
             InitLstContent(lstStream);
         }
+        #endregion
 
+        #region Methods
         public void InitLstContent(StreamReader lstStream)
         {
-            _lstContent = new List<string>();
+            LstContent = new List<string>();
             while (!lstStream.EndOfStream)
             {
-                _lstContent.Add(lstStream.ReadLine());
+                LstContent.Add(lstStream.ReadLine());
             }
-            _initialized = true;
+
+            ParseLstContentToOperationCodes();
         }
+
+        private void ParseLstContentToOperationCodes()
+        {
+            OperationCodes = new List<string>();
+            foreach(var line in LstContent)
+            {
+                if(!line.StartsWith(" "))
+                {
+                    OperationCodes.Add(line.Substring(5, 4));
+                }
+            }
+        }
+        #endregion
     }
 }
