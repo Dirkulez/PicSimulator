@@ -33,11 +33,11 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ausführenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LstContentBox = new System.Windows.Forms.CheckedListBox();
-            this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.ausführenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -79,6 +79,21 @@
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.exitToolStripMenuItem.Text = "E&xit";
             // 
+            // executeToolStripMenuItem
+            // 
+            this.executeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ausführenToolStripMenuItem});
+            this.executeToolStripMenuItem.Name = "executeToolStripMenuItem";
+            this.executeToolStripMenuItem.Size = new System.Drawing.Size(93, 24);
+            this.executeToolStripMenuItem.Text = "Bearbeiten";
+            // 
+            // ausführenToolStripMenuItem
+            // 
+            this.ausführenToolStripMenuItem.Name = "ausführenToolStripMenuItem";
+            this.ausführenToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
+            this.ausführenToolStripMenuItem.Text = "Ausführen";
+            this.ausführenToolStripMenuItem.Click += new System.EventHandler(this.executeToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -100,21 +115,6 @@
             this.LstContentBox.Name = "LstContentBox";
             this.LstContentBox.Size = new System.Drawing.Size(831, 480);
             this.LstContentBox.TabIndex = 1;
-            // 
-            // executeToolStripMenuItem
-            // 
-            this.executeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ausführenToolStripMenuItem});
-            this.executeToolStripMenuItem.Name = "executeToolStripMenuItem";
-            this.executeToolStripMenuItem.Size = new System.Drawing.Size(93, 24);
-            this.executeToolStripMenuItem.Text = "Bearbeiten";
-            // 
-            // ausführenToolStripMenuItem
-            // 
-            this.ausführenToolStripMenuItem.Name = "ausführenToolStripMenuItem";
-            this.ausführenToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.ausführenToolStripMenuItem.Text = "Ausführen";
-            this.ausführenToolStripMenuItem.Click += new System.EventHandler(this.executeToolStripMenuItem_Click);
             // 
             // PicSimulatorForm
             // 
