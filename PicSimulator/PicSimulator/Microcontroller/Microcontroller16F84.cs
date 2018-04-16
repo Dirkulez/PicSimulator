@@ -8,18 +8,43 @@ namespace PicSimulator.Microcontroller
 {
     public class Microcontroller16F84
     {
-        private Dictionary<int, int> _operations;
+        private Dictionary<int, int> _operationStack;
         private Dictionary<byte, Register> _registerAdressTable;
         private Register _workingRegister;
+        private ulong _cycle = 0;
+
+        public int ProgramCounter
+        {
+            get { return _registerAdressTable[2].Content; }
+        }
 
         public Microcontroller16F84(IEnumerable<string> operations)
         {
             InitRegisters();
+            InitOperations(operations);
         }
 
         public void ExecuteOperation(int binaryOperationCode)
         {
-            var operationToExecute = OperationDecoder.DecodeOperation(binaryOperationCode);
+            var operationToExeute = _operationStack[ProgramCounter];
+            var operationEnum = OperationDecoder.DecodeOperation(operationToExeute);
+            var destinationSelect = OperationDecoder.DecodeDestinationSelect(operationToExeute);
+            var literal8Bit = OperationDecoder.Decode8BitLiteral(operationToExeute);
+            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit);
+            _cycle++;
+        }
+
+        private void ExecuteOperationInt(OperationsEnum operationToExecute, int destinationSelect, int literal8Bit)
+        {
+            if(operationToExecute == OperationsEnum.MOVLW)
+            {
+                ExecuteMOVLW(literal8Bit);
+            }
+        }
+
+        private void ExecuteMOVLW(int literal8Bit)
+        {
+            _workingRegister.Content = literal8Bit;
         }
 
         private void InitRegisters()
@@ -47,9 +72,10 @@ namespace PicSimulator.Microcontroller
 
         private void InitOperations(IEnumerable<string> operations)
         {
+            _operationStack = new Dictionary<int, int>(operations.Count());
             foreach(var operation in operations)
             {
-                _operations.Add(
+                _operationStack.Add(
                     Int32.Parse(operation.Substring(0, 4), System.Globalization.NumberStyles.HexNumber),
                     Int32.Parse(operation.Substring(5, 4), System.Globalization.NumberStyles.HexNumber));
             }

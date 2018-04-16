@@ -48,6 +48,7 @@
     <Compile Include="Microcontroller\Microcontroller16F84.cs" />
     <Compile Include="Microcontroller\OperationDecoder.cs" />
     <Compile Include="Microcontroller\OperationsEnum.cs" />
+    <Compile Include="Microcontroller\Register.cs" />
     <Compile Include="Parser\LstParser.cs" />
     <Compile Include="UI\PicSimulatorForm.cs">
       <SubType>Form</SubType>

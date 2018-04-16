@@ -43,12 +43,12 @@ namespace PicSimulator.UI
                 }
             }
 
-            _microController = new Microcontroller16F84()
+            _microController = new Microcontroller16F84(_lstParser.OperationCodes);
         }
 
         private void executeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            
+            _microController.ExecuteOperation(0);
         }
     }
 }

@@ -33,5 +33,26 @@ namespace PicSimulator.Microcontroller
 
             return OperationsEnum.UNKNOWN;
         }
+
+        public static int DecodeDestinationSelect(int binaryOperationCode)
+        {
+            var mask = 128;
+            var maskedCode = mask & binaryOperationCode;
+            if (maskedCode != 0)
+            {
+                return 1;
+            }
+            else
+            {
+                return 0;
+            }
+        }
+
+        public static int Decode8BitLiteral(int binaryOperationCode)
+        {
+            var mask = 255;
+            var maskedCode = mask & binaryOperationCode;
+            return maskedCode;
+        }
     }
 }
