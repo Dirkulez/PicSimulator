@@ -8,18 +8,18 @@ namespace PicSimulator.Microcontroller
 {
     public class Microcontroller16F84
     {
+        private Dictionary<int, int> _operations;
         private Dictionary<byte, Register> _registerAdressTable;
         private Register _workingRegister;
 
-        public Microcontroller16F84()
+        public Microcontroller16F84(IEnumerable<string> operations)
         {
             InitRegisters();
         }
 
-        public void ExecuteOperation(string binaryOperationCode)
+        public void ExecuteOperation(int binaryOperationCode)
         {
             var operationToExecute = OperationDecoder.DecodeOperation(binaryOperationCode);
-
         }
 
         private void InitRegisters()
@@ -43,6 +43,16 @@ namespace PicSimulator.Microcontroller
             _registerAdressTable.Add(137, new Register(0, "EECON2"));
 
             _workingRegister = new Register(0, "W");
+        }
+
+        private void InitOperations(IEnumerable<string> operations)
+        {
+            foreach(var operation in operations)
+            {
+                _operations.Add(
+                    Int32.Parse(operation.Substring(0, 4), System.Globalization.NumberStyles.HexNumber),
+                    Int32.Parse(operation.Substring(5, 4), System.Globalization.NumberStyles.HexNumber));
+            }
         }
     }
 }

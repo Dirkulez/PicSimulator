@@ -71,7 +71,7 @@ namespace PicSimulator.Parser
             {
                 if(!line.StartsWith(" "))
                 {
-                    OperationCodes.Add(line.Substring(5, 4));
+                    OperationCodes.Add(line.Substring(0, 9));
                 }
             }
         }

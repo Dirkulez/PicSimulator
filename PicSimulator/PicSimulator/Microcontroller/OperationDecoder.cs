@@ -8,7 +8,7 @@ namespace PicSimulator.Microcontroller
 {
     public static class OperationDecoder
     {
-        public static OperationsEnum DecodeOperation(string binaryOperationCode)
+        public static OperationsEnum DecodeOperation(int binaryOperationCode)
         {
             return OperationsEnum.UNKNOWN;
         }
