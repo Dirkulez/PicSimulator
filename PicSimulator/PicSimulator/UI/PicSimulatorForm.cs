@@ -1,4 +1,5 @@
-﻿using PicSimulator.Parser;
+﻿using PicSimulator.Microcontroller;
+using PicSimulator.Parser;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,6 +15,8 @@ namespace PicSimulator.UI
     public partial class PicSimulatorForm : Form
     {
         private LstParser _lstParser = new LstParser();
+        private Microcontroller16F84 _microController = new Microcontroller16F84();
+        private int _currentLine = 0;
 
         public PicSimulatorForm()
         {
@@ -40,6 +43,11 @@ namespace PicSimulator.UI
                     LstContentBox.Items.Add(line);
                 }
             }
+        }
+
+        private void executeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

@@ -8,6 +8,8 @@ namespace PicSimulator.Microcontroller
 {
     public enum OperationsEnum
     {
+        UNKNOWN = 0,
+
         //BYTE-ORIENTED FILE REGISTER OPERATIONS
         ADDWF = 1,
         ANDWF = 2,
