@@ -1,27 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace PicSimulator.Microcontroller
 {
-    public class Microcontroller16F84
+    public class Microcontroller16F84: INotifyPropertyChanged
     {
+        #region Fields
         private Dictionary<int, int> _operationStack;
         private Dictionary<byte, Register> _registerAdressTable;
         private Register _workingRegister;
         private ulong _cycle = 0;
+        #endregion
 
+        #region Events
+        public event PropertyChangedEventHandler PropertyChanged;
+        #endregion
+
+        #region Properties
         public int ProgramCounter
         {
             get { return _registerAdressTable[2].Content; }
         }
 
+        public int WorkingRegisterContent
+        {
+            get { return _workingRegister.Content; }
+            private set
+            {
+                if(value != _workingRegister.Content)
+                {
+                    _workingRegister.Content = value;
+                    InvokePropertyChanged(new PropertyChangedEventArgs(nameof(WorkingRegisterContent)));
+                }
+            }
+        }
+        #endregion
+
+        #region Constructor
         public Microcontroller16F84(IEnumerable<string> operations)
         {
             InitRegisters();
             InitOperations(operations);
+        }
+        #endregion
+
+        #region Methods
+
+        public void InvokePropertyChanged(PropertyChangedEventArgs e)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null) handler(this, e);
         }
 
         public void ExecuteOperation(int binaryOperationCode)
@@ -44,7 +76,7 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteMOVLW(int literal8Bit)
         {
-            _workingRegister.Content = literal8Bit;
+            WorkingRegisterContent = literal8Bit;
         }
 
         private void InitRegisters()
@@ -80,5 +112,6 @@ namespace PicSimulator.Microcontroller
                     Int32.Parse(operation.Substring(5, 4), System.Globalization.NumberStyles.HexNumber));
             }
         }
+        #endregion
     }
 }

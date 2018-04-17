@@ -44,6 +44,8 @@ namespace PicSimulator.UI
             }
 
             _microController = new Microcontroller16F84(_lstParser.OperationCodes);
+            wregTextBox.DataBindings.Add(nameof(wregTextBox.Text), _microController, nameof(_microController.WorkingRegisterContent),
+                false, DataSourceUpdateMode.OnPropertyChanged);
         }
 
         private void executeToolStripMenuItem_Click(object sender, EventArgs e)
