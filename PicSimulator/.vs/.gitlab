@@ -1,0 +1,13 @@
+{
+  "User": {
+    "Id": 2207007,
+    "Username": "Dirkulez",
+    "Name": "Dirk Watteroth",
+    "Email": "dirk.watteroth@googlemail.com",
+    "AvatarUrl": "https://secure.gravatar.com/avatar/87f589f0401033560e66990d63d4959d?s=80&d=identicon",
+    "PrivateToken": "b259a7f40f619a9b5bf544948cffad27b2cdedd7069098a27492be6e4affb0fd",
+    "Host": "https://gitlab.com",
+    "TwoFactorEnabled": false,
+    "ApiVersion": 3
+  }
+}

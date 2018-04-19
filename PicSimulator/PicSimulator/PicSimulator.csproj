@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helper\BinaryCalculations.cs" />
     <Compile Include="Microcontroller\Microcontroller16F84.cs" />
     <Compile Include="Microcontroller\OperationDecoder.cs" />
     <Compile Include="Microcontroller\OperationsEnum.cs" />
