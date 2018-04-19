@@ -13,7 +13,7 @@ namespace PicSimulator.Microcontroller
     {
         #region Fields
         private Dictionary<int, int> _operationStack;
-        private Dictionary<int, Register> _registerAdressTable;
+        private Dictionary<byte, Register> _registerAdressTable;
         private Dictionary<byte, Register> _stackAddressTable;
         private Register _workingRegister;
         private Register _programCounter;
@@ -22,7 +22,7 @@ namespace PicSimulator.Microcontroller
         private ulong _cycle = 0;
         private bool _stopExecution;
         private SynchronizationContext _syncContext;
-        private byte _stackPointer;
+        private byte _stackPointer = 0;
         #endregion
 
         #region Events
@@ -161,11 +161,10 @@ namespace PicSimulator.Microcontroller
             var destinationSelect = OperationDecoder.DecodeDestinationSelect(operationToExeute);
             var literal8Bit = OperationDecoder.Decode8BitLiteral(operationToExeute);
             var literal11Bit = OperationDecoder.Decode11BitLiteral(operationToExeute);
-            var FileRegisterAdress7Bit = OperationDecoder.DecodeFileRegisterAdress7Bit(operationToExeute);
-            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit,FileRegisterAdress7Bit);
+            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit);
         }
 
-        private void ExecuteOperationInt(OperationsEnum operationToExecute, int destinationSelect, int literal8Bit, int literal11Bit, int FileRegisterAdress7Bit)
+        private void ExecuteOperationInt(OperationsEnum operationToExecute, int destinationSelect, int literal8Bit, int literal11Bit)
         {
             if(operationToExecute == OperationsEnum.MOVLW)
             {
@@ -209,108 +208,61 @@ namespace PicSimulator.Microcontroller
                 ExecuteRETLW(literal8Bit);
             }
 
-            else if (operationToExecute == OperationsEnum.MOVWF)
+            else if (operationToExecute == OperationsEnum.RETURN)
             {
-                ExecuteMOVWF(FileRegisterAdress7Bit);
+                ExecuteRETURN();
             }
 
-            else if (operationToExecute == OperationsEnum.ADDWF)
-            {
-                ExecuteADDWF(FileRegisterAdress7Bit, destinationSelect);
-            }
+            //else if (operationToExecute == OperationsEnum.MOVWF)
+            //{
+            //    ExecuteMOVWF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.CLRF)
-            {
-                ExecuteCLRF(FileRegisterAdress7Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.ADDWF)
+            //{
+            //    ExecuteADDWF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.INCF)
-            {
-                ExecuteINCF(FileRegisterAdress7Bit, destinationSelect);
-            }
+            //else if (operationToExecute == OperationsEnum.CLRF)
+            //{
+            //    ExecuteCLRF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.MOVF)
-            {
-                ExecuteMOVF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.INCF)
+            //{
+            //    ExecuteINCF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.IORWF)
-            {
-                ExecuteIORWF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.MOVF)
+            //{
+            //    ExecuteMOVF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.SUBWF)
-            {
-                ExecuteSUBWF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.IORWF)
+            //{
+            //    ExecuteIORWF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.SWAPF)
-            {
-                ExecuteSWAPF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.SUBWF)
+            //{
+            //    ExecuteSUBWF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.XORWF)
-            {
-                ExecuteXORWF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.SWAPF)
+            //{
+            //    ExecuteSWAPF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.CLRW)
-            {
-                ExecuteCLRW(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.XORWF)
+            //{
+            //    ExecuteXORWF(literal8Bit);
+            //}
 
-        }
+            //else if (operationToExecute == OperationsEnum.CLRW)
+            //{
+            //    ExecuteCLRW(literal8Bit);
+            //}
 
-        private void ExecuteINCF(int FileRegisterAdress7Bit, int destinationSelect)
-        {
-
-            var contentF = _registerAdressTable[FileRegisterAdress7Bit].Content;
-
-            if (destinationSelect == 0)
-            {
-                WorkingRegisterContent = contentF++;
-            }
-            else
-            {
-                _registerAdressTable[FileRegisterAdress7Bit].Content = contentF++;
-            }
-            CheckWorkingRegisterForZero();
-            Cycle++;
-            ProgramCounterContent++;
-        }
-
-        private void ExecuteCLRF(int FileRegisterAdress7Bit)
-        {
-            _registerAdressTable[FileRegisterAdress7Bit].Content = 0;
-            SetZeroBitTo1();
-
-        }
-
-        private void ExecuteADDWF(int FileRegisterAdress7Bit, int destinationSelect)
-        {
-            var setDC = false;
-            var setC = false;
-            var contentF = _registerAdressTable[FileRegisterAdress7Bit].Content;
-
-            if (destinationSelect == 0)
-            {
-                WorkingRegisterContent = BinaryCalculations.BinaryAddition(contentF, WorkingRegisterContent, ref setDC, ref setC);
-            }
-            else
-            {
-                _registerAdressTable[FileRegisterAdress7Bit].Content = BinaryCalculations.BinaryAddition(contentF, WorkingRegisterContent, ref setDC, ref setC);
-            }
-                CheckWorkingRegisterForZero();
-            SetCarryFlags(setDC, setC);
-            Cycle++;
-            ProgramCounterContent++;
-        }
-
-            private void ExecuteMOVWF(int FileRegisterAdress7Bit)
-        {
-            _registerAdressTable[FileRegisterAdress7Bit].Content = WorkingRegisterContent;
-            Cycle++;
-            ProgramCounterContent++;
         }
 
         private void ExecuteCALL(int literal11Bit)
@@ -320,6 +272,7 @@ namespace PicSimulator.Microcontroller
               eleven bit immediate address is loaded
               into PC bits<10:0 >.The upper bits of
              the PC are loaded from PCLATH.*/
+            PushToStack(ProgramCounterContent+1);
             var pclathValue = PclathRegisterContent & 24;
             pclathValue = pclathValue << 8;
             ProgramCounterContent = literal11Bit + pclathValue;
@@ -337,16 +290,21 @@ namespace PicSimulator.Microcontroller
         private void ExecuteRETLW(int literal8Bit)
         {
             //program counter is loaded from the top of the stack
+            //8bitliteral is stored in w_reg
             WorkingRegisterContent = literal8Bit;
-            CheckWorkingRegisterForZero();
             Cycle+= 2;
-            ProgramCounterContent++;
+            ProgramCounterContent = PopFromStack();
+        }
+
+        private void ExecuteRETURN()
+        {
+            Cycle += 2;
+            ProgramCounterContent = PopFromStack();
         }
 
         private void ExecuteMOVLW(int literal8Bit)
         {
             WorkingRegisterContent = literal8Bit;
-            CheckWorkingRegisterForZero();
             Cycle++;
             ProgramCounterContent++;
         }
