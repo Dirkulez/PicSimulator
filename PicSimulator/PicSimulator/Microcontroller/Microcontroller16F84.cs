@@ -133,6 +133,7 @@ namespace PicSimulator.Microcontroller
             _syncContext = synchronzationContext ?? new SynchronizationContext();
             InitRegisters();
             InitOperations(operations);
+            InitStack();
         }
         #endregion
 
@@ -495,6 +496,19 @@ namespace PicSimulator.Microcontroller
             }
 
             return topOfStack;
+        }
+
+        private void InitStack()
+        {
+            _stackAddressTable = new Dictionary<byte, Register>();
+            _stackAddressTable.Add(0, new Register(0, "STACK0"));
+            _stackAddressTable.Add(1, new Register(0, "STACK1"));
+            _stackAddressTable.Add(2, new Register(0, "STACK2"));
+            _stackAddressTable.Add(3, new Register(0, "STACK3"));
+            _stackAddressTable.Add(4, new Register(0, "STACK4"));
+            _stackAddressTable.Add(5, new Register(0, "STACK5"));
+            _stackAddressTable.Add(6, new Register(0, "STACK6"));
+            _stackAddressTable.Add(7, new Register(0, "STACK7"));
         }
         #endregion
     }
