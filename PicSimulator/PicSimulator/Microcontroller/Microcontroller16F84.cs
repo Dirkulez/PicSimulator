@@ -16,6 +16,7 @@ namespace PicSimulator.Microcontroller
         private Register _workingRegister;
         private Register _programCounter;
         private Register _statusRegister;
+        private Register _pclathRegister;
         private ulong _cycle = 0;
         #endregion
 
@@ -67,6 +68,19 @@ namespace PicSimulator.Microcontroller
             }
         }
 
+        public int PclathRegisterContent
+        {
+            get { return _pclathRegister.Content; }
+            set
+            {
+                if(value != _pclathRegister.Content)
+                {
+                    _pclathRegister.Content = value;
+                    InvokePropertyChanged(new PropertyChangedEventArgs(nameof(PclathRegisterContent)));
+                }
+            }
+        }
+
         public int ZeroBit
         {
             get { return (StatusRegisterContent & 4) == 4 ? 1 : 0; }
@@ -106,11 +120,11 @@ namespace PicSimulator.Microcontroller
             var operationEnum = OperationDecoder.DecodeOperation(operationToExeute);
             var destinationSelect = OperationDecoder.DecodeDestinationSelect(operationToExeute);
             var literal8Bit = OperationDecoder.Decode8BitLiteral(operationToExeute);
-            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit);
-            
+            var literal11Bit = OperationDecoder.Decode11BitLiteral(operationToExeute);
+            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit);
         }
 
-        private void ExecuteOperationInt(OperationsEnum operationToExecute, int destinationSelect, int literal8Bit)
+        private void ExecuteOperationInt(OperationsEnum operationToExecute, int destinationSelect, int literal8Bit, int literal11Bit)
         {
             if(operationToExecute == OperationsEnum.MOVLW)
             {
@@ -127,6 +141,18 @@ namespace PicSimulator.Microcontroller
             else if(operationToExecute == OperationsEnum.SUBLW)
             {
                 ExecuteSUBLW(literal8Bit);
+            }
+            else if(operationToExecute == OperationsEnum.XORLW)
+            {
+                ExecuteXORLW(literal8Bit);
+            }
+            else if(operationToExecute == OperationsEnum.ADDLW)
+            {
+                ExecuteADDLW(literal8Bit);
+            }
+            else if(operationToExecute == OperationsEnum.GOTO)
+            {
+                ExecuteGOTO(literal11Bit);
             }
         }
 
@@ -156,13 +182,59 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteSUBLW(int literal8Bit)
         {
-            //TODO: implement subtraction: WorkingRegister = literal8Bit - WorkingRegister : think of negative result and zero flag
+
             var complement2OfWorkingReg = BinaryCalculations.Build2ndComplement(WorkingRegisterContent);
             var setC = false;
             var setDC = false;
             WorkingRegisterContent = BinaryCalculations.BinaryAddition(literal8Bit, complement2OfWorkingReg, ref setDC, ref setC);
             CheckWorkingRegisterForZero();
+            SetCarryFlags(setDC, setC);
 
+            _cycle++;
+            ProgramCounterContent++;
+        }
+
+        private void ExecuteXORLW(int literal8Bit){
+
+            WorkingRegisterContent = WorkingRegisterContent ^ literal8Bit;
+            CheckWorkingRegisterForZero();
+            _cycle++;
+            ProgramCounterContent++;
+        }
+
+        private void ExecuteADDLW(int literal8Bit)
+        {
+            var setDC = false;
+            var setC = false;
+            WorkingRegisterContent = BinaryCalculations.BinaryAddition(literal8Bit, WorkingRegisterContent, ref setDC, ref setC);
+            CheckWorkingRegisterForZero();
+            SetCarryFlags(setDC, setC);
+            _cycle++;
+            ProgramCounterContent++;
+        }
+
+        private void ExecuteGOTO(int literal11Bit)
+        {
+            var pclathValue = PclathRegisterContent & 24;
+            pclathValue = pclathValue << 8;
+            ProgramCounterContent = literal11Bit + pclathValue;
+            _cycle += 2;
+        }
+
+        private void CheckWorkingRegisterForZero()
+        {
+            if (WorkingRegisterContent == 0)
+            {
+                SetZeroBitTo1();
+            }
+            else
+            {
+                SetZeroBitTo0();
+            }
+        }
+
+        private void SetCarryFlags(bool setDC, bool setC)
+        {
             if (setC)
             {
                 SetCBitTo1();
@@ -180,21 +252,6 @@ namespace PicSimulator.Microcontroller
             {
                 SetDCBitTo0();
             }
-
-            _cycle++;
-            ProgramCounterContent++;
-        }
-
-        private void CheckWorkingRegisterForZero()
-        {
-            if (WorkingRegisterContent == 0)
-            {
-                SetZeroBitTo1();
-            }
-            else
-            {
-                SetZeroBitTo0();
-            }
         }
 
         private void InitRegisters()
@@ -202,6 +259,7 @@ namespace PicSimulator.Microcontroller
             _programCounter = new Register(0, "PC");
             _statusRegister = new Register(24, "STATUS");
             _workingRegister = new Register(0, "W");
+            _pclathRegister = new Register(0, "PCLATH");
 
             _registerAdressTable = new Dictionary<byte, Register>();
             _registerAdressTable.Add(0, new Register(0,"INDF"));
@@ -213,7 +271,7 @@ namespace PicSimulator.Microcontroller
             _registerAdressTable.Add(6, new Register(0, "PORTB"));
             _registerAdressTable.Add(8, new Register(0, "EEDATA"));
             _registerAdressTable.Add(9, new Register(0, "EEADR"));
-            _registerAdressTable.Add(10, new Register(0, "PCLATH"));
+            _registerAdressTable.Add(10, _pclathRegister);
             _registerAdressTable.Add(11, new Register(0, "INTCON"));
             _registerAdressTable.Add(129, new Register(255, "OPTION_REG"));
             _registerAdressTable.Add(133, new Register(31, "TRISA"));

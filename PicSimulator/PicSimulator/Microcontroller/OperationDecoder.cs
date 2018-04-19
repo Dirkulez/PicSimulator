@@ -183,8 +183,15 @@ namespace PicSimulator.Microcontroller
         public static int Decode8BitLiteral(int binaryOperationCode)
         {
             var mask = 255;
-            var maskedCode = mask & binaryOperationCode;
-            return maskedCode;
+            return ( mask & binaryOperationCode);
+
+        }
+
+        public static int Decode11BitLiteral(int binaryOperationCode)
+        {
+            var mask = 2047;
+            return (mask & binaryOperationCode);
+
         }
     }
 }
