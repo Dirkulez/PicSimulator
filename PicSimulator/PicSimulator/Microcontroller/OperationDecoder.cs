@@ -10,7 +10,7 @@ namespace PicSimulator.Microcontroller
     {
         public static OperationsEnum DecodeOperation(int binaryOperationCode)
         {
-            if(binaryOperationCode == 0)
+            if (binaryOperationCode == 0)
             {
                 return OperationsEnum.NOP;
             }
@@ -183,7 +183,7 @@ namespace PicSimulator.Microcontroller
         public static int Decode8BitLiteral(int binaryOperationCode)
         {
             var mask = 255;
-            return ( mask & binaryOperationCode);
+            return (mask & binaryOperationCode);
 
         }
 
@@ -193,5 +193,11 @@ namespace PicSimulator.Microcontroller
             return (mask & binaryOperationCode);
 
         }
-    }
+
+        public static int DecodeFileRegisterAdress7Bit(int binaryOperationCode)
+        {
+            var mask = 127;
+            return (mask & binaryOperationCode);
+        }
+    }   
 }

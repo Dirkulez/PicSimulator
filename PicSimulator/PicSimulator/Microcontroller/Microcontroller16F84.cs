@@ -13,7 +13,7 @@ namespace PicSimulator.Microcontroller
     {
         #region Fields
         private Dictionary<int, int> _operationStack;
-        private Dictionary<byte, Register> _registerAdressTable;
+        private Dictionary<int, Register> _registerAdressTable;
         private Dictionary<byte, Register> _stackAddressTable;
         private Register _workingRegister;
         private Register _programCounter;
@@ -161,10 +161,11 @@ namespace PicSimulator.Microcontroller
             var destinationSelect = OperationDecoder.DecodeDestinationSelect(operationToExeute);
             var literal8Bit = OperationDecoder.Decode8BitLiteral(operationToExeute);
             var literal11Bit = OperationDecoder.Decode11BitLiteral(operationToExeute);
-            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit);
+            var FileRegisterAdress7Bit = OperationDecoder.DecodeFileRegisterAdress7Bit(operationToExeute);
+            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit,FileRegisterAdress7Bit);
         }
 
-        private void ExecuteOperationInt(OperationsEnum operationToExecute, int destinationSelect, int literal8Bit, int literal11Bit)
+        private void ExecuteOperationInt(OperationsEnum operationToExecute, int destinationSelect, int literal8Bit, int literal11Bit, int FileRegisterAdress7Bit)
         {
             if(operationToExecute == OperationsEnum.MOVLW)
             {
@@ -210,22 +211,22 @@ namespace PicSimulator.Microcontroller
 
             else if (operationToExecute == OperationsEnum.MOVWF)
             {
-                ExecuteMOVWF(literal8Bit);
+                ExecuteMOVWF(FileRegisterAdress7Bit);
             }
 
             else if (operationToExecute == OperationsEnum.ADDWF)
             {
-                ExecuteADDWF(literal8Bit);
+                ExecuteADDWF(FileRegisterAdress7Bit, destinationSelect);
             }
 
             else if (operationToExecute == OperationsEnum.CLRF)
             {
-                ExecuteCLRF(literal8Bit);
+                ExecuteCLRF(FileRegisterAdress7Bit);
             }
 
             else if (operationToExecute == OperationsEnum.INCF)
             {
-                ExecuteINCF(literal8Bit);
+                ExecuteINCF(FileRegisterAdress7Bit, destinationSelect);
             }
 
             else if (operationToExecute == OperationsEnum.MOVF)
@@ -258,6 +259,58 @@ namespace PicSimulator.Microcontroller
                 ExecuteCLRW(literal8Bit);
             }
 
+        }
+
+        private void ExecuteINCF(int FileRegisterAdress7Bit, int destinationSelect)
+        {
+
+            var contentF = _registerAdressTable[FileRegisterAdress7Bit].Content;
+
+            if (destinationSelect == 0)
+            {
+                WorkingRegisterContent = contentF++;
+            }
+            else
+            {
+                _registerAdressTable[FileRegisterAdress7Bit].Content = contentF++;
+            }
+            CheckWorkingRegisterForZero();
+            Cycle++;
+            ProgramCounterContent++;
+        }
+
+        private void ExecuteCLRF(int FileRegisterAdress7Bit)
+        {
+            _registerAdressTable[FileRegisterAdress7Bit].Content = 0;
+            SetZeroBitTo1();
+
+        }
+
+        private void ExecuteADDWF(int FileRegisterAdress7Bit, int destinationSelect)
+        {
+            var setDC = false;
+            var setC = false;
+            var contentF = _registerAdressTable[FileRegisterAdress7Bit].Content;
+
+            if (destinationSelect == 0)
+            {
+                WorkingRegisterContent = BinaryCalculations.BinaryAddition(contentF, WorkingRegisterContent, ref setDC, ref setC);
+            }
+            else
+            {
+                _registerAdressTable[FileRegisterAdress7Bit].Content = BinaryCalculations.BinaryAddition(contentF, WorkingRegisterContent, ref setDC, ref setC);
+            }
+                CheckWorkingRegisterForZero();
+            SetCarryFlags(setDC, setC);
+            Cycle++;
+            ProgramCounterContent++;
+        }
+
+            private void ExecuteMOVWF(int FileRegisterAdress7Bit)
+        {
+            _registerAdressTable[FileRegisterAdress7Bit].Content = WorkingRegisterContent;
+            Cycle++;
+            ProgramCounterContent++;
         }
 
         private void ExecuteCALL(int literal11Bit)
