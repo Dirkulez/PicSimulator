@@ -14,7 +14,6 @@ namespace PicSimulator.Microcontroller
         #region Fields
         private Dictionary<int, int> _operationStack;
         private Dictionary<byte, Register> _registerAdressTable;
-        private Dictionary<byte, Register> _stackAddressTable;
         private Register _workingRegister;
         private Register _programCounter;
         private Register _statusRegister;
@@ -22,7 +21,6 @@ namespace PicSimulator.Microcontroller
         private ulong _cycle = 0;
         private bool _stopExecution;
         private SynchronizationContext _syncContext;
-        private byte _stackPointer;
         #endregion
 
         #region Events
@@ -133,41 +131,10 @@ namespace PicSimulator.Microcontroller
             _syncContext = synchronzationContext ?? new SynchronizationContext();
             InitRegisters();
             InitOperations(operations);
-            InitStack();
         }
         #endregion
 
         #region Methods
-
-        private void PushToStack(int contentToPush)
-        {
-            if(_stackPointer == 7)
-            {
-                _stackPointer = 0;
-            }
-            else
-            {
-                _stackPointer++;
-            }
-
-            _stackAddressTable[_stackPointer].Content = contentToPush;
-        }
-
-        private int PopFromStack()
-        {
-            var topOfStack = _stackAddressTable[_stackPointer].Content;
-
-            if(_stackPointer == 0)
-            {
-                _stackPointer = 7;
-            }
-            else
-            {
-                _stackPointer--;
-            }
-
-            return topOfStack;
-        }
 
         public void InvokePropertyChanged(PropertyChangedEventArgs e)
         {
@@ -224,6 +191,100 @@ namespace PicSimulator.Microcontroller
             {
                 ExecuteGOTO(literal11Bit);
             }
+            else if (operationToExecute == OperationsEnum.CALL)
+            {
+                ExecuteCALL(literal11Bit);
+            }
+            else if (operationToExecute == OperationsEnum.NOP)
+            {
+                ExecuteNOP();
+            }
+          
+            else if (operationToExecute == OperationsEnum.RETLW)
+            {
+                ExecuteRETLW(literal8Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.MOVWF)
+            {
+                ExecuteMOVWF(literal8Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.ADDWF)
+            {
+                ExecuteADDWF(literal8Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.CLRF)
+            {
+                ExecuteCLRF(literal8Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.INCF)
+            {
+                ExecuteINCF(literal8Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.MOVF)
+            {
+                ExecuteMOVF(literal8Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.IORWF)
+            {
+                ExecuteIORWF(literal8Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.SUBWF)
+            {
+                ExecuteSUBWF(literal8Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.SWAPF)
+            {
+                ExecuteSWAPF(literal8Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.XORWF)
+            {
+                ExecuteXORWF(literal8Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.CLRW)
+            {
+                ExecuteCLRW(literal8Bit);
+            }
+
+        }
+
+        private void ExecuteCALL(int literal11Bit)
+        {
+            /*Call Subroutine. First, return address
+            (PC + 1) is pushed onto the stack. The
+              eleven bit immediate address is loaded
+              into PC bits<10:0 >.The upper bits of
+             the PC are loaded from PCLATH.*/
+            var pclathValue = PclathRegisterContent & 24;
+            pclathValue = pclathValue << 8;
+            ProgramCounterContent = literal11Bit + pclathValue;
+            Cycle += 2;
+
+        }
+
+        private void ExecuteNOP()
+        {
+            WorkingRegisterContent = WorkingRegisterContent;
+            Cycle++;
+            ProgramCounterContent++;
+        }
+
+        private void ExecuteRETLW(int literal8Bit)
+        {
+            //program counter is loaded from the top of the stack
+            WorkingRegisterContent = literal8Bit;
+            CheckWorkingRegisterForZero();
+            Cycle+= 2;
+            ProgramCounterContent++;
         }
 
         private void ExecuteMOVLW(int literal8Bit)
@@ -349,19 +410,6 @@ namespace PicSimulator.Microcontroller
             _registerAdressTable.Add(136, new Register(0, "EECON1"));
             _registerAdressTable.Add(137, new Register(0, "EECON2"));
             
-        }
-
-        private void InitStack()
-        {
-            _stackAddressTable = new Dictionary<byte, Register>();
-            _stackAddressTable.Add(0, new Register(0, "STACK0"));
-            _stackAddressTable.Add(1, new Register(0, "STACK1"));
-            _stackAddressTable.Add(2, new Register(0, "STACK2"));
-            _stackAddressTable.Add(3, new Register(0, "STACK3"));
-            _stackAddressTable.Add(4, new Register(0, "STACK4"));
-            _stackAddressTable.Add(5, new Register(0, "STACK5"));
-            _stackAddressTable.Add(6, new Register(0, "STACK6"));
-            _stackAddressTable.Add(7, new Register(0, "STACK7"));
         }
 
         private void InitOperations(IEnumerable<string> operations)
