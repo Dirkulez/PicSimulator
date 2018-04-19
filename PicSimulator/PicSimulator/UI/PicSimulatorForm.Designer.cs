@@ -35,10 +35,20 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ausführenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.singleStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LstContentBox = new System.Windows.Forms.CheckedListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cycleTextBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
+            this.pclathTextBox = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.dcBitTextBox = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cBitTextBox = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
             this.zeroBitTextBox = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -47,9 +57,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.wregTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.cBitTextBox = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.dcBitTextBox = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -95,17 +102,44 @@
             // executeToolStripMenuItem
             // 
             this.executeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.ausführenToolStripMenuItem});
+            this.ausführenToolStripMenuItem,
+            this.singleStepToolStripMenuItem,
+            this.debugToolStripMenuItem,
+            this.stopToolStripMenuItem});
             this.executeToolStripMenuItem.Name = "executeToolStripMenuItem";
-            this.executeToolStripMenuItem.Size = new System.Drawing.Size(93, 24);
-            this.executeToolStripMenuItem.Text = "Bearbeiten";
+            this.executeToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
+            this.executeToolStripMenuItem.Text = "Ausführen";
             // 
             // ausführenToolStripMenuItem
             // 
             this.ausführenToolStripMenuItem.Name = "ausführenToolStripMenuItem";
-            this.ausführenToolStripMenuItem.Size = new System.Drawing.Size(150, 26);
+            this.ausführenToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.ausführenToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
             this.ausführenToolStripMenuItem.Text = "Ausführen";
             this.ausführenToolStripMenuItem.Click += new System.EventHandler(this.executeToolStripMenuItem_Click);
+            // 
+            // singleStepToolStripMenuItem
+            // 
+            this.singleStepToolStripMenuItem.Name = "singleStepToolStripMenuItem";
+            this.singleStepToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
+            this.singleStepToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
+            this.singleStepToolStripMenuItem.Text = "Single Step";
+            this.singleStepToolStripMenuItem.Click += new System.EventHandler(this.singleStepToolStripMenuItem_Click);
+            // 
+            // debugToolStripMenuItem
+            // 
+            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
+            this.debugToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
+            this.debugToolStripMenuItem.Text = "Debug";
+            // 
+            // stopToolStripMenuItem
+            // 
+            this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
+            this.stopToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F8;
+            this.stopToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
+            this.stopToolStripMenuItem.Text = "Stop";
+            this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -131,6 +165,10 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.cycleTextBox);
+            this.groupBox1.Controls.Add(this.label8);
+            this.groupBox1.Controls.Add(this.pclathTextBox);
+            this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.dcBitTextBox);
             this.groupBox1.Controls.Add(this.label6);
             this.groupBox1.Controls.Add(this.cBitTextBox);
@@ -144,15 +182,74 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(877, 47);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(321, 318);
+            this.groupBox1.Size = new System.Drawing.Size(321, 396);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Register";
             // 
+            // cycleTextBox
+            // 
+            this.cycleTextBox.Location = new System.Drawing.Point(88, 250);
+            this.cycleTextBox.Name = "cycleTextBox";
+            this.cycleTextBox.ReadOnly = true;
+            this.cycleTextBox.Size = new System.Drawing.Size(181, 22);
+            this.cycleTextBox.TabIndex = 14;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(20, 255);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(42, 17);
+            this.label8.TabIndex = 13;
+            this.label8.Text = "Cycle";
+            // 
+            // pclathTextBox
+            // 
+            this.pclathTextBox.Location = new System.Drawing.Point(87, 104);
+            this.pclathTextBox.Name = "pclathTextBox";
+            this.pclathTextBox.ReadOnly = true;
+            this.pclathTextBox.Size = new System.Drawing.Size(181, 22);
+            this.pclathTextBox.TabIndex = 12;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(19, 108);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(62, 17);
+            this.label7.TabIndex = 11;
+            this.label7.Text = "PCLATH";
+            // 
+            // dcBitTextBox
+            // 
+            this.dcBitTextBox.Location = new System.Drawing.Point(241, 174);
+            this.dcBitTextBox.Name = "dcBitTextBox";
+            this.dcBitTextBox.ReadOnly = true;
+            this.dcBitTextBox.Size = new System.Drawing.Size(28, 22);
+            this.dcBitTextBox.TabIndex = 10;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(204, 178);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(27, 17);
+            this.label6.TabIndex = 9;
+            this.label6.Text = "DC";
+            // 
+            // cBitTextBox
+            // 
+            this.cBitTextBox.Location = new System.Drawing.Point(162, 173);
+            this.cBitTextBox.Name = "cBitTextBox";
+            this.cBitTextBox.ReadOnly = true;
+            this.cBitTextBox.Size = new System.Drawing.Size(36, 22);
+            this.cBitTextBox.TabIndex = 8;
+            // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(138, 136);
+            this.label5.Location = new System.Drawing.Point(139, 178);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(17, 17);
             this.label5.TabIndex = 7;
@@ -160,7 +257,7 @@
             // 
             // zeroBitTextBox
             // 
-            this.zeroBitTextBox.Location = new System.Drawing.Point(98, 131);
+            this.zeroBitTextBox.Location = new System.Drawing.Point(99, 173);
             this.zeroBitTextBox.Name = "zeroBitTextBox";
             this.zeroBitTextBox.ReadOnly = true;
             this.zeroBitTextBox.Size = new System.Drawing.Size(34, 22);
@@ -169,7 +266,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(54, 136);
+            this.label4.Location = new System.Drawing.Point(55, 178);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(38, 17);
             this.label4.TabIndex = 5;
@@ -178,7 +275,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(19, 108);
+            this.label3.Location = new System.Drawing.Point(20, 150);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(48, 17);
             this.label3.TabIndex = 4;
@@ -217,31 +314,6 @@
             this.label1.Size = new System.Drawing.Size(52, 17);
             this.label1.TabIndex = 0;
             this.label1.Text = "W-Reg";
-            // 
-            // cBitTextBox
-            // 
-            this.cBitTextBox.Location = new System.Drawing.Point(161, 131);
-            this.cBitTextBox.Name = "cBitTextBox";
-            this.cBitTextBox.ReadOnly = true;
-            this.cBitTextBox.Size = new System.Drawing.Size(36, 22);
-            this.cBitTextBox.TabIndex = 8;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(203, 136);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(27, 17);
-            this.label6.TabIndex = 9;
-            this.label6.Text = "DC";
-            // 
-            // dcBitTextBox
-            // 
-            this.dcBitTextBox.Location = new System.Drawing.Point(240, 132);
-            this.dcBitTextBox.Name = "dcBitTextBox";
-            this.dcBitTextBox.ReadOnly = true;
-            this.dcBitTextBox.Size = new System.Drawing.Size(28, 22);
-            this.dcBitTextBox.TabIndex = 10;
             // 
             // PicSimulatorForm
             // 
@@ -286,6 +358,13 @@
         private System.Windows.Forms.TextBox dcBitTextBox;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox cBitTextBox;
+        private System.Windows.Forms.TextBox pclathTextBox;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox cycleTextBox;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.ToolStripMenuItem singleStepToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
     }
 }
 

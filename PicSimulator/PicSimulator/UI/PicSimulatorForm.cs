@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -17,6 +18,7 @@ namespace PicSimulator.UI
         private LstParser _lstParser = new LstParser();
         private Microcontroller16F84 _microController;
         private bool _dataBindingInitialized;
+        private BackgroundWorker _backgroundWorker;
 
         public event EventHandler<EventArgs> LstLoaded;
 
@@ -25,12 +27,17 @@ namespace PicSimulator.UI
             InitializeComponent();
             LstLoaded += LstLoaded_Executed;
             _dataBindingInitialized = false;
+            executeToolStripMenuItem.Enabled = false;
+            InitBackgroundWorker();
         }
 
         private void LstLoaded_Executed(object sender, EventArgs e)
         {
             InitMicrocontroller();
             InitDataBindings();
+            executeToolStripMenuItem.Enabled = true;
+            debugToolStripMenuItem.Enabled = false;
+            SelectCurrentLineOfLstContentBox(_microController.ProgramCounterContent);
         }
 
         private void ZeroBitChanged_Executed(object sender, EventArgs e)
@@ -73,12 +80,57 @@ namespace PicSimulator.UI
 
         private void executeToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _microController.ExecuteOperation(0);
+            _backgroundWorker.RunWorkerAsync();
+        }
+
+        private void InitBackgroundWorker()
+        {
+            _backgroundWorker = new BackgroundWorker();
+            _backgroundWorker.WorkerSupportsCancellation = true;
+            _backgroundWorker.DoWork += new DoWorkEventHandler(worker_DoWork);
+        }
+
+        private void worker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (!_backgroundWorker.CancellationPending)
+            {
+                _microController.ExecuteOperation();
+                Thread.Sleep(1000);
+            }
         }
 
         private void InitMicrocontroller()
         {
-            _microController = new Microcontroller16F84(_lstParser.OperationCodes);
+            _microController = new Microcontroller16F84(_lstParser.OperationCodes, SynchronizationContext.Current);
+            _microController.PropertyChanged += MicroController_PropertyChanged;
+        }
+
+        private void MicroController_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(_microController.ProgramCounterContent))
+            {
+                SelectCurrentLineOfLstContentBox(_microController.ProgramCounterContent);
+            }
+        }
+
+        private void SelectCurrentLineOfLstContentBox(int currentProgramCounter)
+        {
+            object itemToSelect = null;
+            LstContentBox.ClearSelected();
+            foreach (var item in LstContentBox.Items)
+            {
+                var itemContent = item.ToString();
+                if (itemContent.StartsWith(currentProgramCounter.ToString("X4").ToUpper()))
+                {
+                    itemToSelect = item;
+                    break;
+                }
+            }
+
+            if (itemToSelect != null)
+            {
+                LstContentBox.SelectedItems.Add(itemToSelect);
+            }
         }
 
         private void InitDataBindings()
@@ -97,6 +149,15 @@ namespace PicSimulator.UI
                 true, DataSourceUpdateMode.OnPropertyChanged);
             pcDataBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith4Digits);
             pcTextBox.DataBindings.Add(pcDataBinding);
+
+            var pclathDataBinding = new Binding(nameof(pclathTextBox.Text), _microController, nameof(_microController.PclathRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            pclathDataBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith2Digits);
+            pclathTextBox.DataBindings.Add(pclathDataBinding);
+
+            var cycleDataBinding = new Binding(nameof(cycleTextBox.Text), _microController, nameof(_microController.Cycle),
+                false, DataSourceUpdateMode.OnPropertyChanged);
+            cycleTextBox.DataBindings.Add(cycleDataBinding);
 
             zeroBitTextBox.DataBindings.Add(nameof(zeroBitTextBox.Text), _microController, nameof(_microController.ZeroBit),
                 false, DataSourceUpdateMode.OnPropertyChanged);
@@ -140,6 +201,18 @@ namespace PicSimulator.UI
             zeroBitTextBox.DataBindings.RemoveAt(0);
             cBitTextBox.DataBindings.RemoveAt(0);
             dcBitTextBox.DataBindings.RemoveAt(0);
+            pclathTextBox.DataBindings.RemoveAt(0);
+            cycleTextBox.DataBindings.RemoveAt(0);
+        }
+
+        private void stopToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _backgroundWorker.CancelAsync();
+        }
+
+        private void singleStepToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _microController.ExecuteOperation();
         }
 
     }
