@@ -14,6 +14,10 @@ namespace PicSimulator.Microcontroller
             {
                 return OperationsEnum.NOP;
             }
+            if(binaryOperationCode == 8)
+            {
+                return OperationsEnum.RETURN;
+            }
 
             //byte oriented operations
             var operationCode6bit = binaryOperationCode & 16128;
@@ -142,10 +146,6 @@ namespace PicSimulator.Microcontroller
             if (operationCode4bit == 13312)
             {
                 return OperationsEnum.RETLW;
-            }
-            if (binaryOperationCode == 8)
-            {
-                return OperationsEnum.RETURN;
             }
             if (binaryOperationCode == 99)
             {

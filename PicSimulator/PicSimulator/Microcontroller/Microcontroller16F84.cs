@@ -22,7 +22,7 @@ namespace PicSimulator.Microcontroller
         private ulong _cycle = 0;
         private bool _stopExecution;
         private SynchronizationContext _syncContext;
-        private byte _stackPointer;
+        private byte _stackPointer = 0;
         #endregion
 
         #region Events
@@ -208,55 +208,60 @@ namespace PicSimulator.Microcontroller
                 ExecuteRETLW(literal8Bit);
             }
 
-            else if (operationToExecute == OperationsEnum.MOVWF)
+            else if (operationToExecute == OperationsEnum.RETURN)
             {
-                ExecuteMOVWF(literal8Bit);
+                ExecuteRETURN();
             }
 
-            else if (operationToExecute == OperationsEnum.ADDWF)
-            {
-                ExecuteADDWF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.MOVWF)
+            //{
+            //    ExecuteMOVWF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.CLRF)
-            {
-                ExecuteCLRF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.ADDWF)
+            //{
+            //    ExecuteADDWF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.INCF)
-            {
-                ExecuteINCF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.CLRF)
+            //{
+            //    ExecuteCLRF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.MOVF)
-            {
-                ExecuteMOVF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.INCF)
+            //{
+            //    ExecuteINCF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.IORWF)
-            {
-                ExecuteIORWF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.MOVF)
+            //{
+            //    ExecuteMOVF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.SUBWF)
-            {
-                ExecuteSUBWF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.IORWF)
+            //{
+            //    ExecuteIORWF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.SWAPF)
-            {
-                ExecuteSWAPF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.SUBWF)
+            //{
+            //    ExecuteSUBWF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.XORWF)
-            {
-                ExecuteXORWF(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.SWAPF)
+            //{
+            //    ExecuteSWAPF(literal8Bit);
+            //}
 
-            else if (operationToExecute == OperationsEnum.CLRW)
-            {
-                ExecuteCLRW(literal8Bit);
-            }
+            //else if (operationToExecute == OperationsEnum.XORWF)
+            //{
+            //    ExecuteXORWF(literal8Bit);
+            //}
+
+            //else if (operationToExecute == OperationsEnum.CLRW)
+            //{
+            //    ExecuteCLRW(literal8Bit);
+            //}
 
         }
 
@@ -267,6 +272,7 @@ namespace PicSimulator.Microcontroller
               eleven bit immediate address is loaded
               into PC bits<10:0 >.The upper bits of
              the PC are loaded from PCLATH.*/
+            PushToStack(ProgramCounterContent+1);
             var pclathValue = PclathRegisterContent & 24;
             pclathValue = pclathValue << 8;
             ProgramCounterContent = literal11Bit + pclathValue;
@@ -284,16 +290,21 @@ namespace PicSimulator.Microcontroller
         private void ExecuteRETLW(int literal8Bit)
         {
             //program counter is loaded from the top of the stack
+            //8bitliteral is stored in w_reg
             WorkingRegisterContent = literal8Bit;
-            CheckWorkingRegisterForZero();
             Cycle+= 2;
-            ProgramCounterContent++;
+            ProgramCounterContent = PopFromStack();
+        }
+
+        private void ExecuteRETURN()
+        {
+            Cycle += 2;
+            ProgramCounterContent = PopFromStack();
         }
 
         private void ExecuteMOVLW(int literal8Bit)
         {
             WorkingRegisterContent = literal8Bit;
-            CheckWorkingRegisterForZero();
             Cycle++;
             ProgramCounterContent++;
         }

@@ -56,6 +56,7 @@ namespace PicSimulator.UI
 
         private void OpenFile_Click(object sender, EventArgs e)
         {
+            ClearLstContentBox();
             OpenFileDialog openFileDialog = new OpenFileDialog();
 
             openFileDialog.InitialDirectory = "D:\\DHBW\\Theorie1\\Rechnertechnik2\\TPicSim";
@@ -76,6 +77,14 @@ namespace PicSimulator.UI
             }
 
             OnLstLoaded(this, new EventArgs());
+        }
+
+        private void ClearLstContentBox()
+        {
+            while (LstContentBox.Items.Count > 0)
+            {
+                LstContentBox.Items.RemoveAt(0);
+            }
         }
 
         private void executeToolStripMenuItem_Click(object sender, EventArgs e)
