@@ -14,6 +14,7 @@ namespace PicSimulator.Microcontroller
         #region Fields
         private Dictionary<int, int> _operationStack;
         private Dictionary<byte, Register> _registerAdressTable;
+        private Dictionary<byte, Register> _stackAddressTable;
         private Register _workingRegister;
         private Register _programCounter;
         private Register _statusRegister;
@@ -21,6 +22,7 @@ namespace PicSimulator.Microcontroller
         private ulong _cycle = 0;
         private bool _stopExecution;
         private SynchronizationContext _syncContext;
+        private byte _stackPointer;
         #endregion
 
         #region Events
@@ -463,6 +465,36 @@ namespace PicSimulator.Microcontroller
             StatusRegisterContent = StatusRegisterContent | 2;
             var propChangedEventArgs = new PropertyChangedEventArgs(nameof(DCBit));
             _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
+        }
+
+        private void PushToStack(int contentToPush)
+        {
+            if (_stackPointer == 7)
+            {
+                _stackPointer = 0;
+            }
+            else
+            {
+                _stackPointer++;
+            }
+
+            _stackAddressTable[_stackPointer].Content = contentToPush;
+        }
+
+        private int PopFromStack()
+        {
+            var topOfStack = _stackAddressTable[_stackPointer].Content;
+
+            if (_stackPointer == 0)
+            {
+                _stackPointer = 7;
+            }
+            else
+            {
+                _stackPointer--;
+            }
+
+            return topOfStack;
         }
         #endregion
     }
