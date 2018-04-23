@@ -45,10 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helper\BinaryCalculations.cs" />
+    <Compile Include="Microcontroller\ArithmeticLogicUnit.cs" />
     <Compile Include="Microcontroller\Microcontroller16F84.cs" />
     <Compile Include="Microcontroller\OperationDecoder.cs" />
     <Compile Include="Microcontroller\OperationsEnum.cs" />
+    <Compile Include="Microcontroller\ProgramCounterStack.cs" />
     <Compile Include="Microcontroller\Register.cs" />
     <Compile Include="Parser\LstParser.cs" />
     <Compile Include="UI\PicSimulatorForm.cs">

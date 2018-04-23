@@ -1,5 +1,4 @@
-﻿using PicSimulator.Helper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -7,14 +6,13 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PicSimulator.Microcontroller
+namespace PicSimulator.Model
 {
     public class Microcontroller16F84: INotifyPropertyChanged
     {
         #region Fields
         private Dictionary<int, int> _operationStack;
         private Dictionary<byte, Register> _registerAdressTable;
-        private Dictionary<byte, Register> _stackAddressTable;
         private Register _workingRegister;
         private Register _programCounter;
         private Register _statusRegister;
@@ -22,7 +20,8 @@ namespace PicSimulator.Microcontroller
         private ulong _cycle = 0;
         private bool _stopExecution;
         private SynchronizationContext _syncContext;
-        private byte _stackPointer = 0;
+        private ProgramCounterStack _programCounterStack;
+        private ArithmeticLogicUnit _alu;
         #endregion
 
         #region Events
@@ -133,11 +132,23 @@ namespace PicSimulator.Microcontroller
             _syncContext = synchronzationContext ?? new SynchronizationContext();
             InitRegisters();
             InitOperations(operations);
-            InitStack();
+            _programCounterStack = new ProgramCounterStack();
+            InitAlu();
         }
         #endregion
 
         #region Methods
+
+        private void InitAlu()
+        {
+            _alu = new ArithmeticLogicUnit();
+            _alu.Cset += SetCBitTo1;
+            _alu.Cunset += SetCBitTo0;
+            _alu.DCset += SetDCBitTo1;
+            _alu.DCunset += SetDCBitTo0;
+            _alu.ResultZero += SetZeroBitTo1;
+            _alu.ResultNotZero += SetZeroBitTo0;
+        }
 
         public void InvokePropertyChanged(PropertyChangedEventArgs e)
         {
@@ -272,7 +283,7 @@ namespace PicSimulator.Microcontroller
               eleven bit immediate address is loaded
               into PC bits<10:0 >.The upper bits of
              the PC are loaded from PCLATH.*/
-            PushToStack(ProgramCounterContent+1);
+            _programCounterStack.PushToStack(ProgramCounterContent+1);
             var pclathValue = PclathRegisterContent & 24;
             pclathValue = pclathValue << 8;
             ProgramCounterContent = literal11Bit + pclathValue;
@@ -293,13 +304,13 @@ namespace PicSimulator.Microcontroller
             //8bitliteral is stored in w_reg
             WorkingRegisterContent = literal8Bit;
             Cycle+= 2;
-            ProgramCounterContent = PopFromStack();
+            ProgramCounterContent = _programCounterStack.PopFromStack();
         }
 
         private void ExecuteRETURN()
         {
             Cycle += 2;
-            ProgramCounterContent = PopFromStack();
+            ProgramCounterContent = _programCounterStack.PopFromStack();
         }
 
         private void ExecuteMOVLW(int literal8Bit)
@@ -311,16 +322,14 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteANDLW(int literal8Bit)
         {
-            WorkingRegisterContent = WorkingRegisterContent & literal8Bit;
-            CheckWorkingRegisterForZero();
+            WorkingRegisterContent = _alu.LogicalAND(WorkingRegisterContent, literal8Bit);
             Cycle++;
             ProgramCounterContent++;
         }
 
         private void ExecuteIORLW(int literal8Bit)
         {
-            WorkingRegisterContent = WorkingRegisterContent | literal8Bit;
-            CheckWorkingRegisterForZero();
+            WorkingRegisterContent = _alu.LogicalInclusiveOR(WorkingRegisterContent, literal8Bit);
             Cycle++;
             ProgramCounterContent++;
         }
@@ -328,12 +337,8 @@ namespace PicSimulator.Microcontroller
         private void ExecuteSUBLW(int literal8Bit)
         {
 
-            var complement2OfWorkingReg = BinaryCalculations.Build2ndComplement(WorkingRegisterContent);
-            var setC = false;
-            var setDC = false;
-            WorkingRegisterContent = BinaryCalculations.BinaryAddition(literal8Bit, complement2OfWorkingReg, ref setDC, ref setC);
-            CheckWorkingRegisterForZero();
-            SetCarryFlags(setDC, setC);
+            var complement2OfWorkingReg = _alu.Build2ndComplement(WorkingRegisterContent);
+            WorkingRegisterContent = _alu.BinaryAddition(literal8Bit, complement2OfWorkingReg);
 
             Cycle++;
             ProgramCounterContent++;
@@ -341,19 +346,16 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteXORLW(int literal8Bit){
 
-            WorkingRegisterContent = WorkingRegisterContent ^ literal8Bit;
-            CheckWorkingRegisterForZero();
+            WorkingRegisterContent = _alu.LogicalExclusiveOR(WorkingRegisterContent, literal8Bit);
+
             Cycle++;
             ProgramCounterContent++;
         }
 
         private void ExecuteADDLW(int literal8Bit)
         {
-            var setDC = false;
-            var setC = false;
-            WorkingRegisterContent = BinaryCalculations.BinaryAddition(literal8Bit, WorkingRegisterContent, ref setDC, ref setC);
-            CheckWorkingRegisterForZero();
-            SetCarryFlags(setDC, setC);
+            WorkingRegisterContent = _alu.BinaryAddition(literal8Bit, WorkingRegisterContent);
+
             Cycle++;
             ProgramCounterContent++;
         }
@@ -364,39 +366,6 @@ namespace PicSimulator.Microcontroller
             pclathValue = pclathValue << 8;
             ProgramCounterContent = literal11Bit + pclathValue;
             Cycle += 2;
-        }
-
-        private void CheckWorkingRegisterForZero()
-        {
-            if (WorkingRegisterContent == 0)
-            {
-                SetZeroBitTo1();
-            }
-            else
-            {
-                SetZeroBitTo0();
-            }
-        }
-
-        private void SetCarryFlags(bool setDC, bool setC)
-        {
-            if (setC)
-            {
-                SetCBitTo1();
-            }
-            else
-            {
-                SetCBitTo0();
-            }
-
-            if (setDC)
-            {
-                SetDCBitTo1();
-            }
-            else
-            {
-                SetDCBitTo0();
-            }
         }
 
         private void InitRegisters()
@@ -437,90 +406,48 @@ namespace PicSimulator.Microcontroller
             }
         }
 
-        private void SetZeroBitTo1()
+        private void SetZeroBitTo1(Object sender, EventArgs e)
         {
             StatusRegisterContent = StatusRegisterContent | 4;
             var propChangedEventArgs = new PropertyChangedEventArgs(nameof(ZeroBit));
             _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
         }
 
-        private void SetZeroBitTo0()
+        private void SetZeroBitTo0(Object sender, EventArgs e)
         {
             StatusRegisterContent = StatusRegisterContent & 251;
             var propChangedEventArgs = new PropertyChangedEventArgs(nameof(ZeroBit));
             _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
         }
 
-        private void SetCBitTo0()
+        private void SetCBitTo0(Object sender, EventArgs e)
         {
             StatusRegisterContent = StatusRegisterContent & 254;
             var propChangedEventArgs = new PropertyChangedEventArgs(nameof(CBit));
             _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
         }
 
-        private void SetCBitTo1()
+        private void SetCBitTo1(Object sender, EventArgs e)
         {
             StatusRegisterContent = StatusRegisterContent | 1;
             var propChangedEventArgs = new PropertyChangedEventArgs(nameof(CBit));
             _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
         }
 
-        private void SetDCBitTo0()
+        private void SetDCBitTo0(Object sender, EventArgs e)
         {
             StatusRegisterContent = StatusRegisterContent & 253;
             var propChangedEventArgs = new PropertyChangedEventArgs(nameof(DCBit));
             _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
         }
 
-        private void SetDCBitTo1()
+        private void SetDCBitTo1(Object sender, EventArgs e)
         {
             StatusRegisterContent = StatusRegisterContent | 2;
             var propChangedEventArgs = new PropertyChangedEventArgs(nameof(DCBit));
             _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
         }
-
-        private void PushToStack(int contentToPush)
-        {
-            if (_stackPointer == 7)
-            {
-                _stackPointer = 0;
-            }
-            else
-            {
-                _stackPointer++;
-            }
-
-            _stackAddressTable[_stackPointer].Content = contentToPush;
-        }
-
-        private int PopFromStack()
-        {
-            var topOfStack = _stackAddressTable[_stackPointer].Content;
-
-            if (_stackPointer == 0)
-            {
-                _stackPointer = 7;
-            }
-            else
-            {
-                _stackPointer--;
-            }
-
-            return topOfStack;
-        }
-
-        private void InitStack()
-        {
-            _stackAddressTable = new Dictionary<byte, Register>();
-            _stackAddressTable.Add(0, new Register(0, "STACK0"));
-            _stackAddressTable.Add(1, new Register(0, "STACK1"));
-            _stackAddressTable.Add(2, new Register(0, "STACK2"));
-            _stackAddressTable.Add(3, new Register(0, "STACK3"));
-            _stackAddressTable.Add(4, new Register(0, "STACK4"));
-            _stackAddressTable.Add(5, new Register(0, "STACK5"));
-            _stackAddressTable.Add(6, new Register(0, "STACK6"));
-            _stackAddressTable.Add(7, new Register(0, "STACK7"));
-        }
+       
         #endregion
     }
 }

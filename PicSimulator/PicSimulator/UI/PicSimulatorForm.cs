@@ -1,4 +1,4 @@
-﻿using PicSimulator.Microcontroller;
+﻿using PicSimulator.Model;
 using PicSimulator.Parser;
 using System;
 using System.Collections.Generic;

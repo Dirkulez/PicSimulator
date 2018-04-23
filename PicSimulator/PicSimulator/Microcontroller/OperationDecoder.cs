@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PicSimulator.Microcontroller
+namespace PicSimulator.Model
 {
     public static class OperationDecoder
     {
@@ -19,11 +19,13 @@ namespace PicSimulator.Microcontroller
                 return OperationsEnum.RETURN;
             }
 
-            //byte oriented operations
             var operationCode6bit = binaryOperationCode & 16128;
             var operationCode4bit = binaryOperationCode & 15360;
             var operationCode5bit = binaryOperationCode & 15872;
             var operationCode3bit = binaryOperationCode & 14336;
+
+            //byte oriented operations
+
             if (operationCode6bit == 1792)
             {
                 return OperationsEnum.ADDWF;
