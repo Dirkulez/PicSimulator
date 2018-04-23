@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PicSimulator.Model
 {
-    internal class Register
+    public class Register
     {
         private int _content = 0;
         private string _name = string.Empty;

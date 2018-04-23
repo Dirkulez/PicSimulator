@@ -1,4 +1,5 @@
-﻿using PicSimulator.Model;
+﻿using PicSimulator.Microcontroller;
+using PicSimulator.Model;
 using PicSimulator.Parser;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,9 @@ namespace PicSimulator.UI
             _dataBindingInitialized = false;
             executeToolStripMenuItem.Enabled = false;
             InitBackgroundWorker();
-        }
+            InitRegisterMemoryListView();
+            WindowState = FormWindowState.Maximized;
+         }
 
         private void LstLoaded_Executed(object sender, EventArgs e)
         {
@@ -38,6 +41,7 @@ namespace PicSimulator.UI
             executeToolStripMenuItem.Enabled = true;
             debugToolStripMenuItem.Enabled = false;
             SelectCurrentLineOfLstContentBox(_microController.ProgramCounterContent);
+            FillRegisterMemoryListView();
         }
 
         private void ZeroBitChanged_Executed(object sender, EventArgs e)
@@ -112,6 +116,12 @@ namespace PicSimulator.UI
         {
             _microController = new Microcontroller16F84(_lstParser.OperationCodes, SynchronizationContext.Current);
             _microController.PropertyChanged += MicroController_PropertyChanged;
+            _microController.MemoryContentChanged += MicroController_MemoryContentChanged;
+        }
+
+        private void MicroController_MemoryContentChanged(object sender, MemoryContentChangedEventArgs e)
+        {
+            UpdateRegisterMemoryListView(e.MemoryAddress, e.MemoryContent);
         }
 
         private void MicroController_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -224,5 +234,121 @@ namespace PicSimulator.UI
             _microController.ExecuteOperation();
         }
 
+        private void InitRegisterMemoryListView()
+        {
+            registerMemoryListView1.Columns.Add("Adr.", 35);
+            registerMemoryListView1.Columns.Add("Inh.", 35);
+
+            registerMemoryListView1.View = View.Details;
+
+            registerMemoryListView2.Columns.Add("Adr.", 35);
+            registerMemoryListView2.Columns.Add("Inh.", 35);
+
+            registerMemoryListView2.View = View.Details;
+
+            registerMemoryListView3.Columns.Add("Adr.", 35);
+            registerMemoryListView3.Columns.Add("Inh.", 35);
+
+            registerMemoryListView3.View = View.Details;
+
+            registerMemoryListView4.Columns.Add("Adr.", 35);
+            registerMemoryListView4.Columns.Add("Inh.", 35);
+
+            registerMemoryListView4.View = View.Details;
+        }
+
+        private void FillRegisterMemoryListView()
+        {
+            registerMemoryListView1.Clear();
+            registerMemoryListView2.Clear();
+            registerMemoryListView3.Clear();
+            registerMemoryListView4.Clear();
+
+            InitRegisterMemoryListView();
+
+            for (int i = 0; i < 40; i++)
+            {
+
+                if (_microController.RegisterAdressTable.ContainsKey(i))
+                {
+                    var item = new ListViewItem(new[] { i.ToString("X2"), _microController.RegisterAdressTable[i].Content.ToString("X2") });
+
+                    registerMemoryListView1.Items.Add(item);
+                }
+                else
+                {
+                    registerMemoryListView1.Items.Add(new ListViewItem(new[] { i.ToString("X2"), "ND" }));
+                }
+
+            }
+
+            for (int i = 40; i < 80; i++)
+            {
+
+                if (_microController.RegisterAdressTable.ContainsKey(i))
+                {
+                    var item = new ListViewItem(new[] { i.ToString("X2"), _microController.RegisterAdressTable[i].Content.ToString("X2") });
+
+                    registerMemoryListView2.Items.Add(item);
+                }
+                else
+                {
+                    registerMemoryListView2.Items.Add(new ListViewItem(new[] { i.ToString("X2"), "ND" }));
+                }
+
+            }
+
+            for(int i = 128; i<168; i++)
+            {
+                if (_microController.RegisterAdressTable.ContainsKey(i))
+                {
+                    var item = new ListViewItem(new[] { i.ToString("X2"), _microController.RegisterAdressTable[i].Content.ToString("X2") });
+
+                    registerMemoryListView3.Items.Add(item);
+                }
+                else
+                {
+                    registerMemoryListView3.Items.Add(new ListViewItem(new[] { i.ToString("X2"), "ND" }));
+                }
+            }
+
+            for (int i = 168; i < 208; i++)
+            {
+                if (_microController.RegisterAdressTable.ContainsKey(i))
+                {
+                    var item = new ListViewItem(new[] { i.ToString("X2"), _microController.RegisterAdressTable[i].Content.ToString("X2") });
+
+                    registerMemoryListView4.Items.Add(item);
+                }
+                else
+                {
+                    registerMemoryListView4.Items.Add(new ListViewItem(new[] { i.ToString("X2"), "ND" }));
+                }
+            }
+        }
+
+        private void UpdateRegisterMemoryListView(int memoryAddress, int memoryContent)
+        {
+            if(memoryAddress>=0 && memoryAddress < 40)
+            {
+                var itemToUpdate = registerMemoryListView1.Items[memoryAddress];
+                itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
+            }
+            else if(memoryAddress >= 40 && memoryAddress < 80)
+            {
+                var itemToUpdate = registerMemoryListView2.Items[memoryAddress % 40];
+                itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
+            }
+            else if(memoryAddress >= 128 && memoryAddress < 168)
+            {
+                var itemToUpdate = registerMemoryListView3.Items[memoryAddress % 128];
+                itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
+            }
+            else if (memoryAddress >= 168 && memoryAddress < 208)
+            {
+                var itemToUpdate = registerMemoryListView4.Items[memoryAddress % 168];
+                itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
+            }
+        }
     }
 }

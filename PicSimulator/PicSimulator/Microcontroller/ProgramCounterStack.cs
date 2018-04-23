@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PicSimulator.Model
+namespace PicSimulator.Microcontroller
 {
     public class ProgramCounterStack
     {

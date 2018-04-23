@@ -1,10 +1,11 @@
-﻿using System;
+﻿using PicSimulator.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PicSimulator.Model
+namespace PicSimulator.Microcontroller
 {
     public static class OperationDecoder
     {
@@ -19,6 +20,7 @@ namespace PicSimulator.Model
                 return OperationsEnum.RETURN;
             }
 
+            var operationCode7Bit = binaryOperationCode & 16256;
             var operationCode6bit = binaryOperationCode & 16128;
             var operationCode4bit = binaryOperationCode & 15360;
             var operationCode5bit = binaryOperationCode & 15872;
@@ -34,15 +36,15 @@ namespace PicSimulator.Model
             {
                 return OperationsEnum.ANDWF;
             }
-            if (operationCode6bit == 256)
+            if (operationCode7Bit == 384)
             {
                 return OperationsEnum.CLRF;
             }
-            /*Sonderfall
-             * if (operationCode6bit ==)
+            
+            if (operationCode7Bit == 256)
             {
                 return OperationsEnum.CLRW;
-            }*/
+            }
             if (operationCode6bit == 2304)
             {
                 return OperationsEnum.COMF;

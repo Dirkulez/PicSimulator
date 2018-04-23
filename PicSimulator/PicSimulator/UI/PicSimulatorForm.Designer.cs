@@ -57,6 +57,10 @@
             this.label2 = new System.Windows.Forms.Label();
             this.wregTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.registerMemoryListView1 = new System.Windows.Forms.ListView();
+            this.registerMemoryListView2 = new System.Windows.Forms.ListView();
+            this.registerMemoryListView3 = new System.Windows.Forms.ListView();
+            this.registerMemoryListView4 = new System.Windows.Forms.ListView();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -70,7 +74,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1221, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1602, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -160,7 +164,7 @@
             this.LstContentBox.FormattingEnabled = true;
             this.LstContentBox.Location = new System.Drawing.Point(12, 40);
             this.LstContentBox.Name = "LstContentBox";
-            this.LstContentBox.Size = new System.Drawing.Size(831, 480);
+            this.LstContentBox.Size = new System.Drawing.Size(831, 888);
             this.LstContentBox.TabIndex = 1;
             // 
             // groupBox1
@@ -182,7 +186,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(877, 47);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(321, 329);
+            this.groupBox1.Size = new System.Drawing.Size(284, 521);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Spezialfunktionsregister";
@@ -315,11 +319,47 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "W-Reg";
             // 
+            // registerMemoryListView1
+            // 
+            this.registerMemoryListView1.Location = new System.Drawing.Point(1177, 47);
+            this.registerMemoryListView1.Name = "registerMemoryListView1";
+            this.registerMemoryListView1.Size = new System.Drawing.Size(98, 891);
+            this.registerMemoryListView1.TabIndex = 3;
+            this.registerMemoryListView1.UseCompatibleStateImageBehavior = false;
+            // 
+            // registerMemoryListView2
+            // 
+            this.registerMemoryListView2.Location = new System.Drawing.Point(1281, 47);
+            this.registerMemoryListView2.Name = "registerMemoryListView2";
+            this.registerMemoryListView2.Size = new System.Drawing.Size(98, 891);
+            this.registerMemoryListView2.TabIndex = 4;
+            this.registerMemoryListView2.UseCompatibleStateImageBehavior = false;
+            // 
+            // registerMemoryListView3
+            // 
+            this.registerMemoryListView3.Location = new System.Drawing.Point(1385, 47);
+            this.registerMemoryListView3.Name = "registerMemoryListView3";
+            this.registerMemoryListView3.Size = new System.Drawing.Size(98, 891);
+            this.registerMemoryListView3.TabIndex = 5;
+            this.registerMemoryListView3.UseCompatibleStateImageBehavior = false;
+            // 
+            // registerMemoryListView4
+            // 
+            this.registerMemoryListView4.Location = new System.Drawing.Point(1489, 47);
+            this.registerMemoryListView4.Name = "registerMemoryListView4";
+            this.registerMemoryListView4.Size = new System.Drawing.Size(98, 891);
+            this.registerMemoryListView4.TabIndex = 6;
+            this.registerMemoryListView4.UseCompatibleStateImageBehavior = false;
+            // 
             // PicSimulatorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1221, 527);
+            this.ClientSize = new System.Drawing.Size(1602, 954);
+            this.Controls.Add(this.registerMemoryListView4);
+            this.Controls.Add(this.registerMemoryListView3);
+            this.Controls.Add(this.registerMemoryListView2);
+            this.Controls.Add(this.registerMemoryListView1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.LstContentBox);
             this.Controls.Add(this.menuStrip1);
@@ -365,6 +405,10 @@
         private System.Windows.Forms.ToolStripMenuItem singleStepToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
+        private System.Windows.Forms.ListView registerMemoryListView1;
+        private System.Windows.Forms.ListView registerMemoryListView2;
+        private System.Windows.Forms.ListView registerMemoryListView3;
+        private System.Windows.Forms.ListView registerMemoryListView4;
     }
 }
 

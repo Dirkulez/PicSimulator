@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PicSimulator.Model
+namespace PicSimulator.Microcontroller
 {
     public class ArithmeticLogicUnit
     {
@@ -19,13 +19,8 @@ namespace PicSimulator.Model
 
         #region Methods
 
-        public int Build2ndComplement(int originFigure)
+        public int BuildComplement(int originFigure)
         {
-            if (originFigure > 255)
-            {
-                return -1;
-            }
-
             var bit0 = (originFigure & 1) == 1 ? 0 : 1;
             var bit1 = (originFigure & 2) == 2 ? 0 : 2;
             var bit2 = (originFigure & 4) == 4 ? 0 : 4;
@@ -35,7 +30,19 @@ namespace PicSimulator.Model
             var bit6 = (originFigure & 64) == 64 ? 0 : 64;
             var bit7 = (originFigure & 128) == 128 ? 0 : 128;
 
-            return bit0 + bit1 + bit2 + bit3 + bit4 + bit5 + bit6 + bit7 + 1;
+            var result = bit0 + bit1 + bit2 + bit3 + bit4 + bit5 + bit6 + bit7;
+
+            return result;
+        }
+
+        public int Build2ndComplement(int originFigure)
+        {
+            if (originFigure > 255)
+            {
+                return -1;
+            }
+
+            return BuildComplement(originFigure) + 1;
         }
 
         public int BinaryAddition(int add1, int add2)
