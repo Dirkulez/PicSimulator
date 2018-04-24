@@ -123,6 +123,95 @@ namespace PicSimulator.Microcontroller
             return result;
         }
 
+        public int Decrement(int originFigure)
+        {
+            var result = 0;
+
+            if(originFigure == 0)
+            {
+                result = 255;
+                OnResultNotZero();
+            }
+            else
+            {
+                if(originFigure == 1)
+                {
+                    OnResultZero();
+                }
+                else
+                {
+                    OnResultNotZero();
+                }
+
+                result = (originFigure - 1);
+            }
+
+            return result;
+        }
+
+        public int Increment(int originFigure)
+        {
+            var result = 0;
+
+            if(originFigure == 255)
+            {
+                result = 0;
+                OnResultZero();
+            }
+            else
+            {
+                result = (originFigure + 1);
+                OnResultNotZero();
+            }
+
+            return result;
+        }
+
+        public int RotateLeft(int carry, int originFigure)
+        {
+            if((originFigure & 128) == 128)
+            {
+                OnCSet();
+            }
+            else
+            {
+                OnCunset();
+            }
+
+            var result = originFigure << 1;
+            result = result & 255;
+
+            if(carry == 1)
+            {
+                result = result | 1;
+            }
+
+            return result;
+
+        }
+
+        public int RotateRight(int carry, int originFigure)
+        {
+            if((originFigure & 1) == 1)
+            {
+                OnCSet();
+            }
+            else
+            {
+                OnCunset();
+            }
+
+            var result = originFigure >> 1;
+            result = result & 255;
+
+            if(carry == 1)
+            {
+                result = result | 128;
+            }
+
+            return result;
+        }
+
         public int LogicalAND(int and1, int and2)
         {
             var result = and1 & and2;
