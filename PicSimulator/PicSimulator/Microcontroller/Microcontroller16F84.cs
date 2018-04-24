@@ -221,11 +221,12 @@ namespace PicSimulator.Microcontroller
             var literal8Bit = OperationDecoder.Decode8BitLiteral(operationToExeute);
             var literal11Bit = OperationDecoder.Decode11BitLiteral(operationToExeute);
             var fileRegisterAdress7Bit = OperationDecoder.DecodeFileRegisterAdress7Bit(operationToExeute);
-            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit, fileRegisterAdress7Bit);
+            var bitAdress3Bit = OperationDecoder.DecodeBitAdress3Bit(operationToExeute);
+            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit, fileRegisterAdress7Bit, bitAdress3Bit);
         }
 
         private void ExecuteOperationInt(OperationsEnum operationToExecute, int destinationSelect, int literal8Bit, int literal11Bit,
-            int fileRegisterAdress7Bit)
+            int fileRegisterAdress7Bit, int bitAdress3Bit)
         {
             if(operationToExecute == OperationsEnum.MOVLW)
             {
@@ -358,6 +359,76 @@ namespace PicSimulator.Microcontroller
             {
                 ExecuteINCFSZ(destinationSelect, fileRegisterAdress7Bit);
             }
+
+            else if (operationToExecute == OperationsEnum.BCF)
+            {
+                ExecuteBCF(bitAdress3Bit, fileRegisterAdress7Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.BSF)
+            {
+                ExecuteBSF(bitAdress3Bit, fileRegisterAdress7Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.BTFSS)
+            {
+                ExecuteBTFSS(bitAdress3Bit, fileRegisterAdress7Bit);
+            }
+
+            else if (operationToExecute == OperationsEnum.BTFSC)
+            {
+                ExecuteBTFSC(bitAdress3Bit, fileRegisterAdress7Bit);
+            }
+        }
+
+        private void ExecuteBTFSS(int bitAdress3Bit, int fileRegisterAdress7Bit)
+        {
+            var registerContent = _registerAdressTable[fileRegisterAdress7Bit].Content;
+            var result = registerContent & (int)Math.Pow((double)2, (double)bitAdress3Bit);
+
+            Cycle++;
+            ProgramCounterContent++;
+
+            if(result != 0)
+            {
+                ExecuteNOP();
+            }
+        }
+
+        private void ExecuteBTFSC(int bitAdress3Bit, int fileRegisterAdress7Bit)
+        {
+            var registerContent = _registerAdressTable[fileRegisterAdress7Bit].Content;
+            var result = registerContent & (int)Math.Pow((double)2, (double)bitAdress3Bit);
+
+            Cycle++;
+            ProgramCounterContent++;
+
+            if(result == 0)
+            {
+                ExecuteNOP();
+            }
+        }
+
+        private void ExecuteBSF(int bitAdress3Bit, int fileRegisterAdress7Bit)
+        {
+            var result = _alu.SetBit(bitAdress3Bit, _registerAdressTable[fileRegisterAdress7Bit].Content);
+
+            _registerAdressTable[fileRegisterAdress7Bit].Content = result;
+            InvokeMemoryChanged(fileRegisterAdress7Bit, result);
+
+            Cycle++;
+            ProgramCounterContent++;
+        }
+
+        private void ExecuteBCF(int bitAdress3Bit, int fileRegisterAdress7Bit)
+        {
+            var result = _alu.UnsetBit(bitAdress3Bit, _registerAdressTable[fileRegisterAdress7Bit].Content);
+
+            _registerAdressTable[fileRegisterAdress7Bit].Content = result;
+            InvokeMemoryChanged(fileRegisterAdress7Bit, result);
+
+            Cycle++;
+            ProgramCounterContent++;
         }
 
         private void ExecuteINCFSZ(int destinationSelect, int fileRegisterAdress7Bit)

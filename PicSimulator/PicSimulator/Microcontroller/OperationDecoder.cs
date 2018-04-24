@@ -164,9 +164,6 @@ namespace PicSimulator.Microcontroller
                 return OperationsEnum.XORLW;
             }
 
-
-
-
             return OperationsEnum.UNKNOWN;
         }
 
@@ -202,6 +199,14 @@ namespace PicSimulator.Microcontroller
         {
             var mask = 127;
             return (mask & binaryOperationCode);
+        }
+
+        public static int DecodeBitAdress3Bit(int binaryOperationCode)
+        {
+            var mask = 896;
+            var result = mask & binaryOperationCode;
+            result = result >> 7;
+            return result;
         }
     }   
 }

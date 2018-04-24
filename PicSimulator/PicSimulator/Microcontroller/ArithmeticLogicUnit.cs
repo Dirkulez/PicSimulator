@@ -149,6 +149,82 @@ namespace PicSimulator.Microcontroller
             return result;
         }
 
+        public int UnsetBit(int bitAdress, int originFigure)
+        {
+            if(bitAdress == 0)
+            {
+                return (originFigure & 254);
+            }
+            else if (bitAdress == 1)
+            {
+                return (originFigure & 253);
+            }
+            else if (bitAdress == 2)
+            {
+                return (originFigure & 251);
+            }
+            else if (bitAdress == 3)
+            {
+                return (originFigure & 247);
+            }
+            else if (bitAdress == 4)
+            {
+                return (originFigure & 239);
+            }
+            else if (bitAdress == 5)
+            {
+                return (originFigure & 223);
+            }
+            else if (bitAdress == 6)
+            {
+                return (originFigure & 191);
+            }
+            else if (bitAdress == 7)
+            {
+                return (originFigure & 127);
+            }
+
+            return 0;
+        }
+
+        public int SetBit(int bitAdress, int originFigure)
+        {
+            if (bitAdress == 0)
+            {
+                return (originFigure | 1);
+            }
+            else if (bitAdress == 1)
+            {
+                return (originFigure | 2);
+            }
+            else if (bitAdress == 2)
+            {
+                return (originFigure | 4);
+            }
+            else if (bitAdress == 3)
+            {
+                return (originFigure | 8);
+            }
+            else if (bitAdress == 4)
+            {
+                return (originFigure | 16);
+            }
+            else if (bitAdress == 5)
+            {
+                return (originFigure | 32);
+            }
+            else if (bitAdress == 6)
+            {
+                return (originFigure | 64);
+            }
+            else if (bitAdress == 7)
+            {
+                return (originFigure | 128);
+            }
+
+            return 0;
+        }
+
         public int Increment(int originFigure)
         {
             var result = 0;
