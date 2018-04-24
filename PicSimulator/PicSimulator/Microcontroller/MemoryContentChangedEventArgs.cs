@@ -8,7 +8,19 @@ namespace PicSimulator.Microcontroller
 {
     public class MemoryContentChangedEventArgs: EventArgs
     {
-        public int MemoryAddress { get; set; }
+        private List<int> _memoryAddressList = new List<int>();
+        public List<int> MemoryAddress
+        {
+            get
+            {
+                return _memoryAddressList;
+            }
+            set
+            {
+                _memoryAddressList = value;
+            }
+        }
         public int MemoryContent { get; set; }
+
     }
 }

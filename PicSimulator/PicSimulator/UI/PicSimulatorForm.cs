@@ -327,27 +327,30 @@ namespace PicSimulator.UI
             }
         }
 
-        private void UpdateRegisterMemoryListView(int memoryAddress, int memoryContent)
+        private void UpdateRegisterMemoryListView(IEnumerable<int> memoryAddressList, int memoryContent)
         {
-            if(memoryAddress>=0 && memoryAddress < 40)
+            foreach (var memoryAddress in memoryAddressList)
             {
-                var itemToUpdate = registerMemoryListView1.Items[memoryAddress];
-                itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
-            }
-            else if(memoryAddress >= 40 && memoryAddress < 80)
-            {
-                var itemToUpdate = registerMemoryListView2.Items[memoryAddress % 40];
-                itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
-            }
-            else if(memoryAddress >= 128 && memoryAddress < 168)
-            {
-                var itemToUpdate = registerMemoryListView3.Items[memoryAddress % 128];
-                itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
-            }
-            else if (memoryAddress >= 168 && memoryAddress < 208)
-            {
-                var itemToUpdate = registerMemoryListView4.Items[memoryAddress % 168];
-                itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
+                if (memoryAddress >= 0 && memoryAddress < 40)
+                {
+                    var itemToUpdate = registerMemoryListView1.Items[memoryAddress];
+                    itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
+                }
+                else if (memoryAddress >= 40 && memoryAddress < 80)
+                {
+                    var itemToUpdate = registerMemoryListView2.Items[memoryAddress % 40];
+                    itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
+                }
+                else if (memoryAddress >= 128 && memoryAddress < 168)
+                {
+                    var itemToUpdate = registerMemoryListView3.Items[memoryAddress % 128];
+                    itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
+                }
+                else if (memoryAddress >= 168 && memoryAddress < 208)
+                {
+                    var itemToUpdate = registerMemoryListView4.Items[memoryAddress % 168];
+                    itemToUpdate.SubItems[1].Text = memoryContent.ToString("X2");
+                }
             }
         }
     }

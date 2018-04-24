@@ -19,6 +19,7 @@ namespace PicSimulator.Microcontroller
         private Register _statusRegister;
         private Register _pclathRegister;
         private Register _pclRegister;
+        private Register _fsrRegister;
         private ulong _cycle = 0;
         private bool _stopExecution;
         private SynchronizationContext _syncContext;
@@ -102,7 +103,6 @@ namespace PicSimulator.Microcontroller
                     _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
 
                     InvokeMemoryChanged(3, value);
-                    InvokeMemoryChanged(131, value);
 
                 }
             }
@@ -120,7 +120,6 @@ namespace PicSimulator.Microcontroller
                     _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
 
                     InvokeMemoryChanged(10, value);
-                    InvokeMemoryChanged(138, value);
 
                 }
             }
@@ -137,7 +136,6 @@ namespace PicSimulator.Microcontroller
                     var propChangedEventArgs = new PropertyChangedEventArgs(nameof(PclRegisterContent));
                     _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
 
-                    InvokeMemoryChanged(2, value);
                     InvokeMemoryChanged(130, value);
 
                 }
@@ -194,9 +192,63 @@ namespace PicSimulator.Microcontroller
         private void InvokeMemoryChanged(int memoryAddress, int memoryContent)
         {
             var memoryContentChangedEventArgs = new MemoryContentChangedEventArgs();
-            memoryContentChangedEventArgs.MemoryAddress = memoryAddress;
+            memoryContentChangedEventArgs.MemoryAddress.Add(memoryAddress);
             memoryContentChangedEventArgs.MemoryContent = memoryContent;
+            CheckForMirroredMemory(memoryAddress, ref memoryContentChangedEventArgs);
             _syncContext.Post(new SendOrPostCallback((o) => OnMemoryContentChanged(memoryContentChangedEventArgs)), null);
+
+        }
+
+        private void CheckForMirroredMemory(int memoryAddress, ref MemoryContentChangedEventArgs memoryContentChangedEventArgs)
+        {
+            if (memoryAddress == 0)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(128);
+            }
+            else if (memoryAddress == 2)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(130);
+            }
+            else if (memoryAddress == 3)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(131);
+            }
+            else if (memoryAddress == 4)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(132);
+            }
+            else if (memoryAddress == 10)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(138);
+            }
+            else if (memoryAddress == 11)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(139);
+            }
+            if (memoryAddress == 128)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(0);
+            }
+            else if (memoryAddress == 130)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(2);
+            }
+            else if (memoryAddress == 131)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(3);
+            }
+            else if (memoryAddress == 132)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(4);
+            }
+            else if (memoryAddress == 138)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(10);
+            }
+            else if (memoryAddress == 139)
+            {
+                memoryContentChangedEventArgs.MemoryAddress.Add(11);
+            }
         }
 
         public void OnMemoryContentChanged(MemoryContentChangedEventArgs e)
@@ -221,6 +273,10 @@ namespace PicSimulator.Microcontroller
             var literal8Bit = OperationDecoder.Decode8BitLiteral(operationToExeute);
             var literal11Bit = OperationDecoder.Decode11BitLiteral(operationToExeute);
             var fileRegisterAdress7Bit = OperationDecoder.DecodeFileRegisterAdress7Bit(operationToExeute);
+            if(fileRegisterAdress7Bit == 0)
+            {
+                fileRegisterAdress7Bit = _fsrRegister.Content;
+            }
             var bitAdress3Bit = OperationDecoder.DecodeBitAdress3Bit(operationToExeute);
             ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit, fileRegisterAdress7Bit, bitAdress3Bit);
         }
@@ -844,6 +900,7 @@ namespace PicSimulator.Microcontroller
             _workingRegister = new Register(0, "W");
             _pclathRegister = new Register(0, "PCLATH");
             _pclRegister = new Register(0, "PCL");
+            _fsrRegister = new Register(0, "FSR");
 
             _sram = new SRAMRegisters();
 
@@ -859,7 +916,7 @@ namespace PicSimulator.Microcontroller
             _registerAdressTable.Add(1, new Register(0, "TMR0"));
             _registerAdressTable.Add(2, _pclRegister);
             _registerAdressTable.Add(3, _statusRegister);
-            _registerAdressTable.Add(4, new Register(0, "FSR"));
+            _registerAdressTable.Add(4, _fsrRegister);
             _registerAdressTable.Add(5, new Register(0, "PORTA"));
             _registerAdressTable.Add(6, new Register(0, "PORTB"));
             _registerAdressTable.Add(8, new Register(0, "EEDATA"));
@@ -1006,9 +1063,11 @@ namespace PicSimulator.Microcontroller
             _registerAdressTable.Add(206, _sram.Sram66);
             _registerAdressTable.Add(207, _sram.Sram67);
 
+            _registerAdressTable.Add(128, new Register(0, "INDF"));
             _registerAdressTable.Add(129, new Register(255, "OPTION_REG"));
             _registerAdressTable.Add(130, _pclRegister);
             _registerAdressTable.Add(131, _statusRegister);
+            _registerAdressTable.Add(132, _fsrRegister);
             _registerAdressTable.Add(133, new Register(31, "TRISA"));
             _registerAdressTable.Add(134, new Register(255, "TRISB"));
             _registerAdressTable.Add(136, new Register(0, "EECON1"));
