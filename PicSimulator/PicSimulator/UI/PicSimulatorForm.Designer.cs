@@ -42,8 +42,6 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LstContentBox = new System.Windows.Forms.CheckedListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.cycleTextBox = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
             this.pclathTextBox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.dcBitTextBox = new System.Windows.Forms.TextBox();
@@ -57,12 +55,27 @@
             this.label2 = new System.Windows.Forms.Label();
             this.wregTextBox = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.cycleTextBox = new System.Windows.Forms.TextBox();
+            this.label8 = new System.Windows.Forms.Label();
             this.registerMemoryListView1 = new System.Windows.Forms.ListView();
             this.registerMemoryListView2 = new System.Windows.Forms.ListView();
             this.registerMemoryListView3 = new System.Windows.Forms.ListView();
             this.registerMemoryListView4 = new System.Windows.Forms.ListView();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cycleDurationTextBox = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.frequencyTextBox = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.runtimeTextBox = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.frequenzToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -71,6 +84,7 @@
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.executeToolStripMenuItem,
+            this.settingToolStripMenuItem,
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
@@ -169,8 +183,6 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.cycleTextBox);
-            this.groupBox1.Controls.Add(this.label8);
             this.groupBox1.Controls.Add(this.pclathTextBox);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.dcBitTextBox);
@@ -186,27 +198,10 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(877, 47);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(284, 521);
+            this.groupBox1.Size = new System.Drawing.Size(284, 321);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Spezialfunktionsregister";
-            // 
-            // cycleTextBox
-            // 
-            this.cycleTextBox.Location = new System.Drawing.Point(88, 250);
-            this.cycleTextBox.Name = "cycleTextBox";
-            this.cycleTextBox.ReadOnly = true;
-            this.cycleTextBox.Size = new System.Drawing.Size(181, 22);
-            this.cycleTextBox.TabIndex = 14;
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(20, 255);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(42, 17);
-            this.label8.TabIndex = 13;
-            this.label8.Text = "Cycle";
             // 
             // pclathTextBox
             // 
@@ -319,6 +314,23 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "W-Reg";
             // 
+            // cycleTextBox
+            // 
+            this.cycleTextBox.Location = new System.Drawing.Point(98, 32);
+            this.cycleTextBox.Name = "cycleTextBox";
+            this.cycleTextBox.ReadOnly = true;
+            this.cycleTextBox.Size = new System.Drawing.Size(135, 22);
+            this.cycleTextBox.TabIndex = 14;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(9, 35);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(50, 17);
+            this.label8.TabIndex = 13;
+            this.label8.Text = "Zyklen";
+            // 
             // registerMemoryListView1
             // 
             this.registerMemoryListView1.Location = new System.Drawing.Point(1177, 47);
@@ -351,11 +363,125 @@
             this.registerMemoryListView4.TabIndex = 6;
             this.registerMemoryListView4.UseCompatibleStateImageBehavior = false;
             // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.label14);
+            this.groupBox2.Controls.Add(this.label13);
+            this.groupBox2.Controls.Add(this.label12);
+            this.groupBox2.Controls.Add(this.cycleDurationTextBox);
+            this.groupBox2.Controls.Add(this.label11);
+            this.groupBox2.Controls.Add(this.frequencyTextBox);
+            this.groupBox2.Controls.Add(this.label10);
+            this.groupBox2.Controls.Add(this.runtimeTextBox);
+            this.groupBox2.Controls.Add(this.label9);
+            this.groupBox2.Controls.Add(this.cycleTextBox);
+            this.groupBox2.Controls.Add(this.label8);
+            this.groupBox2.Location = new System.Drawing.Point(875, 413);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(286, 175);
+            this.groupBox2.TabIndex = 7;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Frequenz / Laufzeit";
+            // 
+            // cycleDurationTextBox
+            // 
+            this.cycleDurationTextBox.Location = new System.Drawing.Point(101, 135);
+            this.cycleDurationTextBox.Name = "cycleDurationTextBox";
+            this.cycleDurationTextBox.ReadOnly = true;
+            this.cycleDurationTextBox.Size = new System.Drawing.Size(132, 22);
+            this.cycleDurationTextBox.TabIndex = 20;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(9, 140);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(86, 17);
+            this.label11.TabIndex = 19;
+            this.label11.Text = "Zyklusdauer";
+            // 
+            // frequencyTextBox
+            // 
+            this.frequencyTextBox.Location = new System.Drawing.Point(100, 98);
+            this.frequencyTextBox.Name = "frequencyTextBox";
+            this.frequencyTextBox.ReadOnly = true;
+            this.frequencyTextBox.Size = new System.Drawing.Size(133, 22);
+            this.frequencyTextBox.TabIndex = 18;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(9, 103);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(68, 17);
+            this.label10.TabIndex = 17;
+            this.label10.Text = "Frequenz";
+            // 
+            // runtimeTextBox
+            // 
+            this.runtimeTextBox.Location = new System.Drawing.Point(98, 68);
+            this.runtimeTextBox.Name = "runtimeTextBox";
+            this.runtimeTextBox.ReadOnly = true;
+            this.runtimeTextBox.Size = new System.Drawing.Size(135, 22);
+            this.runtimeTextBox.TabIndex = 16;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(9, 73);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(58, 17);
+            this.label9.TabIndex = 15;
+            this.label9.Text = "Laufzeit";
+            // 
+            // settingToolStripMenuItem
+            // 
+            this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.frequenzToolStripMenuItem});
+            this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
+            this.settingToolStripMenuItem.Size = new System.Drawing.Size(109, 24);
+            this.settingToolStripMenuItem.Text = "Einstellungen";
+            // 
+            // frequenzToolStripMenuItem
+            // 
+            this.frequenzToolStripMenuItem.Name = "frequenzToolStripMenuItem";
+            this.frequenzToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.frequenzToolStripMenuItem.Text = "Frequenz";
+            this.frequenzToolStripMenuItem.Click += new System.EventHandler(this.frequenzToolStripMenuItem_Click);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(240, 68);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(23, 17);
+            this.label12.TabIndex = 21;
+            this.label12.Text = "µs";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(241, 140);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(23, 17);
+            this.label13.TabIndex = 22;
+            this.label13.Text = "µs";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(241, 101);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(34, 17);
+            this.label14.TabIndex = 23;
+            this.label14.Text = "Mhz";
+            // 
             // PicSimulatorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1602, 954);
+            this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.registerMemoryListView4);
             this.Controls.Add(this.registerMemoryListView3);
             this.Controls.Add(this.registerMemoryListView2);
@@ -370,6 +496,8 @@
             this.menuStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -409,6 +537,18 @@
         private System.Windows.Forms.ListView registerMemoryListView2;
         private System.Windows.Forms.ListView registerMemoryListView3;
         private System.Windows.Forms.ListView registerMemoryListView4;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox runtimeTextBox;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox frequencyTextBox;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox cycleDurationTextBox;
+        private System.Windows.Forms.ToolStripMenuItem settingToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem frequenzToolStripMenuItem;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label12;
     }
 }
 

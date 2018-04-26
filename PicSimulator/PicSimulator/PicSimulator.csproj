@@ -50,10 +50,17 @@
     <Compile Include="Microcontroller\Microcontroller16F84.cs" />
     <Compile Include="Microcontroller\OperationDecoder.cs" />
     <Compile Include="Microcontroller\SRAMRegisters.cs" />
+    <Compile Include="Microcontroller\Timer0.cs" />
     <Compile Include="Model\OperationsEnum.cs" />
     <Compile Include="Microcontroller\ProgramCounterStack.cs" />
     <Compile Include="Model\Register.cs" />
     <Compile Include="Parser\LstParser.cs" />
+    <Compile Include="UI\FrequencyInputDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\FrequencyInputDialog.Designer.cs">
+      <DependentUpon>FrequencyInputDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\PicSimulatorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,6 +69,9 @@
     </Compile>
     <Compile Include="PicSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="UI\FrequencyInputDialog.resx">
+      <DependentUpon>FrequencyInputDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\PicSimulatorForm.resx">
       <DependentUpon>PicSimulatorForm.cs</DependentUpon>
     </EmbeddedResource>

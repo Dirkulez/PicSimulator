@@ -7,3 +7,4 @@ D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\
 D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.exe
 D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.pdb
 D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.UI.PicSimulatorForm.resources
+D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.UI.FrequencyInputDialog.resources

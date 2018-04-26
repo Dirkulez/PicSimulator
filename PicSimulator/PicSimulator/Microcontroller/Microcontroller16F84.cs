@@ -20,12 +20,19 @@ namespace PicSimulator.Microcontroller
         private Register _pclathRegister;
         private Register _pclRegister;
         private Register _fsrRegister;
+        private Register _tmr0Register;
+        private Register _optionRegister;
+        private Register _intconRegister;
         private ulong _cycle = 0;
         private bool _stopExecution;
         private SynchronizationContext _syncContext;
         private ProgramCounterStack _programCounterStack;
         private ArithmeticLogicUnit _alu;
         private SRAMRegisters _sram;
+        private Timer0 _tmr0;
+        private double _frequency; //MHZ
+        private double _cycleDuration; //microseconds
+        private double _runtimeDuration; //microseconds
         #endregion
 
         #region Events
@@ -34,6 +41,49 @@ namespace PicSimulator.Microcontroller
         #endregion
 
         #region Properties
+
+        public double RuntimeDuration
+        {
+            get { return _runtimeDuration; }
+            set
+            {
+                if(value != _runtimeDuration)
+                {
+                    _runtimeDuration = value;
+                    var propChangedEventArgs = new PropertyChangedEventArgs(nameof(RuntimeDuration));
+                    _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
+                }
+            }
+        }
+
+        public double CycleDuration
+        {
+            get { return _cycleDuration; }
+            set
+            {
+                if(value != _cycleDuration)
+                {
+                    _cycleDuration = value;
+                    var propChangedEventArgs = new PropertyChangedEventArgs(nameof(CycleDuration));
+                    _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
+                }
+            }
+        }
+
+        public double Frequency
+        {
+            get { return _frequency; }
+            set
+            {
+                if(value != _frequency)
+                {
+                    _frequency = value;
+                    var propChangedEventArgs = new PropertyChangedEventArgs(nameof(Frequency));
+                    _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
+                    SetCycleDuration();
+                }
+            }
+        }
 
         public Dictionary<int, Register> RegisterAdressTable
         {
@@ -167,10 +217,18 @@ namespace PicSimulator.Microcontroller
             InitOperations(operations);
             _programCounterStack = new ProgramCounterStack();
             InitAlu();
+            _tmr0 = new Timer0();
+            _frequency = 4.0;
+            SetCycleDuration();
         }
         #endregion
 
         #region Methods
+
+        private void SetCycleDuration()
+        {
+            CycleDuration = (1 / Frequency) * 4;
+        }
 
         private void InitAlu()
         {
@@ -272,17 +330,23 @@ namespace PicSimulator.Microcontroller
             var destinationSelect = OperationDecoder.DecodeDestinationSelect(operationToExeute);
             var literal8Bit = OperationDecoder.Decode8BitLiteral(operationToExeute);
             var literal11Bit = OperationDecoder.Decode11BitLiteral(operationToExeute);
-            var fileRegisterAdress7Bit = OperationDecoder.DecodeFileRegisterAdress7Bit(operationToExeute);
-            if(fileRegisterAdress7Bit == 0)
+            var fileRegisterAddress = OperationDecoder.DecodeFileRegisterAdress7Bit(operationToExeute);
+            if(fileRegisterAddress == 0)
             {
-                fileRegisterAdress7Bit = _fsrRegister.Content;
+                var bankSelect = (StatusRegisterContent & 128) << 1;
+                fileRegisterAddress = _fsrRegister.Content + bankSelect;
+            }
+            else
+            {
+                var bankSelect = (StatusRegisterContent & 96) << 2;
+                fileRegisterAddress = fileRegisterAddress + bankSelect;
             }
             var bitAdress3Bit = OperationDecoder.DecodeBitAdress3Bit(operationToExeute);
-            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit, fileRegisterAdress7Bit, bitAdress3Bit);
+            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit, fileRegisterAddress, bitAdress3Bit);
         }
 
         private void ExecuteOperationInt(OperationsEnum operationToExecute, int destinationSelect, int literal8Bit, int literal11Bit,
-            int fileRegisterAdress7Bit, int bitAdress3Bit)
+            int fileRegisterAddress, int bitAdress3Bit)
         {
             if(operationToExecute == OperationsEnum.MOVLW)
             {
@@ -333,62 +397,62 @@ namespace PicSimulator.Microcontroller
 
             else if (operationToExecute == OperationsEnum.MOVWF)
             {
-                ExecuteMOVWF(fileRegisterAdress7Bit);
+                ExecuteMOVWF(fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.ADDWF)
             {
-                ExecuteADDWF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteADDWF(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.ANDWF)
             {
-                ExecuteANDWF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteANDWF(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.CLRF)
             {
-                ExecuteCLRF(fileRegisterAdress7Bit);
+                ExecuteCLRF(fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.COMF)
             {
-                ExecuteCOMF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteCOMF(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.DECF)
             {
-                ExecuteDECF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteDECF(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.INCF)
             {
-                ExecuteINCF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteINCF(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.MOVF)
             {
-                ExecuteMOVF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteMOVF(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.IORWF)
             {
-                ExecuteIORWF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteIORWF(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.SUBWF)
             {
-                ExecuteSUBWF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteSUBWF(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.SWAPF)
             {
-                ExecuteSWAPF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteSWAPF(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.XORWF)
             {
-                ExecuteXORWF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteXORWF(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.CLRW)
@@ -398,178 +462,132 @@ namespace PicSimulator.Microcontroller
 
             else if (operationToExecute == OperationsEnum.RLF)
             {
-                ExecuteRLF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteRLF(destinationSelect, fileRegisterAddress);
             }
 
             else if(operationToExecute == OperationsEnum.RRF)
             {
-                ExecuteRRF(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteRRF(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.DECFSZ)
             {
-                ExecuteDECFSZ(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteDECFSZ(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.INCFSZ)
             {
-                ExecuteINCFSZ(destinationSelect, fileRegisterAdress7Bit);
+                ExecuteINCFSZ(destinationSelect, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.BCF)
             {
-                ExecuteBCF(bitAdress3Bit, fileRegisterAdress7Bit);
+                ExecuteBCF(bitAdress3Bit, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.BSF)
             {
-                ExecuteBSF(bitAdress3Bit, fileRegisterAdress7Bit);
+                ExecuteBSF(bitAdress3Bit, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.BTFSS)
             {
-                ExecuteBTFSS(bitAdress3Bit, fileRegisterAdress7Bit);
+                ExecuteBTFSS(bitAdress3Bit, fileRegisterAddress);
             }
 
             else if (operationToExecute == OperationsEnum.BTFSC)
             {
-                ExecuteBTFSC(bitAdress3Bit, fileRegisterAdress7Bit);
+                ExecuteBTFSC(bitAdress3Bit, fileRegisterAddress);
             }
         }
 
-        private void ExecuteBTFSS(int bitAdress3Bit, int fileRegisterAdress7Bit)
+        private void ExecuteBTFSS(int bitAdress3Bit, int fileRegisterAddress)
         {
-            var registerContent = _registerAdressTable[fileRegisterAdress7Bit].Content;
+            var registerContent = _registerAdressTable[fileRegisterAddress].Content;
             var result = registerContent & (int)Math.Pow((double)2, (double)bitAdress3Bit);
 
-            Cycle++;
+            IncreaseCycle(1);
             ProgramCounterContent++;
 
-            if(result != 0)
+            if (result != 0)
             {
                 ExecuteNOP();
             }
         }
 
-        private void ExecuteBTFSC(int bitAdress3Bit, int fileRegisterAdress7Bit)
+        private void ExecuteBTFSC(int bitAdress3Bit, int fileRegisterAddress)
         {
-            var registerContent = _registerAdressTable[fileRegisterAdress7Bit].Content;
+            var registerContent = _registerAdressTable[fileRegisterAddress].Content;
             var result = registerContent & (int)Math.Pow((double)2, (double)bitAdress3Bit);
 
-            Cycle++;
+            IncreaseCycle(1);
             ProgramCounterContent++;
 
-            if(result == 0)
+            if (result == 0)
             {
                 ExecuteNOP();
             }
         }
 
-        private void ExecuteBSF(int bitAdress3Bit, int fileRegisterAdress7Bit)
+        private void ExecuteBSF(int bitAdress3Bit, int fileRegisterAddress)
         {
-            var result = _alu.SetBit(bitAdress3Bit, _registerAdressTable[fileRegisterAdress7Bit].Content);
-
-            _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-            InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-
-            Cycle++;
+            var result = _alu.SetBit(bitAdress3Bit, _registerAdressTable[fileRegisterAddress].Content);
+            IncreaseCycle(1);
+            WriteResultToRegisterWithGivenAddress(result, fileRegisterAddress);
             ProgramCounterContent++;
         }
 
-        private void ExecuteBCF(int bitAdress3Bit, int fileRegisterAdress7Bit)
+        private void ExecuteBCF(int bitAdress3Bit, int fileRegisterAddress)
         {
-            var result = _alu.UnsetBit(bitAdress3Bit, _registerAdressTable[fileRegisterAdress7Bit].Content);
-
-            _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-            InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-
-            Cycle++;
+            var result = _alu.UnsetBit(bitAdress3Bit, _registerAdressTable[fileRegisterAddress].Content);
+            IncreaseCycle(1);
+            WriteResultToRegisterWithGivenAddress(result, fileRegisterAddress);
             ProgramCounterContent++;
         }
 
-        private void ExecuteINCFSZ(int destinationSelect, int fileRegisterAdress7Bit)
+        private void ExecuteINCFSZ(int destinationSelect, int fileRegisterAddress)
         {
-            var result = _alu.Increment(_registerAdressTable[fileRegisterAdress7Bit].Content);
-
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
+            var result = _alu.Increment(_registerAdressTable[fileRegisterAddress].Content, false);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
             ProgramCounterContent++;
 
-            if(result == 0)
+            if (result == 0)
             {
                 ExecuteNOP();
             }
         }
 
-        private void ExecuteDECFSZ(int destinationSelect, int fileRegisterAdress7Bit)
+        private void ExecuteDECFSZ(int destinationSelect, int fileRegisterAddress)
         {
-            var result = _alu.Decrement(_registerAdressTable[fileRegisterAdress7Bit].Content);
-
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
+            var result = _alu.Decrement(_registerAdressTable[fileRegisterAddress].Content, false);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
             ProgramCounterContent++;
 
-            if(result == 0)
+            if (result == 0)
             {
                 ExecuteNOP();
             }
         }
 
-        private void ExecuteRRF(int destinationSelect, int fileRegisterAdress7Bit)
+        private void ExecuteRRF(int destinationSelect, int fileRegisterAddress)
         {
             var carry = CBit;
+            var result = _alu.RotateRight(carry, _registerAdressTable[fileRegisterAddress].Content);
 
-            var result = _alu.RotateRight(carry, _registerAdressTable[fileRegisterAdress7Bit].Content);
-
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
             ProgramCounterContent++;
         }
 
-        private void ExecuteRLF(int destinationSelect, int fileRegisterAdress7Bit)
+        private void ExecuteRLF(int destinationSelect, int fileRegisterAddress)
         {
             var carry = CBit;
+            var result = _alu.RotateLeft(carry, _registerAdressTable[fileRegisterAddress].Content);
 
-            var result = _alu.RotateLeft(carry, _registerAdressTable[fileRegisterAdress7Bit].Content);
-
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
             ProgramCounterContent++;
         }
 
@@ -577,227 +595,121 @@ namespace PicSimulator.Microcontroller
         {
             WorkingRegisterContent = 0;
             SetZeroBitTo1(this, new EventArgs());
-
-            Cycle++;
+            IncreaseCycle(1);
             ProgramCounterContent++;
         }
 
-        private void ExecuteXORWF(int destinationSelect, int fileRegisterAdress7Bit)
+        private void ExecuteXORWF(int destinationSelect, int fileRegisterAddress)
         {
-            var result = _alu.LogicalExclusiveOR(WorkingRegisterContent, _registerAdressTable[fileRegisterAdress7Bit].Content);
-
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
+            var result = _alu.LogicalExclusiveOR(WorkingRegisterContent, _registerAdressTable[fileRegisterAddress].Content);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
             ProgramCounterContent++;
         }
 
-        private void ExecuteSWAPF(int destinationSelect, int fileRegisterAdress7Bit)
+        private void ExecuteSWAPF(int destinationSelect, int fileRegisterAddress)
         {
-            var registerContent = _registerAdressTable[fileRegisterAdress7Bit].Content;
-            var lowerNibble = registerContent & 15;
-            var higherNibble = registerContent & 240;
-            var lowerNibbleShifted = lowerNibble << 4;
-            var higherNibbleShifted = higherNibble >> 4;
-            var result = lowerNibbleShifted + higherNibbleShifted;
-
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
+            var result = _alu.SwapLowerAndHigherNibble(_registerAdressTable[fileRegisterAddress].Content);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
             ProgramCounterContent++;
         }
 
-        private void ExecuteSUBWF(int destinationSelect, int fileRegisterAdress7Bit)
+        private void ExecuteSUBWF(int destinationSelect, int fileRegisterAddress)
         {
             var complement2OfWorkingRegister = _alu.Build2ndComplement(WorkingRegisterContent);
-            var result = _alu.BinaryAddition(complement2OfWorkingRegister, _registerAdressTable[fileRegisterAdress7Bit].Content);
-
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
+            var result = _alu.BinaryAddition(complement2OfWorkingRegister, _registerAdressTable[fileRegisterAddress].Content);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
             ProgramCounterContent++;
         }
 
-        private void ExecuteIORWF(int destinationSelect, int fileRegisterAdress7Bit)
+        private void ExecuteIORWF(int destinationSelect, int fileRegisterAddress)
         {
-            var result = _alu.LogicalInclusiveOR(WorkingRegisterContent, _registerAdressTable[fileRegisterAdress7Bit].Content);
-
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
-            ProgramCounterContent++;
-        }
-
-        private void ExecuteMOVF(int destinationSelect, int fileRegisterAdress7Bit)
-        {
-            var result = _registerAdressTable[fileRegisterAdress7Bit].Content;
-            if(result == 0)
-            {
-                SetZeroBitTo1(this, new EventArgs());
-            }
-            else
-            {
-                SetZeroBitTo0(this, new EventArgs());
-            }
-
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
-            ProgramCounterContent++;
-        }
-
-        private void ExecuteINCF(int destinationSelect, int fileRegisterAdress7Bit)
-        {
-            var result = _alu.Increment(_registerAdressTable[fileRegisterAdress7Bit].Content);
-
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
-            ProgramCounterContent++;
-        }
-
-        private void ExecuteDECF(int destinationSelect, int fileRegisterAdress7Bit)
-        {
-            var result = _alu.Decrement(_registerAdressTable[fileRegisterAdress7Bit].Content);
+            var result = _alu.LogicalInclusiveOR(WorkingRegisterContent, _registerAdressTable[fileRegisterAddress].Content);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
             
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
             ProgramCounterContent++;
-
         }
 
-        private void ExecuteCOMF(int destinationSelect, int fileRegisterAdress7Bit)
+        private void ExecuteMOVF(int destinationSelect, int fileRegisterAddress)
         {
-            var complement = _alu.BuildComplement(_registerAdressTable[fileRegisterAdress7Bit].Content);
-            if(complement == 0)
-            {
-                SetZeroBitTo1(this, new EventArgs());
-            }
-            else
-            {
-                SetZeroBitTo0(this, new EventArgs());
-            }
-
-            if (destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = complement;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, complement);
-            }
-            else
-            {
-                WorkingRegisterContent = complement;
-            }
-
-            Cycle++;
+            var result = _registerAdressTable[fileRegisterAddress].Content;
+            
+            CheckResultForZero(result);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
             ProgramCounterContent++;
-                
         }
 
-        private void ExecuteCLRF(int fileRegisterAdress7Bit)
+        private void ExecuteINCF(int destinationSelect, int fileRegisterAddress)
         {
-            _registerAdressTable[fileRegisterAdress7Bit].Content = 0;
-            InvokeMemoryChanged(fileRegisterAdress7Bit, 0);
+            var result = _alu.Increment(_registerAdressTable[fileRegisterAddress].Content);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
+            ProgramCounterContent++;
+        }
+
+        private void ExecuteDECF(int destinationSelect, int fileRegisterAddress)
+        {
+            var result = _alu.Decrement(_registerAdressTable[fileRegisterAddress].Content);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
+            ProgramCounterContent++;
+        }
+
+        private void ExecuteCOMF(int destinationSelect, int fileRegisterAddress)
+        {
+            var complement = _alu.BuildComplement(_registerAdressTable[fileRegisterAddress].Content);
+            
+            CheckResultForZero(complement);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, complement, fileRegisterAddress);
+
+            ProgramCounterContent++;
+        }
+
+        private void ExecuteCLRF(int fileRegisterAddress)
+        {
+            IncreaseCycle(1);
+            WriteResultToRegisterWithGivenAddress(0, fileRegisterAddress);
             SetZeroBitTo1(this, new EventArgs());
-            Cycle++;
             ProgramCounterContent++;
         }
 
-        private void ExecuteANDWF(int destinationSelect, int fileRegisterAdress7Bit)
+        private void ExecuteANDWF(int destinationSelect, int fileRegisterAddress)
         {
-            var result = _alu.LogicalAND(WorkingRegisterContent, _registerAdressTable[fileRegisterAdress7Bit].Content);
+            var result = _alu.LogicalAND(WorkingRegisterContent, _registerAdressTable[fileRegisterAddress].Content);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
+            ProgramCounterContent++;
+        }
+
+        private void ExecuteADDWF(int destinationSelect, int fileRegisterAddress)
+        {
+            var result = _alu.BinaryAddition(WorkingRegisterContent, _registerAdressTable[fileRegisterAddress].Content);
+            IncreaseCycle(1);
+            WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
+            ProgramCounterContent++;
+        }
+
+        private void WriteResultDependingOnDestinationSelect(int destinationSelect, int result, int fileRegisterAddress)
+        {
             if (destinationSelect == 1)
             {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
+                WriteResultToRegisterWithGivenAddress(result, fileRegisterAddress);
             }
             else
             {
                 WorkingRegisterContent = result;
             }
-
-            Cycle++;
-            ProgramCounterContent++;
         }
 
-        private void ExecuteADDWF(int destinationSelect, int fileRegisterAdress7Bit)
+        private void ExecuteMOVWF(int fileRegisterAddress)
         {
-            var result = _alu.BinaryAddition(WorkingRegisterContent, _registerAdressTable[fileRegisterAdress7Bit].Content);
-            if(destinationSelect == 1)
-            {
-                _registerAdressTable[fileRegisterAdress7Bit].Content = result;
-                InvokeMemoryChanged(fileRegisterAdress7Bit, result);
-            }
-            else
-            {
-                WorkingRegisterContent = result;
-            }
-
-            Cycle++;
-            ProgramCounterContent++;
-        }
-
-        private void ExecuteMOVWF(int fileRegisterAdress7Bit)
-        {
-            _registerAdressTable[fileRegisterAdress7Bit].Content = WorkingRegisterContent;
-            InvokeMemoryChanged(fileRegisterAdress7Bit, WorkingRegisterContent);
-            Cycle++;
+            IncreaseCycle(1);
+            WriteResultToRegisterWithGivenAddress(WorkingRegisterContent, fileRegisterAddress);
             ProgramCounterContent++;
         }
 
@@ -812,14 +724,13 @@ namespace PicSimulator.Microcontroller
             var pclathValue = PclathRegisterContent & 24;
             pclathValue = pclathValue << 8;
             ProgramCounterContent = literal11Bit + pclathValue;
-            Cycle += 2;
 
+            IncreaseCycle(2);
         }
 
         private void ExecuteNOP()
         {
-            WorkingRegisterContent = WorkingRegisterContent;
-            Cycle++;
+            IncreaseCycle(1);
             ProgramCounterContent++;
         }
 
@@ -828,34 +739,34 @@ namespace PicSimulator.Microcontroller
             //program counter is loaded from the top of the stack
             //8bitliteral is stored in w_reg
             WorkingRegisterContent = literal8Bit;
-            Cycle+= 2;
+            IncreaseCycle(2);
             ProgramCounterContent = _programCounterStack.PopFromStack();
         }
 
         private void ExecuteRETURN()
         {
-            Cycle += 2;
+            IncreaseCycle(2);
             ProgramCounterContent = _programCounterStack.PopFromStack();
         }
 
         private void ExecuteMOVLW(int literal8Bit)
         {
             WorkingRegisterContent = literal8Bit;
-            Cycle++;
+            IncreaseCycle(1);
             ProgramCounterContent++;
         }
 
         private void ExecuteANDLW(int literal8Bit)
         {
             WorkingRegisterContent = _alu.LogicalAND(WorkingRegisterContent, literal8Bit);
-            Cycle++;
+            IncreaseCycle(1);
             ProgramCounterContent++;
         }
 
         private void ExecuteIORLW(int literal8Bit)
         {
             WorkingRegisterContent = _alu.LogicalInclusiveOR(WorkingRegisterContent, literal8Bit);
-            Cycle++;
+            IncreaseCycle(1);
             ProgramCounterContent++;
         }
 
@@ -864,24 +775,21 @@ namespace PicSimulator.Microcontroller
 
             var complement2OfWorkingReg = _alu.Build2ndComplement(WorkingRegisterContent);
             WorkingRegisterContent = _alu.BinaryAddition(literal8Bit, complement2OfWorkingReg);
-
-            Cycle++;
+            IncreaseCycle(1);
             ProgramCounterContent++;
         }
 
         private void ExecuteXORLW(int literal8Bit){
 
             WorkingRegisterContent = _alu.LogicalExclusiveOR(WorkingRegisterContent, literal8Bit);
-
-            Cycle++;
+            IncreaseCycle(1);
             ProgramCounterContent++;
         }
 
         private void ExecuteADDLW(int literal8Bit)
         {
             WorkingRegisterContent = _alu.BinaryAddition(literal8Bit, WorkingRegisterContent);
-
-            Cycle++;
+            IncreaseCycle(1);
             ProgramCounterContent++;
         }
 
@@ -889,8 +797,91 @@ namespace PicSimulator.Microcontroller
         {
             var pclathValue = PclathRegisterContent & 24;
             pclathValue = pclathValue << 8;
+
             ProgramCounterContent = literal11Bit + pclathValue;
-            Cycle += 2;
+            IncreaseCycle(2);
+        }
+
+        private void WriteResultToRegisterWithGivenAddress(int result, int fileRegisterAddress)
+        {
+            _registerAdressTable[fileRegisterAddress].Content = result;
+            InvokeMemoryChanged(fileRegisterAddress, result);
+        }
+
+        private void IncreaseCycle(int cycleIncrease)
+        {
+            while (cycleIncrease > 0)
+            {
+                Cycle++;
+                RuntimeDuration += CycleDuration;
+                cycleIncrease--;
+                ProcessTimer0();
+            }
+        }
+
+        private void ProcessTimer0()
+        {
+            if (TimerModeSelected())
+            {
+                var timerIncreaseValue = _tmr0.IncreaseTimer(IsPrescalerAssignedToTimer(), GetPrescalerValue());
+                var newTimerValue = _tmr0Register.Content + timerIncreaseValue;
+                if(newTimerValue > 255)
+                {
+                    newTimerValue = 0;
+                    SetT0IFbit();
+                }
+                WriteResultToRegisterWithGivenAddress(newTimerValue, 1);
+            }
+        }
+
+        private void SetT0IFbit()
+        {
+            var intconContent = _intconRegister.Content;
+            intconContent = intconContent | 4;
+            WriteResultToRegisterWithGivenAddress(intconContent, 11);
+        }
+
+        private bool IsPrescalerAssignedToTimer()
+        {
+            //check PSA bit in option register
+            //if == 0 return true, else false
+
+            if ((_optionRegister.Content & 8) == 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private int GetPrescalerValue()
+        {
+            //return bit 0-2 of option register
+            return (_optionRegister.Content & 7);
+        }
+
+        private void CheckResultForZero(int result)
+        {
+            if (result == 0)
+            {
+                SetZeroBitTo1(this, new EventArgs());
+            }
+            else
+            {
+                SetZeroBitTo0(this, new EventArgs());
+            }
+        }
+
+        private bool TimerModeSelected()
+        {
+            //check TOCS bit in option register
+            //return true if == 0, else false
+            if((_optionRegister.Content & 32) == 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void InitRegisters()
@@ -901,19 +892,21 @@ namespace PicSimulator.Microcontroller
             _pclathRegister = new Register(0, "PCLATH");
             _pclRegister = new Register(0, "PCL");
             _fsrRegister = new Register(0, "FSR");
+            _tmr0Register = new Register(0, "TMR0");
+            _optionRegister = new Register(255, "OPTION_REG");
+            _intconRegister = new Register(0, "INTCON");
 
             _sram = new SRAMRegisters();
 
             _registerAdressTable = new Dictionary<int, Register>();
             FillRegisterAdressTable();
-           
             
         }
 
         private void FillRegisterAdressTable()
         {
             _registerAdressTable.Add(0, new Register(0, "INDF"));
-            _registerAdressTable.Add(1, new Register(0, "TMR0"));
+            _registerAdressTable.Add(1, _tmr0Register);
             _registerAdressTable.Add(2, _pclRegister);
             _registerAdressTable.Add(3, _statusRegister);
             _registerAdressTable.Add(4, _fsrRegister);
@@ -922,7 +915,7 @@ namespace PicSimulator.Microcontroller
             _registerAdressTable.Add(8, new Register(0, "EEDATA"));
             _registerAdressTable.Add(9, new Register(0, "EEADR"));
             _registerAdressTable.Add(10, _pclathRegister);
-            _registerAdressTable.Add(11, new Register(0, "INTCON"));
+            _registerAdressTable.Add(11, _intconRegister);
 
             //map SRAM registers
             _registerAdressTable.Add(12, _sram.Sram0);
@@ -1064,7 +1057,7 @@ namespace PicSimulator.Microcontroller
             _registerAdressTable.Add(207, _sram.Sram67);
 
             _registerAdressTable.Add(128, new Register(0, "INDF"));
-            _registerAdressTable.Add(129, new Register(255, "OPTION_REG"));
+            _registerAdressTable.Add(129, _optionRegister);
             _registerAdressTable.Add(130, _pclRegister);
             _registerAdressTable.Add(131, _statusRegister);
             _registerAdressTable.Add(132, _fsrRegister);
@@ -1072,6 +1065,7 @@ namespace PicSimulator.Microcontroller
             _registerAdressTable.Add(134, new Register(255, "TRISB"));
             _registerAdressTable.Add(136, new Register(0, "EECON1"));
             _registerAdressTable.Add(137, new Register(0, "EECON2"));
+            _registerAdressTable.Add(139, _intconRegister);
         }
 
         private void InitOperations(IEnumerable<string> operations)

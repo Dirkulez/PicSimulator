@@ -20,6 +20,7 @@ namespace PicSimulator.UI
         private Microcontroller16F84 _microController;
         private bool _dataBindingInitialized;
         private BackgroundWorker _backgroundWorker;
+        private FrequencyInputDialog _frequencyInputDialog;
 
         public event EventHandler<EventArgs> LstLoaded;
 
@@ -32,6 +33,7 @@ namespace PicSimulator.UI
             InitBackgroundWorker();
             InitRegisterMemoryListView();
             WindowState = FormWindowState.Maximized;
+            frequenzToolStripMenuItem.Enabled = false;
          }
 
         private void LstLoaded_Executed(object sender, EventArgs e)
@@ -39,6 +41,7 @@ namespace PicSimulator.UI
             InitMicrocontroller();
             InitDataBindings();
             executeToolStripMenuItem.Enabled = true;
+            frequenzToolStripMenuItem.Enabled = true;
             debugToolStripMenuItem.Enabled = false;
             SelectCurrentLineOfLstContentBox(_microController.ProgramCounterContent);
             FillRegisterMemoryListView();
@@ -178,6 +181,21 @@ namespace PicSimulator.UI
                 false, DataSourceUpdateMode.OnPropertyChanged);
             cycleTextBox.DataBindings.Add(cycleDataBinding);
 
+            var frequencyDataBinding = new Binding(nameof(frequencyTextBox.Text), _microController, nameof(_microController.Frequency),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            frequencyDataBinding.Format += new ConvertEventHandler(ConvertDouble);
+            frequencyTextBox.DataBindings.Add(frequencyDataBinding);
+
+            var cycleDurationDataBinding = new Binding(nameof(cycleDurationTextBox.Text), _microController, nameof(_microController.CycleDuration),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            cycleDurationDataBinding.Format += new ConvertEventHandler(ConvertDouble);
+            cycleDurationTextBox.DataBindings.Add(cycleDurationDataBinding);
+
+            var runtimeDataBinding = new Binding(nameof(runtimeTextBox.Text), _microController, nameof(_microController.RuntimeDuration),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            runtimeDataBinding.Format += new ConvertEventHandler(ConvertDouble);
+            runtimeTextBox.DataBindings.Add(runtimeDataBinding);
+
             zeroBitTextBox.DataBindings.Add(nameof(zeroBitTextBox.Text), _microController, nameof(_microController.ZeroBit),
                 false, DataSourceUpdateMode.OnPropertyChanged);
             cBitTextBox.DataBindings.Add(nameof(cBitTextBox.Text), _microController, nameof(_microController.CBit),
@@ -185,6 +203,13 @@ namespace PicSimulator.UI
             dcBitTextBox.DataBindings.Add(nameof(dcBitTextBox.Text), _microController, nameof(_microController.DCBit),
                 false, DataSourceUpdateMode.OnPropertyChanged);
             _dataBindingInitialized = true;
+        }
+
+        private void ConvertDouble(object sender, ConvertEventArgs e)
+        {
+            var givenNumber = (double)e.Value;
+            givenNumber = Math.Round(givenNumber, 4);
+            e.Value = givenNumber.ToString();
         }
 
         private void ConvertRegisterContentToHexWith2Digits(object sender, ConvertEventArgs e)
@@ -222,6 +247,7 @@ namespace PicSimulator.UI
             dcBitTextBox.DataBindings.RemoveAt(0);
             pclathTextBox.DataBindings.RemoveAt(0);
             cycleTextBox.DataBindings.RemoveAt(0);
+            frequencyTextBox.DataBindings.RemoveAt(0);
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
@@ -353,5 +379,16 @@ namespace PicSimulator.UI
                 }
             }
         }
+
+        private void frequenzToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _frequencyInputDialog = new FrequencyInputDialog(_microController.Frequency.ToString());
+            var dialogResult = _frequencyInputDialog.ShowDialog();
+            if(dialogResult == DialogResult.OK)
+            {
+                _microController.Frequency = double.Parse(_frequencyInputDialog.Frequency);
+            }
+        }
+
     }
 }

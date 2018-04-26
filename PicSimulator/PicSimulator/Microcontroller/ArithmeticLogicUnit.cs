@@ -123,24 +123,33 @@ namespace PicSimulator.Microcontroller
             return result;
         }
 
-        public int Decrement(int originFigure)
+        public int Decrement(int originFigure, bool affectZeroFlag=true)
         {
             var result = 0;
 
             if(originFigure == 0)
             {
                 result = 255;
-                OnResultNotZero();
+                if (affectZeroFlag)
+                {
+                    OnResultNotZero();
+                }
             }
             else
             {
                 if(originFigure == 1)
                 {
-                    OnResultZero();
+                    if (affectZeroFlag)
+                    {
+                        OnResultZero();
+                    }
                 }
                 else
                 {
-                    OnResultNotZero();
+                    if (affectZeroFlag)
+                    {
+                        OnResultNotZero();
+                    }
                 }
 
                 result = (originFigure - 1);
@@ -225,19 +234,34 @@ namespace PicSimulator.Microcontroller
             return 0;
         }
 
-        public int Increment(int originFigure)
+        public int SwapLowerAndHigherNibble(int originFigure)
+        {
+            var lowerNibble = originFigure & 15;
+            var higherNibble = originFigure & 240;
+            var lowerNibbleShifted = lowerNibble << 4;
+            var higherNibbleShifted = higherNibble >> 4;
+            return (lowerNibbleShifted + higherNibbleShifted);
+        }
+
+        public int Increment(int originFigure, bool affectZeroFlag=true)
         {
             var result = 0;
 
             if(originFigure == 255)
             {
                 result = 0;
-                OnResultZero();
+                if (affectZeroFlag)
+                {
+                    OnResultZero();
+                }
             }
             else
             {
                 result = (originFigure + 1);
-                OnResultNotZero();
+                if (affectZeroFlag)
+                {
+                    OnResultNotZero();
+                }
             }
 
             return result;
