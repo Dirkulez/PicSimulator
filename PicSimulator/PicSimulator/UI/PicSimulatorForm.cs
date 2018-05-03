@@ -22,7 +22,7 @@ namespace PicSimulator.UI
         private BackgroundWorker _backgroundWorker;
         private FrequencyInputDialog _frequencyInputDialog;
         private RegisterContentChangeDialog _registerContentChangeDialog;
-        private int _listViewDoubleClickCount = 0;
+        private int _listViewDoubleClickCount = 0; //neccessary to avoid calling the event twice !?
 
         public event EventHandler<EventArgs> LstLoaded;
 
@@ -37,7 +37,19 @@ namespace PicSimulator.UI
             WindowState = FormWindowState.Maximized;
             frequenzToolStripMenuItem.Enabled = false;
             wregTextBox.DoubleClick += WregTextBox_DoubleClick;
+            LstContentBox.SelectedIndexChanged += LstContentBox_SelectedIndexChanged;
          }
+
+        private void LstContentBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(LstContentBox.SelectedItem != null)
+            {
+                if (LstContentBox.SelectedItem.ToString().StartsWith(" "))
+                {
+                    SelectCurrentLineOfLstContentBox(_microController.ProgramCounterContent);
+                }
+            }
+        }
 
         private void WregTextBox_DoubleClick(object sender, EventArgs e)
         {
@@ -61,7 +73,6 @@ namespace PicSimulator.UI
             InitDataBindings();
             executeToolStripMenuItem.Enabled = true;
             frequenzToolStripMenuItem.Enabled = true;
-            debugToolStripMenuItem.Enabled = false;
             SelectCurrentLineOfLstContentBox(_microController.ProgramCounterContent);
             FillRegisterMemoryListView();
         }
@@ -151,6 +162,19 @@ namespace PicSimulator.UI
             if(e.PropertyName == nameof(_microController.ProgramCounterContent))
             {
                 SelectCurrentLineOfLstContentBox(_microController.ProgramCounterContent);
+                CheckForBreakpoint(_microController.ProgramCounterContent);
+            }
+        }
+
+        private void CheckForBreakpoint(int currentProgramCounter)
+        {
+            foreach(var item in LstContentBox.CheckedItems)
+            {
+                if (item.ToString().StartsWith(currentProgramCounter.ToString("X4").ToUpper()))
+                {
+                    _backgroundWorker.CancelAsync();
+                    break;
+                }
             }
         }
 
@@ -519,5 +543,9 @@ namespace PicSimulator.UI
             }
         }
 
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }

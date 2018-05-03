@@ -10,9 +10,21 @@ namespace PicSimulator.Microcontroller
     public class Timer0
     {
         private int _cyclesSinceLastIncrement = 0;
+        private int _skipCycles = 0;
+
+        public int SkipCycles
+        {
+            get { return _skipCycles; }
+            set { _skipCycles = value; }
+        }
 
         public int IncreaseTimer(bool prescalerActive, int prescalerValue)
         {
+            if(_skipCycles > 0)
+            {
+                _skipCycles--;
+                return 0;
+            }
             if (!prescalerActive)
             {
                 _cyclesSinceLastIncrement = 0;

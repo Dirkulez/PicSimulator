@@ -36,7 +36,6 @@
             this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ausführenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.singleStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frequenzToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -116,14 +115,14 @@
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
             this.exitToolStripMenuItem.Size = new System.Drawing.Size(182, 26);
             this.exitToolStripMenuItem.Text = "Ende";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // executeToolStripMenuItem
             // 
             this.executeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ausführenToolStripMenuItem,
-            this.singleStepToolStripMenuItem,
-            this.debugToolStripMenuItem,
-            this.stopToolStripMenuItem});
+            this.stopToolStripMenuItem,
+            this.singleStepToolStripMenuItem});
             this.executeToolStripMenuItem.Name = "executeToolStripMenuItem";
             this.executeToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
             this.executeToolStripMenuItem.Text = "Ausführen";
@@ -143,13 +142,6 @@
             this.singleStepToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
             this.singleStepToolStripMenuItem.Text = "Single Step";
             this.singleStepToolStripMenuItem.Click += new System.EventHandler(this.singleStepToolStripMenuItem_Click);
-            // 
-            // debugToolStripMenuItem
-            // 
-            this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F6;
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
-            this.debugToolStripMenuItem.Text = "Debug";
             // 
             // stopToolStripMenuItem
             // 
@@ -531,7 +523,6 @@
         private System.Windows.Forms.TextBox cycleTextBox;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.ToolStripMenuItem singleStepToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem debugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem stopToolStripMenuItem;
         private System.Windows.Forms.ListView registerMemoryListView1;
         private System.Windows.Forms.ListView registerMemoryListView2;

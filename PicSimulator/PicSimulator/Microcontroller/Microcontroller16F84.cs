@@ -812,6 +812,10 @@ namespace PicSimulator.Microcontroller
             }else if(fileRegisterAddress == 10 || fileRegisterAddress == 138){
                 PCLATHRegisterContentChanged();
             }
+            if (fileRegisterAddress == 1)
+            {
+                _tmr0.SkipCycles = 2;
+            }
         }
 
         private void PCLATHRegisterContentChanged()
@@ -854,7 +858,8 @@ namespace PicSimulator.Microcontroller
                     newTimerValue = 0;
                     SetT0IFbit();
                 }
-                WriteResultToRegisterWithGivenAddress(newTimerValue, 1);
+                _registerAdressTable[1].Content = newTimerValue;
+                InvokeMemoryChanged(1, newTimerValue);
             }
         }
 
