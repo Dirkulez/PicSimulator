@@ -69,6 +69,12 @@
     </Compile>
     <Compile Include="PicSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\RegisterContentChangeDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\RegisterContentChangeDialog.Designer.cs">
+      <DependentUpon>RegisterContentChangeDialog.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="UI\FrequencyInputDialog.resx">
       <DependentUpon>FrequencyInputDialog.cs</DependentUpon>
     </EmbeddedResource>
@@ -84,6 +90,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\RegisterContentChangeDialog.resx">
+      <DependentUpon>RegisterContentChangeDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

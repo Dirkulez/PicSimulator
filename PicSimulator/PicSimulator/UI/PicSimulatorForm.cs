@@ -21,6 +21,8 @@ namespace PicSimulator.UI
         private bool _dataBindingInitialized;
         private BackgroundWorker _backgroundWorker;
         private FrequencyInputDialog _frequencyInputDialog;
+        private RegisterContentChangeDialog _registerContentChangeDialog;
+        private int _listViewDoubleClickCount = 0;
 
         public event EventHandler<EventArgs> LstLoaded;
 
@@ -34,7 +36,24 @@ namespace PicSimulator.UI
             InitRegisterMemoryListView();
             WindowState = FormWindowState.Maximized;
             frequenzToolStripMenuItem.Enabled = false;
+            wregTextBox.DoubleClick += WregTextBox_DoubleClick;
          }
+
+        private void WregTextBox_DoubleClick(object sender, EventArgs e)
+        {
+            if(_microController == null)
+            {
+                return;
+            }
+
+            _registerContentChangeDialog = new RegisterContentChangeDialog("W-Reg",
+                wregTextBox.Text);
+            var dialogResult = _registerContentChangeDialog.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+            {
+                _microController.ChangeWorkingRegisterContent((int)_registerContentChangeDialog.NewRegisterContent);
+            }
+        }
 
         private void LstLoaded_Executed(object sender, EventArgs e)
         {
@@ -266,21 +285,131 @@ namespace PicSimulator.UI
             registerMemoryListView1.Columns.Add("Inh.", 35);
 
             registerMemoryListView1.View = View.Details;
+            registerMemoryListView1.DoubleClick += RegisterMemoryListView1_DoubleClick;
 
             registerMemoryListView2.Columns.Add("Adr.", 35);
             registerMemoryListView2.Columns.Add("Inh.", 35);
 
             registerMemoryListView2.View = View.Details;
+            registerMemoryListView2.DoubleClick += RegisterMemoryListView2_DoubleClick;
 
             registerMemoryListView3.Columns.Add("Adr.", 35);
             registerMemoryListView3.Columns.Add("Inh.", 35);
 
             registerMemoryListView3.View = View.Details;
+            registerMemoryListView3.DoubleClick += RegisterMemoryListView3_DoubleClick;
 
             registerMemoryListView4.Columns.Add("Adr.", 35);
             registerMemoryListView4.Columns.Add("Inh.", 35);
 
             registerMemoryListView4.View = View.Details;
+            registerMemoryListView4.DoubleClick += RegisterMemoryListView4_DoubleClick;
+        }
+
+        private void RegisterMemoryListView4_DoubleClick(object sender, EventArgs e)
+        {
+            _listViewDoubleClickCount++;
+            if (_listViewDoubleClickCount > 1)
+            {
+                _listViewDoubleClickCount = 0;
+                return;
+            }
+
+            if (registerMemoryListView4.SelectedItems.Count != 1)
+            {
+                return;
+            }
+
+            _registerContentChangeDialog = new RegisterContentChangeDialog(registerMemoryListView4.SelectedItems[0].Text,
+                registerMemoryListView4.SelectedItems[0].SubItems[1].Text);
+            var dialogResult = _registerContentChangeDialog.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+            {
+                _microController.WriteResultToRegisterWithGivenAddress((int)_registerContentChangeDialog.NewRegisterContent,
+                    Convert.ToInt32(registerMemoryListView4.SelectedItems[0].Text, 16));
+            }
+        }
+
+        private void RegisterMemoryListView3_DoubleClick(object sender, EventArgs e)
+        {
+            _listViewDoubleClickCount++;
+            if (_listViewDoubleClickCount > 1)
+            {
+                _listViewDoubleClickCount = 0;
+                return;
+            }
+
+            if (registerMemoryListView3.SelectedItems.Count != 1)
+            {
+                return;
+            }
+
+            if (registerMemoryListView3.SelectedItems[0].Text == "87" || registerMemoryListView3.SelectedItems[0].Text == "8A")
+            {
+                return;
+            }
+
+            _registerContentChangeDialog = new RegisterContentChangeDialog(registerMemoryListView3.SelectedItems[0].Text,
+                registerMemoryListView3.SelectedItems[0].SubItems[1].Text);
+            var dialogResult = _registerContentChangeDialog.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+            {
+                _microController.WriteResultToRegisterWithGivenAddress((int)_registerContentChangeDialog.NewRegisterContent,
+                    Convert.ToInt32(registerMemoryListView3.SelectedItems[0].Text, 16));
+            }
+        }
+
+        private void RegisterMemoryListView2_DoubleClick(object sender, EventArgs e)
+        {
+            _listViewDoubleClickCount++;
+            if (_listViewDoubleClickCount > 1)
+            {
+                _listViewDoubleClickCount = 0;
+                return;
+            }
+
+            if (registerMemoryListView2.SelectedItems.Count != 1)
+            {
+                return;
+            }
+
+            _registerContentChangeDialog = new RegisterContentChangeDialog(registerMemoryListView2.SelectedItems[0].Text,
+                registerMemoryListView2.SelectedItems[0].SubItems[1].Text);
+            var dialogResult = _registerContentChangeDialog.ShowDialog();
+            if (dialogResult == DialogResult.OK)
+            {
+                _microController.WriteResultToRegisterWithGivenAddress((int)_registerContentChangeDialog.NewRegisterContent,
+                    Convert.ToInt32(registerMemoryListView2.SelectedItems[0].Text, 16));
+            }
+        }
+
+        private void RegisterMemoryListView1_DoubleClick(object sender, EventArgs e)
+        {
+            _listViewDoubleClickCount++;
+            if (_listViewDoubleClickCount > 1)
+            {
+                _listViewDoubleClickCount = 0;
+                return;
+            }
+
+            if(registerMemoryListView1.SelectedItems.Count != 1)
+            {
+                return;
+            }
+
+            if(registerMemoryListView1.SelectedItems[0].Text == "07")
+            {
+                return;
+            }
+
+            _registerContentChangeDialog = new RegisterContentChangeDialog(registerMemoryListView1.SelectedItems[0].Text,
+                registerMemoryListView1.SelectedItems[0].SubItems[1].Text);
+            var dialogResult = _registerContentChangeDialog.ShowDialog();
+            if(dialogResult == DialogResult.OK)
+            {
+                _microController.WriteResultToRegisterWithGivenAddress((int)_registerContentChangeDialog.NewRegisterContent,
+                    Convert.ToInt32(registerMemoryListView1.SelectedItems[0].Text, 16));
+            }
         }
 
         private void FillRegisterMemoryListView()

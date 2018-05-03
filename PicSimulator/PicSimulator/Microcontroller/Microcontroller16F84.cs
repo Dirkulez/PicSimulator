@@ -802,10 +802,34 @@ namespace PicSimulator.Microcontroller
             IncreaseCycle(2);
         }
 
-        private void WriteResultToRegisterWithGivenAddress(int result, int fileRegisterAddress)
+        public void WriteResultToRegisterWithGivenAddress(int result, int fileRegisterAddress)
         {
             _registerAdressTable[fileRegisterAddress].Content = result;
             InvokeMemoryChanged(fileRegisterAddress, result);
+            if(fileRegisterAddress == 3 || fileRegisterAddress == 131)
+            {
+                StatusRegisterContentChanged();
+            }else if(fileRegisterAddress == 10 || fileRegisterAddress == 138){
+                PCLATHRegisterContentChanged();
+            }
+        }
+
+        private void PCLATHRegisterContentChanged()
+        {
+            var propChangedEventArgs1 = new PropertyChangedEventArgs(nameof(PclathRegisterContent));
+            _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs1)), null);
+        }
+
+        private void StatusRegisterContentChanged()
+        {
+            var propChangedEventArgs1 = new PropertyChangedEventArgs(nameof(ZeroBit));
+            _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs1)), null);
+            var propChangedEventArgs2 = new PropertyChangedEventArgs(nameof(CBit));
+            _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs2)), null);
+            var propChangedEventArgs3 = new PropertyChangedEventArgs(nameof(DCBit));
+            _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs3)), null);
+            var propChangedEventArgs4 = new PropertyChangedEventArgs(nameof(StatusRegisterContent));
+            _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs4)), null);
         }
 
         private void IncreaseCycle(int cycleIncrease)
@@ -1119,6 +1143,11 @@ namespace PicSimulator.Microcontroller
             StatusRegisterContent = StatusRegisterContent | 2;
             var propChangedEventArgs = new PropertyChangedEventArgs(nameof(DCBit));
             _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
+        }
+
+        public void ChangeWorkingRegisterContent(int newValue)
+        {
+            WorkingRegisterContent = newValue;
         }
        
         #endregion

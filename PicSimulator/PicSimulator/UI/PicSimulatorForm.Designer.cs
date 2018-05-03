@@ -38,6 +38,8 @@
             this.singleStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.frequenzToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LstContentBox = new System.Windows.Forms.CheckedListBox();
@@ -62,17 +64,15 @@
             this.registerMemoryListView3 = new System.Windows.Forms.ListView();
             this.registerMemoryListView4 = new System.Windows.Forms.ListView();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.cycleDurationTextBox = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.frequencyTextBox = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.runtimeTextBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
-            this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.frequenzToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -159,6 +159,21 @@
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
             // 
+            // settingToolStripMenuItem
+            // 
+            this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.frequenzToolStripMenuItem});
+            this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
+            this.settingToolStripMenuItem.Size = new System.Drawing.Size(109, 24);
+            this.settingToolStripMenuItem.Text = "Einstellungen";
+            // 
+            // frequenzToolStripMenuItem
+            // 
+            this.frequenzToolStripMenuItem.Name = "frequenzToolStripMenuItem";
+            this.frequenzToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.frequenzToolStripMenuItem.Text = "Frequenz";
+            this.frequenzToolStripMenuItem.Click += new System.EventHandler(this.frequenzToolStripMenuItem_Click);
+            // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -170,7 +185,7 @@
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 26);
             this.aboutToolStripMenuItem.Text = "Über";
             // 
             // LstContentBox
@@ -383,6 +398,33 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Frequenz / Laufzeit";
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(241, 101);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(34, 17);
+            this.label14.TabIndex = 23;
+            this.label14.Text = "Mhz";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(241, 140);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(23, 17);
+            this.label13.TabIndex = 22;
+            this.label13.Text = "µs";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(240, 68);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(23, 17);
+            this.label12.TabIndex = 21;
+            this.label12.Text = "µs";
+            // 
             // cycleDurationTextBox
             // 
             this.cycleDurationTextBox.Location = new System.Drawing.Point(101, 135);
@@ -433,48 +475,6 @@
             this.label9.Size = new System.Drawing.Size(58, 17);
             this.label9.TabIndex = 15;
             this.label9.Text = "Laufzeit";
-            // 
-            // settingToolStripMenuItem
-            // 
-            this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.frequenzToolStripMenuItem});
-            this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
-            this.settingToolStripMenuItem.Size = new System.Drawing.Size(109, 24);
-            this.settingToolStripMenuItem.Text = "Einstellungen";
-            // 
-            // frequenzToolStripMenuItem
-            // 
-            this.frequenzToolStripMenuItem.Name = "frequenzToolStripMenuItem";
-            this.frequenzToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.frequenzToolStripMenuItem.Text = "Frequenz";
-            this.frequenzToolStripMenuItem.Click += new System.EventHandler(this.frequenzToolStripMenuItem_Click);
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(240, 68);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(23, 17);
-            this.label12.TabIndex = 21;
-            this.label12.Text = "µs";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(241, 140);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(23, 17);
-            this.label13.TabIndex = 22;
-            this.label13.Text = "µs";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(241, 101);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(34, 17);
-            this.label14.TabIndex = 23;
-            this.label14.Text = "Mhz";
             // 
             // PicSimulatorForm
             // 

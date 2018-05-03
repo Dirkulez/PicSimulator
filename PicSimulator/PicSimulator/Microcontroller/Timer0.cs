@@ -43,7 +43,7 @@ namespace PicSimulator.Microcontroller
             }
             else if(prescalerValue == 1)
             {
-                return 2;
+                return 4;
             }
             else if (prescalerValue == 2)
             {
