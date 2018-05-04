@@ -35,8 +35,8 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.executeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ausführenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.singleStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.singleStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frequenzToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -135,14 +135,6 @@
             this.ausführenToolStripMenuItem.Text = "Ausführen";
             this.ausführenToolStripMenuItem.Click += new System.EventHandler(this.executeToolStripMenuItem_Click);
             // 
-            // singleStepToolStripMenuItem
-            // 
-            this.singleStepToolStripMenuItem.Name = "singleStepToolStripMenuItem";
-            this.singleStepToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
-            this.singleStepToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
-            this.singleStepToolStripMenuItem.Text = "Single Step";
-            this.singleStepToolStripMenuItem.Click += new System.EventHandler(this.singleStepToolStripMenuItem_Click);
-            // 
             // stopToolStripMenuItem
             // 
             this.stopToolStripMenuItem.Name = "stopToolStripMenuItem";
@@ -150,6 +142,14 @@
             this.stopToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
             this.stopToolStripMenuItem.Text = "Stop";
             this.stopToolStripMenuItem.Click += new System.EventHandler(this.stopToolStripMenuItem_Click);
+            // 
+            // singleStepToolStripMenuItem
+            // 
+            this.singleStepToolStripMenuItem.Name = "singleStepToolStripMenuItem";
+            this.singleStepToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F10;
+            this.singleStepToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
+            this.singleStepToolStripMenuItem.Text = "Single Step";
+            this.singleStepToolStripMenuItem.Click += new System.EventHandler(this.singleStepToolStripMenuItem_Click);
             // 
             // settingToolStripMenuItem
             // 
@@ -162,7 +162,7 @@
             // frequenzToolStripMenuItem
             // 
             this.frequenzToolStripMenuItem.Name = "frequenzToolStripMenuItem";
-            this.frequenzToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.frequenzToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.frequenzToolStripMenuItem.Text = "Frequenz";
             this.frequenzToolStripMenuItem.Click += new System.EventHandler(this.frequenzToolStripMenuItem_Click);
             // 

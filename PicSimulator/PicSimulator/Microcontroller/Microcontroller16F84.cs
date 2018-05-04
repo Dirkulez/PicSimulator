@@ -319,7 +319,6 @@ namespace PicSimulator.Microcontroller
             while (!_stopExecution)
             {
                 ExecuteOperation();
-                Thread.Sleep(2000);
             }
         }
 

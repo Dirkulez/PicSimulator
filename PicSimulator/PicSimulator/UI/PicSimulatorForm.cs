@@ -547,5 +547,6 @@ namespace PicSimulator.UI
         {
             Close();
         }
+
     }
 }
