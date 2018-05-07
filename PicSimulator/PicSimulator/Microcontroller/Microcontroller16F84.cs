@@ -498,6 +498,22 @@ namespace PicSimulator.Microcontroller
             {
                 ExecuteBTFSC(bitAdress3Bit, fileRegisterAddress);
             }
+
+            else if (operationToExecute == OperationsEnum.SLEEP)
+            {
+                ExecuteSLEEP();
+            }
+        }
+
+        private void ExecuteSLEEP()
+        {
+            /*The power-down status bit, PD is
+            cleared.Time -out status bit, TO is
+            set.Watchdog Timer and its prescaler
+            are cleared.
+            The processor is put into SLEEP
+            mode with the oscillator stopped. See
+            Section 14.8 for more details.*/
         }
 
         private void ExecuteBTFSS(int bitAdress3Bit, int fileRegisterAddress)
