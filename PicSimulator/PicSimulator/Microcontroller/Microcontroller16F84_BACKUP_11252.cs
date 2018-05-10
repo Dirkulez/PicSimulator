@@ -321,26 +321,17 @@ namespace PicSimulator.Microcontroller
             MemoryContentChanged?.Invoke(this, e);
         }
 
+<<<<<<< .merge_file_a04312
+        //starts execution of the instructions loaded in 
+=======
         //Executes ExecuteOperation until stop is requested
+>>>>>>> .merge_file_a12248
         public void Execute()
         {
             while (!_stopExecution)
             {
                 ExecuteOperation();
             }
-        }
-
-        //performs power on reset; execution needs to be stopped before its called 
-        public void PowerOnReset()
-        {
-            WorkingRegisterContent = 0;
-            Cycle = 0;
-            RuntimeDuration = 0;
-            InitRegisters();
-            PCLATHRegisterContentChanged();
-            StatusRegisterContentChanged();
-            _tmr0 = new Timer0();
-            _programCounterStack = new ProgramCounterStack();
         }
 
         public void ExecuteOperation()

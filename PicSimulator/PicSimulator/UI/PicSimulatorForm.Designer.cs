@@ -72,9 +72,18 @@
             this.label10 = new System.Windows.Forms.Label();
             this.runtimeTextBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.controlGroupBox = new System.Windows.Forms.GroupBox();
+            this.execButton = new System.Windows.Forms.Button();
+            this.stopButton = new System.Windows.Forms.Button();
+            this.singleStepButton = new System.Windows.Forms.Button();
+            this.runningTextBox = new System.Windows.Forms.TextBox();
+            this.stopedTextBox = new System.Windows.Forms.TextBox();
+            this.resetButton = new System.Windows.Forms.Button();
+            this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.controlGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -122,7 +131,8 @@
             this.executeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ausführenToolStripMenuItem,
             this.stopToolStripMenuItem,
-            this.singleStepToolStripMenuItem});
+            this.singleStepToolStripMenuItem,
+            this.resetToolStripMenuItem});
             this.executeToolStripMenuItem.Name = "executeToolStripMenuItem";
             this.executeToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
             this.executeToolStripMenuItem.Text = "Ausführen";
@@ -468,11 +478,98 @@
             this.label9.TabIndex = 15;
             this.label9.Text = "Laufzeit";
             // 
+            // controlGroupBox
+            // 
+            this.controlGroupBox.Controls.Add(this.resetButton);
+            this.controlGroupBox.Controls.Add(this.stopedTextBox);
+            this.controlGroupBox.Controls.Add(this.runningTextBox);
+            this.controlGroupBox.Controls.Add(this.singleStepButton);
+            this.controlGroupBox.Controls.Add(this.stopButton);
+            this.controlGroupBox.Controls.Add(this.execButton);
+            this.controlGroupBox.Location = new System.Drawing.Point(881, 637);
+            this.controlGroupBox.Name = "controlGroupBox";
+            this.controlGroupBox.Size = new System.Drawing.Size(280, 163);
+            this.controlGroupBox.TabIndex = 8;
+            this.controlGroupBox.TabStop = false;
+            this.controlGroupBox.Text = "Steuerung";
+            // 
+            // execButton
+            // 
+            this.execButton.Location = new System.Drawing.Point(18, 35);
+            this.execButton.Name = "execButton";
+            this.execButton.Size = new System.Drawing.Size(117, 39);
+            this.execButton.TabIndex = 0;
+            this.execButton.Text = "Ausführen (F5)";
+            this.execButton.UseVisualStyleBackColor = true;
+            this.execButton.Click += new System.EventHandler(this.execButton_Click);
+            // 
+            // stopButton
+            // 
+            this.stopButton.Location = new System.Drawing.Point(148, 35);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(117, 39);
+            this.stopButton.TabIndex = 1;
+            this.stopButton.Text = "Stop (F8)";
+            this.stopButton.UseVisualStyleBackColor = true;
+            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
+            // 
+            // singleStepButton
+            // 
+            this.singleStepButton.Location = new System.Drawing.Point(18, 80);
+            this.singleStepButton.Name = "singleStepButton";
+            this.singleStepButton.Size = new System.Drawing.Size(117, 39);
+            this.singleStepButton.TabIndex = 2;
+            this.singleStepButton.Text = "Step (F10)";
+            this.singleStepButton.UseVisualStyleBackColor = true;
+            this.singleStepButton.Click += new System.EventHandler(this.singleStepButton_Click);
+            // 
+            // runningTextBox
+            // 
+            this.runningTextBox.BackColor = System.Drawing.Color.Lime;
+            this.runningTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.runningTextBox.Location = new System.Drawing.Point(19, 135);
+            this.runningTextBox.Name = "runningTextBox";
+            this.runningTextBox.ReadOnly = true;
+            this.runningTextBox.Size = new System.Drawing.Size(116, 22);
+            this.runningTextBox.TabIndex = 3;
+            this.runningTextBox.Text = "Läuft ... ";
+            this.runningTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // stopedTextBox
+            // 
+            this.stopedTextBox.BackColor = System.Drawing.Color.Red;
+            this.stopedTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stopedTextBox.Location = new System.Drawing.Point(148, 135);
+            this.stopedTextBox.Name = "stopedTextBox";
+            this.stopedTextBox.Size = new System.Drawing.Size(116, 22);
+            this.stopedTextBox.TabIndex = 4;
+            this.stopedTextBox.Text = "Gestoppt !";
+            this.stopedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // resetButton
+            // 
+            this.resetButton.Location = new System.Drawing.Point(148, 80);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(117, 39);
+            this.resetButton.TabIndex = 5;
+            this.resetButton.Text = "Reset (F12)";
+            this.resetButton.UseVisualStyleBackColor = true;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            // 
+            // resetToolStripMenuItem
+            // 
+            this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
+            this.resetToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
+            this.resetToolStripMenuItem.Text = "Reset";
+            this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
+            // 
             // PicSimulatorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1602, 954);
+            this.Controls.Add(this.controlGroupBox);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.registerMemoryListView4);
             this.Controls.Add(this.registerMemoryListView3);
@@ -490,6 +587,8 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.controlGroupBox.ResumeLayout(false);
+            this.controlGroupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -540,6 +639,14 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.GroupBox controlGroupBox;
+        private System.Windows.Forms.TextBox stopedTextBox;
+        private System.Windows.Forms.TextBox runningTextBox;
+        private System.Windows.Forms.Button singleStepButton;
+        private System.Windows.Forms.Button stopButton;
+        private System.Windows.Forms.Button execButton;
+        private System.Windows.Forms.ToolStripMenuItem resetToolStripMenuItem;
+        private System.Windows.Forms.Button resetButton;
     }
 }
 

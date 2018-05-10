@@ -14,7 +14,6 @@ namespace PicSimulator.Microcontroller
         #region Fields
         private Dictionary<int, int> _operationStack;
         private Dictionary<int, Register> _registerAdressTable;
-
         private Register _workingRegister;
         private Register _programCounter;
         private Register _statusRegister;
@@ -24,15 +23,13 @@ namespace PicSimulator.Microcontroller
         private Register _tmr0Register;
         private Register _optionRegister;
         private Register _intconRegister;
-
-        private SynchronizationContext _syncContext; //for synchronisation with UI
+        private ulong _cycle = 0;
+        private bool _stopExecution;
+        private SynchronizationContext _syncContext;
         private ProgramCounterStack _programCounterStack;
         private ArithmeticLogicUnit _alu;
         private SRAMRegisters _sram;
         private Timer0 _tmr0;
-
-        private ulong _cycle = 0;
-        private bool _stopExecution;
         private double _frequency; //MHZ
         private double _cycleDuration; //microseconds
         private double _runtimeDuration; //microseconds
@@ -236,7 +233,6 @@ namespace PicSimulator.Microcontroller
         private void InitAlu()
         {
             _alu = new ArithmeticLogicUnit();
-            //subscribe to the ALU events
             _alu.Cset += SetCBitTo1;
             _alu.Cunset += SetCBitTo0;
             _alu.DCset += SetDCBitTo1;
@@ -245,14 +241,12 @@ namespace PicSimulator.Microcontroller
             _alu.ResultNotZero += SetZeroBitTo0;
         }
 
-        //called when any propertychanged to inform the UI 
         public void InvokePropertyChanged(PropertyChangedEventArgs e)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
             if (handler != null) handler(this, e);
         }
 
-        //called when content of any register is changed to inform the UI
         private void InvokeMemoryChanged(int memoryAddress, int memoryContent)
         {
             var memoryContentChangedEventArgs = new MemoryContentChangedEventArgs();
@@ -263,7 +257,6 @@ namespace PicSimulator.Microcontroller
 
         }
 
-        //called to see if the updated register is mirrored in bank 0/1
         private void CheckForMirroredMemory(int memoryAddress, ref MemoryContentChangedEventArgs memoryContentChangedEventArgs)
         {
             if (memoryAddress == 0)
@@ -328,19 +321,6 @@ namespace PicSimulator.Microcontroller
             {
                 ExecuteOperation();
             }
-        }
-
-        //performs power on reset; execution needs to be stopped before its called 
-        public void PowerOnReset()
-        {
-            WorkingRegisterContent = 0;
-            Cycle = 0;
-            RuntimeDuration = 0;
-            InitRegisters();
-            PCLATHRegisterContentChanged();
-            StatusRegisterContentChanged();
-            _tmr0 = new Timer0();
-            _programCounterStack = new ProgramCounterStack();
         }
 
         public void ExecuteOperation()

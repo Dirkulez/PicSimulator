@@ -227,7 +227,7 @@ namespace PicSimulator.Microcontroller
         #endregion
 
         #region Methods
-        //sets the cycle duration dependent on frequency
+
         private void SetCycleDuration()
         {
             CycleDuration = (1 / Frequency) * 4;
@@ -321,26 +321,13 @@ namespace PicSimulator.Microcontroller
             MemoryContentChanged?.Invoke(this, e);
         }
 
-        //Executes ExecuteOperation until stop is requested
+        //starts execution of the instructions loaded in 
         public void Execute()
         {
             while (!_stopExecution)
             {
                 ExecuteOperation();
             }
-        }
-
-        //performs power on reset; execution needs to be stopped before its called 
-        public void PowerOnReset()
-        {
-            WorkingRegisterContent = 0;
-            Cycle = 0;
-            RuntimeDuration = 0;
-            InitRegisters();
-            PCLATHRegisterContentChanged();
-            StatusRegisterContentChanged();
-            _tmr0 = new Timer0();
-            _programCounterStack = new ProgramCounterStack();
         }
 
         public void ExecuteOperation()
@@ -519,27 +506,10 @@ namespace PicSimulator.Microcontroller
             {
                 ExecuteBTFSC(bitAdress3Bit, fileRegisterAddress);
             }
-
-            else if (operationToExecute == OperationsEnum.SLEEP)
-            {
-                ExecuteSLEEP();
-            }
-        }
-
-        private void ExecuteSLEEP()
-        {
-            /*The power-down status bit, PD is
-            cleared.Time -out status bit, TO is
-            set.Watchdog Timer and its prescaler
-            are cleared.
-            The processor is put into SLEEP
-            mode with the oscillator stopped. See
-            Section 14.8 for more details.*/
         }
 
         private void ExecuteBTFSS(int bitAdress3Bit, int fileRegisterAddress)
         {
-            //Executes the next operation if result  ==0. skips the next operation if result !=0 and NOP is executed instead
             var registerContent = _registerAdressTable[fileRegisterAddress].Content;
             var result = registerContent & (int)Math.Pow((double)2, (double)bitAdress3Bit);
 
@@ -554,7 +524,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteBTFSC(int bitAdress3Bit, int fileRegisterAddress)
         {
-            //Executes the next operation if result is !=0. skips the next operation if result ==0 and NOP is executed instead
             var registerContent = _registerAdressTable[fileRegisterAddress].Content;
             var result = registerContent & (int)Math.Pow((double)2, (double)bitAdress3Bit);
 
@@ -569,7 +538,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteBSF(int bitAdress3Bit, int fileRegisterAddress)
         {
-            //sets bitAdress3bBit in File Register
             var result = _alu.SetBit(bitAdress3Bit, _registerAdressTable[fileRegisterAddress].Content);
             IncreaseCycle(1);
             WriteResultToRegisterWithGivenAddress(result, fileRegisterAddress);
@@ -578,7 +546,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteBCF(int bitAdress3Bit, int fileRegisterAddress)
         {
-            //unsets bitAdress3bBit in fileRegister
             var result = _alu.UnsetBit(bitAdress3Bit, _registerAdressTable[fileRegisterAddress].Content);
             IncreaseCycle(1);
             WriteResultToRegisterWithGivenAddress(result, fileRegisterAddress);
@@ -587,7 +554,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteINCFSZ(int destinationSelect, int fileRegisterAddress)
         {
-            //inrements fileRegister and loads result depending on destination select either in w_reg or f_reg. if placed in w_reg, skip next operation,execute NOP instead
             var result = _alu.Increment(_registerAdressTable[fileRegisterAddress].Content, false);
             IncreaseCycle(1);
             WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
@@ -601,7 +567,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteDECFSZ(int destinationSelect, int fileRegisterAddress)
         {
-            //decrements fileRegister and loads result depending on destination select either in w_reg or f_reg. if placed in w_reg, skip next operation,execute NOP instead
             var result = _alu.Decrement(_registerAdressTable[fileRegisterAddress].Content, false);
             IncreaseCycle(1);
             WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
@@ -615,7 +580,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteRRF(int destinationSelect, int fileRegisterAddress)
         {
-            //rotates right through carry, if result is 0 its placed in w_reg 
             var carry = CBit;
             var result = _alu.RotateRight(carry, _registerAdressTable[fileRegisterAddress].Content);
 
@@ -626,7 +590,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteRLF(int destinationSelect, int fileRegisterAddress)
         {
-            //rotates left through carry, if result is 0 its placed in w_reg 
             var carry = CBit;
             var result = _alu.RotateLeft(carry, _registerAdressTable[fileRegisterAddress].Content);
 
@@ -637,7 +600,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteCLRW()
         {
-            //w_reg gets cleared
             WorkingRegisterContent = 0;
             SetZeroBitTo1(this, new EventArgs());
             IncreaseCycle(1);
@@ -760,6 +722,11 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteCALL(int literal11Bit)
         {
+            /*Call Subroutine. First, return address
+            (PC + 1) is pushed onto the stack. The
+              eleven bit immediate address is loaded
+              into PC bits<10:0 >.The upper bits of
+             the PC are loaded from PCLATH.*/
             _programCounterStack.PushToStack(ProgramCounterContent+1);
             var pclathValue = PclathRegisterContent & 24;
             pclathValue = pclathValue << 8;
@@ -785,14 +752,12 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteRETURN()
         {
-            //program counter is loaded from the top of the stack
             IncreaseCycle(2);
             ProgramCounterContent = _programCounterStack.PopFromStack();
         }
 
         private void ExecuteMOVLW(int literal8Bit)
         {
-            //8bitliteral is stored in w_reg
             WorkingRegisterContent = literal8Bit;
             IncreaseCycle(1);
             ProgramCounterContent++;
@@ -800,7 +765,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteANDLW(int literal8Bit)
         {
-            //AND-operation with w_reg and literal8Bit
             WorkingRegisterContent = _alu.LogicalAND(WorkingRegisterContent, literal8Bit);
             IncreaseCycle(1);
             ProgramCounterContent++;
@@ -808,7 +772,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteIORLW(int literal8Bit)
         {
-            //inclusive OR-operation with w_reg and literal8Bit
             WorkingRegisterContent = _alu.LogicalInclusiveOR(WorkingRegisterContent, literal8Bit);
             IncreaseCycle(1);
             ProgramCounterContent++;
@@ -816,16 +779,15 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteSUBLW(int literal8Bit)
         {
-            //substracts w_reg from literal8Bit
+
             var complement2OfWorkingReg = _alu.Build2ndComplement(WorkingRegisterContent);
             WorkingRegisterContent = _alu.BinaryAddition(literal8Bit, complement2OfWorkingReg);
             IncreaseCycle(1);
             ProgramCounterContent++;
         }
 
-        private void ExecuteXORLW(int literal8Bit)
-        {
-            //exclusive OR-operation with w_reg and literal8Bit
+        private void ExecuteXORLW(int literal8Bit){
+
             WorkingRegisterContent = _alu.LogicalExclusiveOR(WorkingRegisterContent, literal8Bit);
             IncreaseCycle(1);
             ProgramCounterContent++;
@@ -833,7 +795,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteADDLW(int literal8Bit)
         {
-            //Adds literal8Bit to w_reg
             WorkingRegisterContent = _alu.BinaryAddition(literal8Bit, WorkingRegisterContent);
             IncreaseCycle(1);
             ProgramCounterContent++;
@@ -841,7 +802,6 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteGOTO(int literal11Bit)
         {
-            //unconditional branch
             var pclathValue = PclathRegisterContent & 24;
             pclathValue = pclathValue << 8;
 
