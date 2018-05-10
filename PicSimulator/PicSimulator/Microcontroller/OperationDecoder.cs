@@ -9,6 +9,7 @@ namespace PicSimulator.Microcontroller
 {
     public static class OperationDecoder
     {
+        //decodes which operation is the current one
         public static OperationsEnum DecodeOperation(int binaryOperationCode)
         {
             if (binaryOperationCode == 0)
