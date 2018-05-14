@@ -28,17 +28,44 @@ namespace PicSimulator.UI
 
         public PicSimulatorForm()
         {
+            //Init
             InitializeComponent();
-            LstLoaded += LstLoaded_Executed;
-            _dataBindingInitialized = false;
-            executeToolStripMenuItem.Enabled = false;
             InitBackgroundWorker();
             InitRegisterMemoryListView();
             WindowState = FormWindowState.Maximized;
+
+            //prepare some items
+            _dataBindingInitialized = false;
+            executeToolStripMenuItem.Enabled = false;
             frequenzToolStripMenuItem.Enabled = false;
+            stopToolStripMenuItem.Enabled = false;
+            runningTextBox.Visible = false;
+            stopedTextBox.Visible = false;
+            execButton.Enabled = false;
+            stopButton.Enabled = false;
+            singleStepButton.Enabled = false;
+            resetButton.Enabled = false;
+
+            //subscribe events
             wregTextBox.DoubleClick += WregTextBox_DoubleClick;
             LstContentBox.SelectedIndexChanged += LstContentBox_SelectedIndexChanged;
-         }
+            LstLoaded += LstLoaded_Executed;
+            funcActive1.CheckedChanged += FuncActive1_CheckedChanged;
+        }
+
+        private void FuncActive1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (funcActive1.Checked)
+            {
+                funcGenFreqTextBox.Text = _microController.Frequency.ToString();
+                _microController.FuncGen = new FunctionGenerator(double.Parse(funcGenFreqTextBox.Text));
+            }
+            else
+            {
+                funcGenFreqTextBox.Text = string.Empty;
+                _microController.FuncGen = null;
+            }
+        }
 
         private void LstContentBox_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -75,6 +102,12 @@ namespace PicSimulator.UI
             frequenzToolStripMenuItem.Enabled = true;
             SelectCurrentLineOfLstContentBox(_microController.ProgramCounterContent);
             FillRegisterMemoryListView();
+            stopedTextBox.Visible = true;
+            stopButton.Enabled = false;
+            execButton.Enabled = true;
+            singleStepButton.Enabled = true;
+            resetButton.Enabled = true;
+            funcActive1.Enabled = true;
         }
 
         private void ZeroBitChanged_Executed(object sender, EventArgs e)
@@ -126,7 +159,21 @@ namespace PicSimulator.UI
 
         private void executeToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ExecuteInt();
+        }
+
+        private void ExecuteInt()
+        {
             _backgroundWorker.RunWorkerAsync();
+            stopToolStripMenuItem.Enabled = true;
+            ausführenToolStripMenuItem.Enabled = false;
+            singleStepToolStripMenuItem.Enabled = false;
+            execButton.Enabled = false;
+            singleStepButton.Enabled = false;
+            stopButton.Enabled = true;
+            stopedTextBox.Visible = false;
+            runningTextBox.Visible = true;
+            funcActive1.Enabled = false;
         }
 
         private void InitBackgroundWorker()
@@ -141,7 +188,7 @@ namespace PicSimulator.UI
             while (!_backgroundWorker.CancellationPending)
             {
                 _microController.ExecuteOperation();
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
             }
         }
 
@@ -173,6 +220,7 @@ namespace PicSimulator.UI
                 if (item.ToString().StartsWith(currentProgramCounter.ToString("X4").ToUpper()))
                 {
                     _backgroundWorker.CancelAsync();
+                    StopExecutionInt();
                     break;
                 }
             }
@@ -291,16 +339,45 @@ namespace PicSimulator.UI
             pclathTextBox.DataBindings.RemoveAt(0);
             cycleTextBox.DataBindings.RemoveAt(0);
             frequencyTextBox.DataBindings.RemoveAt(0);
+            cycleDurationTextBox.DataBindings.RemoveAt(0);
+            runtimeTextBox.DataBindings.RemoveAt(0);
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            StopExecutionInt();
+        }
+
+        private void StopExecutionInt()
+        {
             _backgroundWorker.CancelAsync();
+            stopToolStripMenuItem.Enabled = false;
+            ausführenToolStripMenuItem.Enabled = true;
+            singleStepToolStripMenuItem.Enabled = true;
+            execButton.Enabled = true;
+            stopButton.Enabled = false;
+            singleStepButton.Enabled = true;
+            runningTextBox.Visible = false;
+            stopedTextBox.Visible = true;
+            funcActive1.Enabled = true;
         }
 
         private void singleStepToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            ExecuteSingleStepInt();
+        }
+
+        private void ExecuteSingleStepInt()
+        {
+            runningTextBox.Visible = true;
+            stopedTextBox.Visible = false;
+            ausführenToolStripMenuItem.Enabled = false;
+            execButton.Enabled = false;
             _microController.ExecuteOperation();
+            runningTextBox.Visible = false;
+            stopedTextBox.Visible = true;
+            ausführenToolStripMenuItem.Enabled = true;
+            execButton.Enabled = true;
         }
 
         private void InitRegisterMemoryListView()
@@ -548,5 +625,55 @@ namespace PicSimulator.UI
             Close();
         }
 
+        private void execButton_Click(object sender, EventArgs e)
+        {
+            ExecuteInt();
+        }
+
+        private void stopButton_Click(object sender, EventArgs e)
+        {
+            StopExecutionInt();
+        }
+
+        private void singleStepButton_Click(object sender, EventArgs e)
+        {
+            ExecuteSingleStepInt();
+        }
+
+        private void resetToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ResetInt();
+        }
+
+        private void ResetInt()
+        {
+            if (_backgroundWorker.IsBusy)
+            {
+                _backgroundWorker.CancelAsync();
+            }
+            StopExecutionInt();
+            _microController.PowerOnReset();
+            FillRegisterMemoryListView();
+            SelectCurrentLineOfLstContentBox(_microController.ProgramCounterContent);
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            ResetInt();
+        }
+
+        private void textBox1_Click(object sender, EventArgs e)
+        {
+            if (funcActive1.Enabled && funcActive1.Checked)
+            {
+                _frequencyInputDialog = new FrequencyInputDialog();
+                var dialogResult = _frequencyInputDialog.ShowDialog();
+                if (dialogResult == DialogResult.OK)
+                {
+                    _microController.FuncGen.Frequency = double.Parse(_frequencyInputDialog.Frequency);
+                    funcGenFreqTextBox.Text = _frequencyInputDialog.Frequency;
+                }
+            }
+        }
     }
 }

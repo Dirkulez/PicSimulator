@@ -30,7 +30,6 @@ namespace PicSimulator.Microcontroller
         private ArithmeticLogicUnit _alu;
         private SRAMRegisters _sram;
         private Timer0 _tmr0;
-        private FunctionGenerator _funcGen;
 
         private ulong _cycle = 0;
         private bool _stopExecution;
@@ -45,12 +44,6 @@ namespace PicSimulator.Microcontroller
         #endregion
 
         #region Properties
-
-        public FunctionGenerator FuncGen
-        {
-            get { return _funcGen; }
-            set { _funcGen = value; }
-        }
 
         public double RuntimeDuration
         {
@@ -328,26 +321,17 @@ namespace PicSimulator.Microcontroller
             MemoryContentChanged?.Invoke(this, e);
         }
 
+<<<<<<< .merge_file_a04312
+        //starts execution of the instructions loaded in 
+=======
         //Executes ExecuteOperation until stop is requested
+>>>>>>> .merge_file_a12248
         public void Execute()
         {
             while (!_stopExecution)
             {
                 ExecuteOperation();
             }
-        }
-
-        //performs power on reset; execution needs to be stopped before its called 
-        public void PowerOnReset()
-        {
-            WorkingRegisterContent = 0;
-            Cycle = 0;
-            RuntimeDuration = 0;
-            InitRegisters();
-            PCLATHRegisterContentChanged();
-            StatusRegisterContentChanged();
-            _tmr0 = new Timer0();
-            _programCounterStack = new ProgramCounterStack();
         }
 
         public void ExecuteOperation()
@@ -594,8 +578,7 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteINCFSZ(int destinationSelect, int fileRegisterAddress)
         {
-            //inrements fileRegister and loads result depending on destination select either in w_reg or f_reg.
-            //if placed in w_reg, skip next operation,execute NOP instead
+            //inrements fileRegister and loads result depending on destination select either in w_reg or f_reg. if placed in w_reg, skip next operation,execute NOP instead
             var result = _alu.Increment(_registerAdressTable[fileRegisterAddress].Content, false);
             IncreaseCycle(1);
             WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
@@ -609,8 +592,7 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteDECFSZ(int destinationSelect, int fileRegisterAddress)
         {
-            //decrements fileRegister and loads result depending on destination select either in w_reg or f_reg.
-            //if placed in w_reg, skip next operation,execute NOP instead
+            //decrements fileRegister and loads result depending on destination select either in w_reg or f_reg. if placed in w_reg, skip next operation,execute NOP instead
             var result = _alu.Decrement(_registerAdressTable[fileRegisterAddress].Content, false);
             IncreaseCycle(1);
             WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);

@@ -37,6 +37,7 @@
             this.ausführenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stopToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.singleStepToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frequenzToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -72,9 +73,29 @@
             this.label10 = new System.Windows.Forms.Label();
             this.runtimeTextBox = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.controlGroupBox = new System.Windows.Forms.GroupBox();
+            this.resetButton = new System.Windows.Forms.Button();
+            this.stopedTextBox = new System.Windows.Forms.TextBox();
+            this.runningTextBox = new System.Windows.Forms.TextBox();
+            this.singleStepButton = new System.Windows.Forms.Button();
+            this.stopButton = new System.Windows.Forms.Button();
+            this.execButton = new System.Windows.Forms.Button();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.funcGenFreqTextBox = new System.Windows.Forms.TextBox();
+            this.funcActive1 = new System.Windows.Forms.CheckBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.statusRegContentTextBox = new System.Windows.Forms.TextBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
+            this.controlGroupBox.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -87,7 +108,7 @@
             this.helpToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1602, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(1924, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -122,7 +143,8 @@
             this.executeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.ausführenToolStripMenuItem,
             this.stopToolStripMenuItem,
-            this.singleStepToolStripMenuItem});
+            this.singleStepToolStripMenuItem,
+            this.resetToolStripMenuItem});
             this.executeToolStripMenuItem.Name = "executeToolStripMenuItem";
             this.executeToolStripMenuItem.Size = new System.Drawing.Size(87, 24);
             this.executeToolStripMenuItem.Text = "Ausführen";
@@ -151,6 +173,14 @@
             this.singleStepToolStripMenuItem.Text = "Single Step";
             this.singleStepToolStripMenuItem.Click += new System.EventHandler(this.singleStepToolStripMenuItem_Click);
             // 
+            // resetToolStripMenuItem
+            // 
+            this.resetToolStripMenuItem.Name = "resetToolStripMenuItem";
+            this.resetToolStripMenuItem.ShortcutKeys = System.Windows.Forms.Keys.F12;
+            this.resetToolStripMenuItem.Size = new System.Drawing.Size(191, 26);
+            this.resetToolStripMenuItem.Text = "Reset";
+            this.resetToolStripMenuItem.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
+            // 
             // settingToolStripMenuItem
             // 
             this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -162,7 +192,7 @@
             // frequenzToolStripMenuItem
             // 
             this.frequenzToolStripMenuItem.Name = "frequenzToolStripMenuItem";
-            this.frequenzToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.frequenzToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
             this.frequenzToolStripMenuItem.Text = "Frequenz";
             this.frequenzToolStripMenuItem.Click += new System.EventHandler(this.frequenzToolStripMenuItem_Click);
             // 
@@ -190,6 +220,9 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label19);
+            this.groupBox1.Controls.Add(this.label18);
+            this.groupBox1.Controls.Add(this.statusRegContentTextBox);
             this.groupBox1.Controls.Add(this.pclathTextBox);
             this.groupBox1.Controls.Add(this.label7);
             this.groupBox1.Controls.Add(this.dcBitTextBox);
@@ -205,7 +238,7 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(877, 47);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(284, 321);
+            this.groupBox1.Size = new System.Drawing.Size(284, 345);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Spezialfunktionsregister";
@@ -281,7 +314,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(20, 150);
+            this.label3.Location = new System.Drawing.Point(23, 144);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(48, 17);
             this.label3.TabIndex = 4;
@@ -468,11 +501,189 @@
             this.label9.TabIndex = 15;
             this.label9.Text = "Laufzeit";
             // 
+            // controlGroupBox
+            // 
+            this.controlGroupBox.Controls.Add(this.resetButton);
+            this.controlGroupBox.Controls.Add(this.stopedTextBox);
+            this.controlGroupBox.Controls.Add(this.runningTextBox);
+            this.controlGroupBox.Controls.Add(this.singleStepButton);
+            this.controlGroupBox.Controls.Add(this.stopButton);
+            this.controlGroupBox.Controls.Add(this.execButton);
+            this.controlGroupBox.Location = new System.Drawing.Point(881, 637);
+            this.controlGroupBox.Name = "controlGroupBox";
+            this.controlGroupBox.Size = new System.Drawing.Size(280, 163);
+            this.controlGroupBox.TabIndex = 8;
+            this.controlGroupBox.TabStop = false;
+            this.controlGroupBox.Text = "Steuerung";
+            // 
+            // resetButton
+            // 
+            this.resetButton.Location = new System.Drawing.Point(148, 80);
+            this.resetButton.Name = "resetButton";
+            this.resetButton.Size = new System.Drawing.Size(117, 39);
+            this.resetButton.TabIndex = 5;
+            this.resetButton.Text = "Reset (F12)";
+            this.resetButton.UseVisualStyleBackColor = true;
+            this.resetButton.Click += new System.EventHandler(this.resetButton_Click);
+            // 
+            // stopedTextBox
+            // 
+            this.stopedTextBox.BackColor = System.Drawing.Color.Red;
+            this.stopedTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.stopedTextBox.Location = new System.Drawing.Point(148, 135);
+            this.stopedTextBox.Name = "stopedTextBox";
+            this.stopedTextBox.Size = new System.Drawing.Size(116, 22);
+            this.stopedTextBox.TabIndex = 4;
+            this.stopedTextBox.Text = "Gestoppt !";
+            this.stopedTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // runningTextBox
+            // 
+            this.runningTextBox.BackColor = System.Drawing.Color.Lime;
+            this.runningTextBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.runningTextBox.Location = new System.Drawing.Point(19, 135);
+            this.runningTextBox.Name = "runningTextBox";
+            this.runningTextBox.ReadOnly = true;
+            this.runningTextBox.Size = new System.Drawing.Size(116, 22);
+            this.runningTextBox.TabIndex = 3;
+            this.runningTextBox.Text = "Läuft ... ";
+            this.runningTextBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // singleStepButton
+            // 
+            this.singleStepButton.Location = new System.Drawing.Point(18, 80);
+            this.singleStepButton.Name = "singleStepButton";
+            this.singleStepButton.Size = new System.Drawing.Size(117, 39);
+            this.singleStepButton.TabIndex = 2;
+            this.singleStepButton.Text = "Step (F10)";
+            this.singleStepButton.UseVisualStyleBackColor = true;
+            this.singleStepButton.Click += new System.EventHandler(this.singleStepButton_Click);
+            // 
+            // stopButton
+            // 
+            this.stopButton.Location = new System.Drawing.Point(148, 35);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(117, 39);
+            this.stopButton.TabIndex = 1;
+            this.stopButton.Text = "Stop (F8)";
+            this.stopButton.UseVisualStyleBackColor = true;
+            this.stopButton.Click += new System.EventHandler(this.stopButton_Click);
+            // 
+            // execButton
+            // 
+            this.execButton.Location = new System.Drawing.Point(18, 35);
+            this.execButton.Name = "execButton";
+            this.execButton.Size = new System.Drawing.Size(117, 39);
+            this.execButton.TabIndex = 0;
+            this.execButton.Text = "Ausführen (F5)";
+            this.execButton.UseVisualStyleBackColor = true;
+            this.execButton.Click += new System.EventHandler(this.execButton_Click);
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.groupBox4);
+            this.groupBox3.Location = new System.Drawing.Point(1603, 51);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(232, 163);
+            this.groupBox3.TabIndex = 9;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "Funktionsgenerator";
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.label17);
+            this.groupBox4.Controls.Add(this.funcGenFreqTextBox);
+            this.groupBox4.Controls.Add(this.funcActive1);
+            this.groupBox4.Controls.Add(this.label16);
+            this.groupBox4.Controls.Add(this.label15);
+            this.groupBox4.Location = new System.Drawing.Point(6, 26);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(220, 131);
+            this.groupBox4.TabIndex = 0;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "#1";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(180, 28);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(34, 17);
+            this.label17.TabIndex = 5;
+            this.label17.Text = "Mhz";
+            // 
+            // funcGenFreqTextBox
+            // 
+            this.funcGenFreqTextBox.Location = new System.Drawing.Point(80, 28);
+            this.funcGenFreqTextBox.Name = "funcGenFreqTextBox";
+            this.funcGenFreqTextBox.ReadOnly = true;
+            this.funcGenFreqTextBox.Size = new System.Drawing.Size(94, 22);
+            this.funcGenFreqTextBox.TabIndex = 4;
+            this.funcGenFreqTextBox.Click += new System.EventHandler(this.textBox1_Click);
+            // 
+            // funcActive1
+            // 
+            this.funcActive1.AutoSize = true;
+            this.funcActive1.Enabled = false;
+            this.funcActive1.Location = new System.Drawing.Point(6, 88);
+            this.funcActive1.Name = "funcActive1";
+            this.funcActive1.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.funcActive1.Size = new System.Drawing.Size(60, 21);
+            this.funcActive1.TabIndex = 3;
+            this.funcActive1.Text = "Aktiv";
+            this.funcActive1.UseVisualStyleBackColor = true;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(6, 58);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(28, 17);
+            this.label16.TabIndex = 1;
+            this.label16.Text = "Pin";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(6, 28);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(68, 17);
+            this.label15.TabIndex = 0;
+            this.label15.Text = "Frequenz";
+            // 
+            // statusRegContentTextBox
+            // 
+            this.statusRegContentTextBox.Enabled = false;
+            this.statusRegContentTextBox.Location = new System.Drawing.Point(87, 141);
+            this.statusRegContentTextBox.Name = "statusRegContentTextBox";
+            this.statusRegContentTextBox.Size = new System.Drawing.Size(180, 22);
+            this.statusRegContentTextBox.TabIndex = 13;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(27, 219);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(50, 17);
+            this.label18.TabIndex = 14;
+            this.label18.Text = "Option";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(34, 279);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(46, 17);
+            this.label19.TabIndex = 15;
+            this.label19.Text = "Intcon";
+            // 
             // PicSimulatorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1602, 954);
+            this.ClientSize = new System.Drawing.Size(1924, 954);
+            this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.controlGroupBox);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.registerMemoryListView4);
             this.Controls.Add(this.registerMemoryListView3);
@@ -490,6 +701,11 @@
             this.groupBox1.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
+            this.controlGroupBox.ResumeLayout(false);
+            this.controlGroupBox.PerformLayout();
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -540,6 +756,24 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.GroupBox controlGroupBox;
+        private System.Windows.Forms.TextBox stopedTextBox;
+        private System.Windows.Forms.TextBox runningTextBox;
+        private System.Windows.Forms.Button singleStepButton;
+        private System.Windows.Forms.Button stopButton;
+        private System.Windows.Forms.Button execButton;
+        private System.Windows.Forms.ToolStripMenuItem resetToolStripMenuItem;
+        private System.Windows.Forms.Button resetButton;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox funcGenFreqTextBox;
+        private System.Windows.Forms.CheckBox funcActive1;
+        private System.Windows.Forms.TextBox statusRegContentTextBox;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label label18;
     }
 }
 
