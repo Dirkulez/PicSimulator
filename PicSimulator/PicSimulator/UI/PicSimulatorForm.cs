@@ -25,6 +25,7 @@ namespace PicSimulator.UI
         private RegisterContentChangeDialog _registerContentChangeDialog;
         private int _listViewDoubleClickCount = 0; //neccessary to avoid calling the event twice !?
         private SerialPort _comPort;
+        private int _executionDelay = 100; // delay after each instruction in ms
 
         public event EventHandler<EventArgs> LstLoaded;
 
@@ -62,15 +63,28 @@ namespace PicSimulator.UI
         {
             if (hardwareCheckBox.Checked)
             {
-                _comPort = new SerialPort(hardwareComboBox.Text, 4800, Parity.None, 8, StopBits.One);
-                _comPort.Open();
-                executeHardwareButton.Enabled = true;
-                hardwareComboBox.Enabled = false;
+                try
+                {
+                    _comPort = new SerialPort(hardwareComboBox.Text, 4800, Parity.None, 8, StopBits.One);
+                    _comPort.Open();
+                    executeHardwareButton.Enabled = true;
+                    hardwareComboBox.Enabled = false;
+                }catch(Exception)
+                {
+                    MessageBox.Show("Beim Verbinden mit dem angegebenen COM-Port ist ein Fehler aufgetreten." +
+                        " Bitte stellen Sie sicher, dass der ausgewählte Port aktiv und bereit zur Verwendung ist.",
+                        "Es ist ein Fehler aufgetreten", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    _comPort = null;
+                    hardwareCheckBox.Checked = false;
+                }
             }
             else
             {
-                _comPort.Close();
-                _comPort = null;
+                if (_comPort != null && _comPort.IsOpen)
+                {
+                    _comPort.Close();
+                    _comPort = null;
+                }
                 executeHardwareButton.Enabled = false;
                 hardwareComboBox.Enabled = true;
             }
@@ -241,6 +255,7 @@ namespace PicSimulator.UI
             runningTextBox.Visible = true;
             funcActive1.Enabled = false;
             funcGenPinComboBox.Enabled = false;
+            settingToolStripMenuItem.Enabled = false;
         }
 
         private void InitBackgroundWorker()
@@ -255,7 +270,7 @@ namespace PicSimulator.UI
             while (!_backgroundWorker.CancellationPending)
             {
                 _microController.ExecuteOperation();
-                Thread.Sleep(10);
+                Thread.Sleep(_executionDelay);
             }
         }
 
@@ -434,6 +449,7 @@ namespace PicSimulator.UI
             stopedTextBox.Visible = true;
             funcActive1.Enabled = true;
             funcGenPinComboBox.Enabled = true;
+            settingToolStripMenuItem.Enabled = true;
         }
 
         private void singleStepToolStripMenuItem_Click(object sender, EventArgs e)
@@ -761,6 +777,16 @@ namespace PicSimulator.UI
             else
             {
                 hardwareComboBox.Enabled = false;
+            }
+        }
+
+        private void ausfuehrungToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var executionSettingsDialog = new ExecutionSettingsDialog(_executionDelay);
+            var dialogResult = executionSettingsDialog.ShowDialog();
+            if(dialogResult == DialogResult.OK)
+            {
+                _executionDelay = executionSettingsDialog.ExecutionDelay;
             }
         }
     }

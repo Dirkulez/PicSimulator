@@ -57,6 +57,12 @@
     <Compile Include="Microcontroller\ProgramCounterStack.cs" />
     <Compile Include="Model\Register.cs" />
     <Compile Include="Parser\LstParser.cs" />
+    <Compile Include="UI\ExecutionSettingsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\ExecutionSettingsDialog.Designer.cs">
+      <DependentUpon>ExecutionSettingsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\FrequencyInputDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -77,6 +83,9 @@
     <Compile Include="UI\RegisterContentChangeDialog.Designer.cs">
       <DependentUpon>RegisterContentChangeDialog.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="UI\ExecutionSettingsDialog.resx">
+      <DependentUpon>ExecutionSettingsDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\FrequencyInputDialog.resx">
       <DependentUpon>FrequencyInputDialog.cs</DependentUpon>
     </EmbeddedResource>

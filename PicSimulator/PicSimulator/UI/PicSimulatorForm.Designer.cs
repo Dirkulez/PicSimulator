@@ -44,6 +44,20 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LstContentBox = new System.Windows.Forms.CheckedListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.optionTextBox = new System.Windows.Forms.TextBox();
+            this.irpTextBox = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.rp1TextBox = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.rp0TextBox = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.toTextBox = new System.Windows.Forms.TextBox();
+            this.toLabel = new System.Windows.Forms.Label();
+            this.pdTextBox = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.labelPCL = new System.Windows.Forms.Label();
+            this.fsrTextBox = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label19 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
@@ -86,32 +100,19 @@
             this.execButton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.funcGenPinComboBox = new System.Windows.Forms.ComboBox();
             this.label17 = new System.Windows.Forms.Label();
             this.funcGenFreqTextBox = new System.Windows.Forms.TextBox();
             this.funcActive1 = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.fsrTextBox = new System.Windows.Forms.TextBox();
-            this.labelPCL = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.label21 = new System.Windows.Forms.Label();
-            this.pdTextBox = new System.Windows.Forms.TextBox();
-            this.toLabel = new System.Windows.Forms.Label();
-            this.toTextBox = new System.Windows.Forms.TextBox();
-            this.label22 = new System.Windows.Forms.Label();
-            this.rp0TextBox = new System.Windows.Forms.TextBox();
-            this.label23 = new System.Windows.Forms.Label();
-            this.rp1TextBox = new System.Windows.Forms.TextBox();
-            this.label24 = new System.Windows.Forms.Label();
-            this.irpTextBox = new System.Windows.Forms.TextBox();
-            this.optionTextBox = new System.Windows.Forms.TextBox();
-            this.funcGenPinComboBox = new System.Windows.Forms.ComboBox();
             this.hardwareConnectionGroup = new System.Windows.Forms.GroupBox();
-            this.label25 = new System.Windows.Forms.Label();
-            this.hardwareCheckBox = new System.Windows.Forms.CheckBox();
-            this.hardwareComboBox = new System.Windows.Forms.ComboBox();
-            this.refreshComPortsButton = new System.Windows.Forms.Button();
             this.executeHardwareButton = new System.Windows.Forms.Button();
+            this.refreshComPortsButton = new System.Windows.Forms.Button();
+            this.hardwareComboBox = new System.Windows.Forms.ComboBox();
+            this.hardwareCheckBox = new System.Windows.Forms.CheckBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.ausfuehrungToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -207,7 +208,8 @@
             // settingToolStripMenuItem
             // 
             this.settingToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.frequenzToolStripMenuItem});
+            this.frequenzToolStripMenuItem,
+            this.ausfuehrungToolStripMenuItem});
             this.settingToolStripMenuItem.Name = "settingToolStripMenuItem";
             this.settingToolStripMenuItem.Size = new System.Drawing.Size(109, 24);
             this.settingToolStripMenuItem.Text = "Einstellungen";
@@ -215,7 +217,7 @@
             // frequenzToolStripMenuItem
             // 
             this.frequenzToolStripMenuItem.Name = "frequenzToolStripMenuItem";
-            this.frequenzToolStripMenuItem.Size = new System.Drawing.Size(144, 26);
+            this.frequenzToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
             this.frequenzToolStripMenuItem.Text = "Frequenz";
             this.frequenzToolStripMenuItem.Click += new System.EventHandler(this.frequenzToolStripMenuItem_Click);
             // 
@@ -281,6 +283,126 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Spezialfunktionsregister";
             // 
+            // optionTextBox
+            // 
+            this.optionTextBox.Location = new System.Drawing.Point(88, 256);
+            this.optionTextBox.Name = "optionTextBox";
+            this.optionTextBox.ReadOnly = true;
+            this.optionTextBox.Size = new System.Drawing.Size(181, 22);
+            this.optionTextBox.TabIndex = 30;
+            // 
+            // irpTextBox
+            // 
+            this.irpTextBox.Location = new System.Drawing.Point(32, 220);
+            this.irpTextBox.Name = "irpTextBox";
+            this.irpTextBox.ReadOnly = true;
+            this.irpTextBox.Size = new System.Drawing.Size(24, 22);
+            this.irpTextBox.TabIndex = 29;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(29, 200);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(30, 17);
+            this.label24.TabIndex = 28;
+            this.label24.Text = "IRP";
+            // 
+            // rp1TextBox
+            // 
+            this.rp1TextBox.Location = new System.Drawing.Point(63, 220);
+            this.rp1TextBox.Name = "rp1TextBox";
+            this.rp1TextBox.ReadOnly = true;
+            this.rp1TextBox.Size = new System.Drawing.Size(24, 22);
+            this.rp1TextBox.TabIndex = 27;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(60, 200);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(35, 17);
+            this.label23.TabIndex = 26;
+            this.label23.Text = "RP1";
+            // 
+            // rp0TextBox
+            // 
+            this.rp0TextBox.Location = new System.Drawing.Point(98, 220);
+            this.rp0TextBox.Name = "rp0TextBox";
+            this.rp0TextBox.ReadOnly = true;
+            this.rp0TextBox.Size = new System.Drawing.Size(24, 22);
+            this.rp0TextBox.TabIndex = 25;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(95, 200);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(35, 17);
+            this.label22.TabIndex = 24;
+            this.label22.Text = "RP0";
+            // 
+            // toTextBox
+            // 
+            this.toTextBox.Location = new System.Drawing.Point(131, 220);
+            this.toTextBox.Name = "toTextBox";
+            this.toTextBox.ReadOnly = true;
+            this.toTextBox.Size = new System.Drawing.Size(24, 22);
+            this.toTextBox.TabIndex = 23;
+            // 
+            // toLabel
+            // 
+            this.toLabel.AutoSize = true;
+            this.toLabel.Location = new System.Drawing.Point(128, 200);
+            this.toLabel.Name = "toLabel";
+            this.toLabel.Size = new System.Drawing.Size(28, 17);
+            this.toLabel.TabIndex = 22;
+            this.toLabel.Text = "TO";
+            // 
+            // pdTextBox
+            // 
+            this.pdTextBox.Location = new System.Drawing.Point(162, 220);
+            this.pdTextBox.Name = "pdTextBox";
+            this.pdTextBox.ReadOnly = true;
+            this.pdTextBox.Size = new System.Drawing.Size(24, 22);
+            this.pdTextBox.TabIndex = 21;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(163, 200);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(27, 17);
+            this.label21.TabIndex = 20;
+            this.label21.Text = "PD";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Enabled = false;
+            this.textBox1.Location = new System.Drawing.Point(88, 91);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(181, 22);
+            this.textBox1.TabIndex = 19;
+            // 
+            // labelPCL
+            // 
+            this.labelPCL.AutoSize = true;
+            this.labelPCL.Location = new System.Drawing.Point(17, 96);
+            this.labelPCL.Name = "labelPCL";
+            this.labelPCL.Size = new System.Drawing.Size(34, 17);
+            this.labelPCL.TabIndex = 18;
+            this.labelPCL.Text = "PCL";
+            // 
+            // fsrTextBox
+            // 
+            this.fsrTextBox.Enabled = false;
+            this.fsrTextBox.Location = new System.Drawing.Point(88, 63);
+            this.fsrTextBox.Name = "fsrTextBox";
+            this.fsrTextBox.ReadOnly = true;
+            this.fsrTextBox.Size = new System.Drawing.Size(181, 22);
+            this.fsrTextBox.TabIndex = 17;
+            // 
             // label20
             // 
             this.label20.AutoSize = true;
@@ -310,9 +432,9 @@
             // 
             // statusRegContentTextBox
             // 
-            this.statusRegContentTextBox.Enabled = false;
             this.statusRegContentTextBox.Location = new System.Drawing.Point(88, 175);
             this.statusRegContentTextBox.Name = "statusRegContentTextBox";
+            this.statusRegContentTextBox.ReadOnly = true;
             this.statusRegContentTextBox.Size = new System.Drawing.Size(181, 22);
             this.statusRegContentTextBox.TabIndex = 13;
             // 
@@ -677,6 +799,15 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "#1";
             // 
+            // funcGenPinComboBox
+            // 
+            this.funcGenPinComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.funcGenPinComboBox.FormattingEnabled = true;
+            this.funcGenPinComboBox.Location = new System.Drawing.Point(80, 60);
+            this.funcGenPinComboBox.Name = "funcGenPinComboBox";
+            this.funcGenPinComboBox.Size = new System.Drawing.Size(94, 24);
+            this.funcGenPinComboBox.TabIndex = 6;
+            // 
             // label17
             // 
             this.label17.AutoSize = true;
@@ -725,135 +856,6 @@
             this.label15.TabIndex = 0;
             this.label15.Text = "Frequenz";
             // 
-            // fsrTextBox
-            // 
-            this.fsrTextBox.Enabled = false;
-            this.fsrTextBox.Location = new System.Drawing.Point(88, 63);
-            this.fsrTextBox.Name = "fsrTextBox";
-            this.fsrTextBox.ReadOnly = true;
-            this.fsrTextBox.Size = new System.Drawing.Size(181, 22);
-            this.fsrTextBox.TabIndex = 17;
-            // 
-            // labelPCL
-            // 
-            this.labelPCL.AutoSize = true;
-            this.labelPCL.Location = new System.Drawing.Point(17, 96);
-            this.labelPCL.Name = "labelPCL";
-            this.labelPCL.Size = new System.Drawing.Size(34, 17);
-            this.labelPCL.TabIndex = 18;
-            this.labelPCL.Text = "PCL";
-            // 
-            // textBox1
-            // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(88, 91);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(181, 22);
-            this.textBox1.TabIndex = 19;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(163, 200);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(27, 17);
-            this.label21.TabIndex = 20;
-            this.label21.Text = "PD";
-            // 
-            // pdTextBox
-            // 
-            this.pdTextBox.Location = new System.Drawing.Point(162, 220);
-            this.pdTextBox.Name = "pdTextBox";
-            this.pdTextBox.ReadOnly = true;
-            this.pdTextBox.Size = new System.Drawing.Size(24, 22);
-            this.pdTextBox.TabIndex = 21;
-            // 
-            // toLabel
-            // 
-            this.toLabel.AutoSize = true;
-            this.toLabel.Location = new System.Drawing.Point(128, 200);
-            this.toLabel.Name = "toLabel";
-            this.toLabel.Size = new System.Drawing.Size(28, 17);
-            this.toLabel.TabIndex = 22;
-            this.toLabel.Text = "TO";
-            // 
-            // toTextBox
-            // 
-            this.toTextBox.Location = new System.Drawing.Point(131, 220);
-            this.toTextBox.Name = "toTextBox";
-            this.toTextBox.ReadOnly = true;
-            this.toTextBox.Size = new System.Drawing.Size(24, 22);
-            this.toTextBox.TabIndex = 23;
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(95, 200);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(35, 17);
-            this.label22.TabIndex = 24;
-            this.label22.Text = "RP0";
-            // 
-            // rp0TextBox
-            // 
-            this.rp0TextBox.Location = new System.Drawing.Point(98, 220);
-            this.rp0TextBox.Name = "rp0TextBox";
-            this.rp0TextBox.ReadOnly = true;
-            this.rp0TextBox.Size = new System.Drawing.Size(24, 22);
-            this.rp0TextBox.TabIndex = 25;
-            // 
-            // label23
-            // 
-            this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(60, 200);
-            this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(35, 17);
-            this.label23.TabIndex = 26;
-            this.label23.Text = "RP1";
-            // 
-            // rp1TextBox
-            // 
-            this.rp1TextBox.Location = new System.Drawing.Point(63, 220);
-            this.rp1TextBox.Name = "rp1TextBox";
-            this.rp1TextBox.ReadOnly = true;
-            this.rp1TextBox.Size = new System.Drawing.Size(24, 22);
-            this.rp1TextBox.TabIndex = 27;
-            // 
-            // label24
-            // 
-            this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(29, 200);
-            this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(30, 17);
-            this.label24.TabIndex = 28;
-            this.label24.Text = "IRP";
-            // 
-            // irpTextBox
-            // 
-            this.irpTextBox.Location = new System.Drawing.Point(32, 220);
-            this.irpTextBox.Name = "irpTextBox";
-            this.irpTextBox.ReadOnly = true;
-            this.irpTextBox.Size = new System.Drawing.Size(24, 22);
-            this.irpTextBox.TabIndex = 29;
-            // 
-            // optionTextBox
-            // 
-            this.optionTextBox.Enabled = false;
-            this.optionTextBox.Location = new System.Drawing.Point(88, 256);
-            this.optionTextBox.Name = "optionTextBox";
-            this.optionTextBox.Size = new System.Drawing.Size(181, 22);
-            this.optionTextBox.TabIndex = 30;
-            // 
-            // funcGenPinComboBox
-            // 
-            this.funcGenPinComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.funcGenPinComboBox.FormattingEnabled = true;
-            this.funcGenPinComboBox.Location = new System.Drawing.Point(80, 60);
-            this.funcGenPinComboBox.Name = "funcGenPinComboBox";
-            this.funcGenPinComboBox.Size = new System.Drawing.Size(94, 24);
-            this.funcGenPinComboBox.TabIndex = 6;
-            // 
             // hardwareConnectionGroup
             // 
             this.hardwareConnectionGroup.Controls.Add(this.executeHardwareButton);
@@ -868,14 +870,33 @@
             this.hardwareConnectionGroup.TabStop = false;
             this.hardwareConnectionGroup.Text = "Hardwareansteuerung";
             // 
-            // label25
+            // executeHardwareButton
             // 
-            this.label25.AutoSize = true;
-            this.label25.Location = new System.Drawing.Point(19, 35);
-            this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(70, 17);
-            this.label25.TabIndex = 0;
-            this.label25.Text = "COM-Port";
+            this.executeHardwareButton.Location = new System.Drawing.Point(22, 108);
+            this.executeHardwareButton.Name = "executeHardwareButton";
+            this.executeHardwareButton.Size = new System.Drawing.Size(89, 23);
+            this.executeHardwareButton.TabIndex = 4;
+            this.executeHardwareButton.Text = "Senden";
+            this.executeHardwareButton.UseVisualStyleBackColor = true;
+            // 
+            // refreshComPortsButton
+            // 
+            this.refreshComPortsButton.Location = new System.Drawing.Point(117, 108);
+            this.refreshComPortsButton.Name = "refreshComPortsButton";
+            this.refreshComPortsButton.Size = new System.Drawing.Size(99, 23);
+            this.refreshComPortsButton.TabIndex = 3;
+            this.refreshComPortsButton.Text = "Ports?";
+            this.refreshComPortsButton.UseVisualStyleBackColor = true;
+            this.refreshComPortsButton.Click += new System.EventHandler(this.refreshComPortsButton_Click);
+            // 
+            // hardwareComboBox
+            // 
+            this.hardwareComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.hardwareComboBox.FormattingEnabled = true;
+            this.hardwareComboBox.Location = new System.Drawing.Point(95, 32);
+            this.hardwareComboBox.Name = "hardwareComboBox";
+            this.hardwareComboBox.Size = new System.Drawing.Size(86, 24);
+            this.hardwareComboBox.TabIndex = 2;
             // 
             // hardwareCheckBox
             // 
@@ -888,33 +909,21 @@
             this.hardwareCheckBox.Text = "Aktiv";
             this.hardwareCheckBox.UseVisualStyleBackColor = true;
             // 
-            // hardwareComboBox
+            // label25
             // 
-            this.hardwareComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.hardwareComboBox.FormattingEnabled = true;
-            this.hardwareComboBox.Location = new System.Drawing.Point(95, 32);
-            this.hardwareComboBox.Name = "hardwareComboBox";
-            this.hardwareComboBox.Size = new System.Drawing.Size(86, 24);
-            this.hardwareComboBox.TabIndex = 2;
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(19, 35);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(70, 17);
+            this.label25.TabIndex = 0;
+            this.label25.Text = "COM-Port";
             // 
-            // refreshComPortsButton
+            // ausfuehrungToolStripMenuItem
             // 
-            this.refreshComPortsButton.Location = new System.Drawing.Point(117, 108);
-            this.refreshComPortsButton.Name = "refreshComPortsButton";
-            this.refreshComPortsButton.Size = new System.Drawing.Size(99, 23);
-            this.refreshComPortsButton.TabIndex = 3;
-            this.refreshComPortsButton.Text = "Ports?";
-            this.refreshComPortsButton.UseVisualStyleBackColor = true;
-            this.refreshComPortsButton.Click += new System.EventHandler(this.refreshComPortsButton_Click);
-            // 
-            // executeHardwareButton
-            // 
-            this.executeHardwareButton.Location = new System.Drawing.Point(22, 108);
-            this.executeHardwareButton.Name = "executeHardwareButton";
-            this.executeHardwareButton.Size = new System.Drawing.Size(89, 23);
-            this.executeHardwareButton.TabIndex = 4;
-            this.executeHardwareButton.Text = "Senden";
-            this.executeHardwareButton.UseVisualStyleBackColor = true;
+            this.ausfuehrungToolStripMenuItem.Name = "ausfuehrungToolStripMenuItem";
+            this.ausfuehrungToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.ausfuehrungToolStripMenuItem.Text = "Ausführung";
+            this.ausfuehrungToolStripMenuItem.Click += new System.EventHandler(this.ausfuehrungToolStripMenuItem_Click);
             // 
             // PicSimulatorForm
             // 
@@ -1038,6 +1047,7 @@
         private System.Windows.Forms.Label label25;
         private System.Windows.Forms.Button refreshComPortsButton;
         private System.Windows.Forms.Button executeHardwareButton;
+        private System.Windows.Forms.ToolStripMenuItem ausfuehrungToolStripMenuItem;
     }
 }
 
