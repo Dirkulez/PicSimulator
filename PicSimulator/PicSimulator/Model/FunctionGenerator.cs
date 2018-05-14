@@ -49,10 +49,10 @@ namespace PicSimulator.Model
 
         #region Constructor
 
-        public FunctionGenerator(double frequency)
+        public FunctionGenerator(double frequency, string pin)
         {
             Frequency = frequency;
-            Pin = "RA4";
+            Pin = pin;
             _currentState = 0;
             _timeSinceLastEdgeChange = 0;
         }
