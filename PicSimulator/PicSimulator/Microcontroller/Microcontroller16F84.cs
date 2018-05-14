@@ -781,7 +781,8 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteINCFSZ(int destinationSelect, int fileRegisterAddress)
         {
-            //inrements fileRegister and loads result depending on destination select either in w_reg or f_reg. if placed in w_reg, skip next operation,execute NOP instead
+            //inrements fileRegister and loads result depending on destination select either in w_reg or f_reg.
+            //if placed in w_reg, skip next operation,execute NOP instead
             var result = _alu.Increment(_registerAdressTable[fileRegisterAddress].Content, false);
             IncreaseCycle(1);
             WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
@@ -795,7 +796,8 @@ namespace PicSimulator.Microcontroller
 
         private void ExecuteDECFSZ(int destinationSelect, int fileRegisterAddress)
         {
-            //decrements fileRegister and loads result depending on destination select either in w_reg or f_reg. if placed in w_reg, skip next operation,execute NOP instead
+            //decrements fileRegister and loads result depending on destination select either in w_reg or f_reg.
+            //if placed in w_reg, skip next operation,execute NOP instead
             var result = _alu.Decrement(_registerAdressTable[fileRegisterAddress].Content, false);
             IncreaseCycle(1);
             WriteResultDependingOnDestinationSelect(destinationSelect, result, fileRegisterAddress);
