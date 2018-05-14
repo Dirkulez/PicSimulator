@@ -51,6 +51,7 @@
     <Compile Include="Microcontroller\OperationDecoder.cs" />
     <Compile Include="Microcontroller\SRAMRegisters.cs" />
     <Compile Include="Microcontroller\Timer0.cs" />
+    <Compile Include="Model\FunctionGenerator.cs" />
     <Compile Include="Model\OperationsEnum.cs" />
     <Compile Include="Microcontroller\ProgramCounterStack.cs" />
     <Compile Include="Model\Register.cs" />

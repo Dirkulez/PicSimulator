@@ -50,6 +50,21 @@ namespace PicSimulator.UI
             wregTextBox.DoubleClick += WregTextBox_DoubleClick;
             LstContentBox.SelectedIndexChanged += LstContentBox_SelectedIndexChanged;
             LstLoaded += LstLoaded_Executed;
+            funcActive1.CheckedChanged += FuncActive1_CheckedChanged;
+        }
+
+        private void FuncActive1_CheckedChanged(object sender, EventArgs e)
+        {
+            if (funcActive1.Checked)
+            {
+                funcGenFreqTextBox.Text = _microController.Frequency.ToString();
+                _microController.FuncGen = new FunctionGenerator(double.Parse(funcGenFreqTextBox.Text));
+            }
+            else
+            {
+                funcGenFreqTextBox.Text = string.Empty;
+                _microController.FuncGen = null;
+            }
         }
 
         private void LstContentBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -92,6 +107,7 @@ namespace PicSimulator.UI
             execButton.Enabled = true;
             singleStepButton.Enabled = true;
             resetButton.Enabled = true;
+            funcActive1.Enabled = true;
         }
 
         private void ZeroBitChanged_Executed(object sender, EventArgs e)
@@ -157,6 +173,7 @@ namespace PicSimulator.UI
             stopButton.Enabled = true;
             stopedTextBox.Visible = false;
             runningTextBox.Visible = true;
+            funcActive1.Enabled = false;
         }
 
         private void InitBackgroundWorker()
@@ -322,6 +339,8 @@ namespace PicSimulator.UI
             pclathTextBox.DataBindings.RemoveAt(0);
             cycleTextBox.DataBindings.RemoveAt(0);
             frequencyTextBox.DataBindings.RemoveAt(0);
+            cycleDurationTextBox.DataBindings.RemoveAt(0);
+            runtimeTextBox.DataBindings.RemoveAt(0);
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
@@ -340,6 +359,7 @@ namespace PicSimulator.UI
             singleStepButton.Enabled = true;
             runningTextBox.Visible = false;
             stopedTextBox.Visible = true;
+            funcActive1.Enabled = true;
         }
 
         private void singleStepToolStripMenuItem_Click(object sender, EventArgs e)
@@ -640,6 +660,20 @@ namespace PicSimulator.UI
         private void resetButton_Click(object sender, EventArgs e)
         {
             ResetInt();
+        }
+
+        private void textBox1_Click(object sender, EventArgs e)
+        {
+            if (funcActive1.Enabled && funcActive1.Checked)
+            {
+                _frequencyInputDialog = new FrequencyInputDialog();
+                var dialogResult = _frequencyInputDialog.ShowDialog();
+                if (dialogResult == DialogResult.OK)
+                {
+                    _microController.FuncGen.Frequency = double.Parse(_frequencyInputDialog.Frequency);
+                    funcGenFreqTextBox.Text = _frequencyInputDialog.Frequency;
+                }
+            }
         }
     }
 }

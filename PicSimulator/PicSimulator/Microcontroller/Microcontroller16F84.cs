@@ -30,6 +30,7 @@ namespace PicSimulator.Microcontroller
         private ArithmeticLogicUnit _alu;
         private SRAMRegisters _sram;
         private Timer0 _tmr0;
+        private FunctionGenerator _funcGen;
 
         private ulong _cycle = 0;
         private bool _stopExecution;
@@ -44,6 +45,12 @@ namespace PicSimulator.Microcontroller
         #endregion
 
         #region Properties
+
+        public FunctionGenerator FuncGen
+        {
+            get { return _funcGen; }
+            set { _funcGen = value; }
+        }
 
         public double RuntimeDuration
         {
