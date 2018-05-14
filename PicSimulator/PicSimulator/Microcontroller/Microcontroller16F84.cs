@@ -58,187 +58,7 @@ namespace PicSimulator.Microcontroller
                 _funcGen.EdgeChanged += _funcGen_EdgeChanged;
             }
         }
-
-        private void _funcGen_EdgeChanged(object sender, FunctionGeneratorEventArguments e)
-        {
-            //Value changed on any port due to external function generator 
-            //check which port is affected, check if tris is set to input and perform changes 
-            switch (e.AffectedPin)
-            {
-                case "RA0":
-                    if ((_trisA.Content & 1) == 1)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portA.Content | 1, 5);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portA.Content & 254, 5);
-                        }
-                    }
-                    break;
-
-                case "RA1":
-                    if ((_trisA.Content & 2) == 2)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portA.Content | 2, 5);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portA.Content & 253, 5);
-                        }
-                    }
-                    break;
-                case "RA2":
-                    if ((_trisA.Content & 4) == 4)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portA.Content | 4, 5);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portA.Content & 251, 5);
-                        }
-                    }
-                    break;
-                case "RA3":
-                    if ((_trisA.Content & 8) == 8)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portA.Content | 8, 5);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portA.Content & 247, 5);
-                        }
-                    }
-                    break;
-                case "RA4":
-                    if ((_trisA.Content & 16) == 16)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portA.Content | 16, 5);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portA.Content & 239, 5);
-                        }
-                    }
-                    break;
-                case "RB0":
-                    if ((_trisB.Content & 1) == 1)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content | 1, 6);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content & 254, 6);
-                        }
-                    }
-                    break;
-
-                case "RB1":
-                    if ((_trisB.Content & 2) == 2)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content | 2, 6);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content & 253, 6);
-                        }
-                    }
-                    break;
-                case "RB2":
-                    if ((_trisB.Content & 4) == 4)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content | 4, 6);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content & 251, 6);
-                        }
-                    }
-                    break;
-                case "RB3":
-                    if ((_trisB.Content & 8) == 8)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content | 8, 6);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content & 247, 6);
-                        }
-                    }
-                    break;
-                case "RB4":
-                    if ((_trisB.Content & 16) == 16)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content | 16, 6);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content & 239, 6);
-                        }
-                    }
-                    break;
-                case "RB5":
-                    if ((_trisB.Content & 32) == 32)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content | 32, 6);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content & 223, 6);
-                        }
-                    }
-                    break;
-                case "RB6":
-                    if ((_trisB.Content & 64) == 64)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content | 64, 6);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content & 191, 6);
-                        }
-                    }
-                    break;
-                case "RB7":
-                    if ((_trisB.Content & 128) == 128)
-                    {
-                        if (e.Value == 1)
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content | 128, 6);
-                        }
-                        else
-                        {
-                            WriteResultToRegisterWithGivenAddress(_portB.Content & 127, 6);
-                        }
-                    }
-                    break;
-            }
-        }
-
+                
         public double RuntimeDuration
         {
             get { return _runtimeDuration; }
@@ -1107,8 +927,12 @@ namespace PicSimulator.Microcontroller
             else
             {
                 //counte mode active, needs external frequency on RA4
-                timerIncreaseValue = _tmr0.IncreaseCounter(numberOfRisingEdgesInExtFuncGen, numberOfFallingEdgesInExtFuncGen, CountOnRisingEdge(),
+                if (((_trisA.Content & 16) == 16) && (_funcGen.Pin == "RA4"))
+                {
+                    //RA4 is set to input and is choosen in function Generator
+                    timerIncreaseValue = _tmr0.IncreaseCounter(numberOfRisingEdgesInExtFuncGen, numberOfFallingEdgesInExtFuncGen, CountOnRisingEdge(),
                     IsPrescalerAssignedToTimer(), GetPrescalerValue());
+                }
             }
 
             if (timerIncreaseValue != 0)
@@ -1431,7 +1255,187 @@ namespace PicSimulator.Microcontroller
         {
             WorkingRegisterContent = newValue;
         }
-       
+
+        private void _funcGen_EdgeChanged(object sender, FunctionGeneratorEventArguments e)
+        {
+            //Value changed on any port due to external function generator 
+            //check which port is affected, check if tris is set to input and perform changes 
+            switch (e.AffectedPin)
+            {
+                case "RA0":
+                    if ((_trisA.Content & 1) == 1)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content | 1, 5);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content & 254, 5);
+                        }
+                    }
+                    break;
+
+                case "RA1":
+                    if ((_trisA.Content & 2) == 2)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content | 2, 5);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content & 253, 5);
+                        }
+                    }
+                    break;
+                case "RA2":
+                    if ((_trisA.Content & 4) == 4)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content | 4, 5);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content & 251, 5);
+                        }
+                    }
+                    break;
+                case "RA3":
+                    if ((_trisA.Content & 8) == 8)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content | 8, 5);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content & 247, 5);
+                        }
+                    }
+                    break;
+                case "RA4":
+                    if ((_trisA.Content & 16) == 16)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content | 16, 5);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content & 239, 5);
+                        }
+                    }
+                    break;
+                case "RB0":
+                    if ((_trisB.Content & 1) == 1)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 1, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 254, 6);
+                        }
+                    }
+                    break;
+
+                case "RB1":
+                    if ((_trisB.Content & 2) == 2)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 2, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 253, 6);
+                        }
+                    }
+                    break;
+                case "RB2":
+                    if ((_trisB.Content & 4) == 4)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 4, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 251, 6);
+                        }
+                    }
+                    break;
+                case "RB3":
+                    if ((_trisB.Content & 8) == 8)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 8, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 247, 6);
+                        }
+                    }
+                    break;
+                case "RB4":
+                    if ((_trisB.Content & 16) == 16)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 16, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 239, 6);
+                        }
+                    }
+                    break;
+                case "RB5":
+                    if ((_trisB.Content & 32) == 32)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 32, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 223, 6);
+                        }
+                    }
+                    break;
+                case "RB6":
+                    if ((_trisB.Content & 64) == 64)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 64, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 191, 6);
+                        }
+                    }
+                    break;
+                case "RB7":
+                    if ((_trisB.Content & 128) == 128)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 128, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 127, 6);
+                        }
+                    }
+                    break;
+            }
+        }
+
         #endregion
     }
 }

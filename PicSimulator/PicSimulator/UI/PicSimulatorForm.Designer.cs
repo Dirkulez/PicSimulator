@@ -44,6 +44,10 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LstContentBox = new System.Windows.Forms.CheckedListBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label19 = new System.Windows.Forms.Label();
+            this.label18 = new System.Windows.Forms.Label();
+            this.statusRegContentTextBox = new System.Windows.Forms.TextBox();
             this.pclathTextBox = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.dcBitTextBox = new System.Windows.Forms.TextBox();
@@ -87,9 +91,21 @@
             this.funcActive1 = new System.Windows.Forms.CheckBox();
             this.label16 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
-            this.statusRegContentTextBox = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
+            this.fsrTextBox = new System.Windows.Forms.TextBox();
+            this.labelPCL = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.label21 = new System.Windows.Forms.Label();
+            this.pdTextBox = new System.Windows.Forms.TextBox();
+            this.toLabel = new System.Windows.Forms.Label();
+            this.toTextBox = new System.Windows.Forms.TextBox();
+            this.label22 = new System.Windows.Forms.Label();
+            this.rp0TextBox = new System.Windows.Forms.TextBox();
+            this.label23 = new System.Windows.Forms.Label();
+            this.rp1TextBox = new System.Windows.Forms.TextBox();
+            this.label24 = new System.Windows.Forms.Label();
+            this.irpTextBox = new System.Windows.Forms.TextBox();
+            this.optionTextBox = new System.Windows.Forms.TextBox();
+            this.funcGenPinComboBox = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -220,6 +236,21 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.optionTextBox);
+            this.groupBox1.Controls.Add(this.irpTextBox);
+            this.groupBox1.Controls.Add(this.label24);
+            this.groupBox1.Controls.Add(this.rp1TextBox);
+            this.groupBox1.Controls.Add(this.label23);
+            this.groupBox1.Controls.Add(this.rp0TextBox);
+            this.groupBox1.Controls.Add(this.label22);
+            this.groupBox1.Controls.Add(this.toTextBox);
+            this.groupBox1.Controls.Add(this.toLabel);
+            this.groupBox1.Controls.Add(this.pdTextBox);
+            this.groupBox1.Controls.Add(this.label21);
+            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.labelPCL);
+            this.groupBox1.Controls.Add(this.fsrTextBox);
+            this.groupBox1.Controls.Add(this.label20);
             this.groupBox1.Controls.Add(this.label19);
             this.groupBox1.Controls.Add(this.label18);
             this.groupBox1.Controls.Add(this.statusRegContentTextBox);
@@ -238,14 +269,49 @@
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Location = new System.Drawing.Point(877, 47);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(284, 345);
+            this.groupBox1.Size = new System.Drawing.Size(284, 443);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Spezialfunktionsregister";
             // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(16, 68);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(35, 17);
+            this.label20.TabIndex = 16;
+            this.label20.Text = "FSR";
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(16, 324);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(46, 17);
+            this.label19.TabIndex = 15;
+            this.label19.Text = "Intcon";
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(16, 256);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(50, 17);
+            this.label18.TabIndex = 14;
+            this.label18.Text = "Option";
+            // 
+            // statusRegContentTextBox
+            // 
+            this.statusRegContentTextBox.Enabled = false;
+            this.statusRegContentTextBox.Location = new System.Drawing.Point(88, 175);
+            this.statusRegContentTextBox.Name = "statusRegContentTextBox";
+            this.statusRegContentTextBox.Size = new System.Drawing.Size(181, 22);
+            this.statusRegContentTextBox.TabIndex = 13;
+            // 
             // pclathTextBox
             // 
-            this.pclathTextBox.Location = new System.Drawing.Point(87, 104);
+            this.pclathTextBox.Location = new System.Drawing.Point(88, 117);
             this.pclathTextBox.Name = "pclathTextBox";
             this.pclathTextBox.ReadOnly = true;
             this.pclathTextBox.Size = new System.Drawing.Size(181, 22);
@@ -254,7 +320,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(19, 108);
+            this.label7.Location = new System.Drawing.Point(15, 122);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(62, 17);
             this.label7.TabIndex = 11;
@@ -262,16 +328,16 @@
             // 
             // dcBitTextBox
             // 
-            this.dcBitTextBox.Location = new System.Drawing.Point(241, 174);
+            this.dcBitTextBox.Location = new System.Drawing.Point(222, 220);
             this.dcBitTextBox.Name = "dcBitTextBox";
             this.dcBitTextBox.ReadOnly = true;
-            this.dcBitTextBox.Size = new System.Drawing.Size(28, 22);
+            this.dcBitTextBox.Size = new System.Drawing.Size(24, 22);
             this.dcBitTextBox.TabIndex = 10;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(204, 178);
+            this.label6.Location = new System.Drawing.Point(219, 200);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(27, 17);
             this.label6.TabIndex = 9;
@@ -279,16 +345,16 @@
             // 
             // cBitTextBox
             // 
-            this.cBitTextBox.Location = new System.Drawing.Point(162, 173);
+            this.cBitTextBox.Location = new System.Drawing.Point(252, 220);
             this.cBitTextBox.Name = "cBitTextBox";
             this.cBitTextBox.ReadOnly = true;
-            this.cBitTextBox.Size = new System.Drawing.Size(36, 22);
+            this.cBitTextBox.Size = new System.Drawing.Size(24, 22);
             this.cBitTextBox.TabIndex = 8;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(139, 178);
+            this.label5.Location = new System.Drawing.Point(252, 200);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(17, 17);
             this.label5.TabIndex = 7;
@@ -296,25 +362,25 @@
             // 
             // zeroBitTextBox
             // 
-            this.zeroBitTextBox.Location = new System.Drawing.Point(99, 173);
+            this.zeroBitTextBox.Location = new System.Drawing.Point(192, 220);
             this.zeroBitTextBox.Name = "zeroBitTextBox";
             this.zeroBitTextBox.ReadOnly = true;
-            this.zeroBitTextBox.Size = new System.Drawing.Size(34, 22);
+            this.zeroBitTextBox.Size = new System.Drawing.Size(24, 22);
             this.zeroBitTextBox.TabIndex = 6;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(55, 178);
+            this.label4.Location = new System.Drawing.Point(196, 200);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(38, 17);
+            this.label4.Size = new System.Drawing.Size(17, 17);
             this.label4.TabIndex = 5;
-            this.label4.Text = "Zero";
+            this.label4.Text = "Z";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(23, 144);
+            this.label3.Location = new System.Drawing.Point(16, 178);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(48, 17);
             this.label3.TabIndex = 4;
@@ -322,7 +388,7 @@
             // 
             // pcTextBox
             // 
-            this.pcTextBox.Location = new System.Drawing.Point(88, 69);
+            this.pcTextBox.Location = new System.Drawing.Point(88, 145);
             this.pcTextBox.Name = "pcTextBox";
             this.pcTextBox.ReadOnly = true;
             this.pcTextBox.Size = new System.Drawing.Size(181, 22);
@@ -331,7 +397,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(19, 74);
+            this.label2.Location = new System.Drawing.Point(15, 150);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(26, 17);
             this.label2.TabIndex = 2;
@@ -339,7 +405,7 @@
             // 
             // wregTextBox
             // 
-            this.wregTextBox.Location = new System.Drawing.Point(88, 30);
+            this.wregTextBox.Location = new System.Drawing.Point(88, 35);
             this.wregTextBox.Name = "wregTextBox";
             this.wregTextBox.ReadOnly = true;
             this.wregTextBox.Size = new System.Drawing.Size(181, 22);
@@ -348,7 +414,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(19, 35);
+            this.label1.Location = new System.Drawing.Point(15, 40);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(52, 17);
             this.label1.TabIndex = 0;
@@ -416,7 +482,7 @@
             this.groupBox2.Controls.Add(this.label9);
             this.groupBox2.Controls.Add(this.cycleTextBox);
             this.groupBox2.Controls.Add(this.label8);
-            this.groupBox2.Location = new System.Drawing.Point(875, 413);
+            this.groupBox2.Location = new System.Drawing.Point(877, 547);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(286, 175);
             this.groupBox2.TabIndex = 7;
@@ -509,7 +575,7 @@
             this.controlGroupBox.Controls.Add(this.singleStepButton);
             this.controlGroupBox.Controls.Add(this.stopButton);
             this.controlGroupBox.Controls.Add(this.execButton);
-            this.controlGroupBox.Location = new System.Drawing.Point(881, 637);
+            this.controlGroupBox.Location = new System.Drawing.Point(877, 728);
             this.controlGroupBox.Name = "controlGroupBox";
             this.controlGroupBox.Size = new System.Drawing.Size(280, 163);
             this.controlGroupBox.TabIndex = 8;
@@ -591,6 +657,7 @@
             // 
             // groupBox4
             // 
+            this.groupBox4.Controls.Add(this.funcGenPinComboBox);
             this.groupBox4.Controls.Add(this.label17);
             this.groupBox4.Controls.Add(this.funcGenFreqTextBox);
             this.groupBox4.Controls.Add(this.funcActive1);
@@ -651,31 +718,134 @@
             this.label15.TabIndex = 0;
             this.label15.Text = "Frequenz";
             // 
-            // statusRegContentTextBox
+            // fsrTextBox
             // 
-            this.statusRegContentTextBox.Enabled = false;
-            this.statusRegContentTextBox.Location = new System.Drawing.Point(87, 141);
-            this.statusRegContentTextBox.Name = "statusRegContentTextBox";
-            this.statusRegContentTextBox.Size = new System.Drawing.Size(180, 22);
-            this.statusRegContentTextBox.TabIndex = 13;
+            this.fsrTextBox.Enabled = false;
+            this.fsrTextBox.Location = new System.Drawing.Point(88, 63);
+            this.fsrTextBox.Name = "fsrTextBox";
+            this.fsrTextBox.ReadOnly = true;
+            this.fsrTextBox.Size = new System.Drawing.Size(181, 22);
+            this.fsrTextBox.TabIndex = 17;
             // 
-            // label18
+            // labelPCL
             // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(27, 219);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(50, 17);
-            this.label18.TabIndex = 14;
-            this.label18.Text = "Option";
+            this.labelPCL.AutoSize = true;
+            this.labelPCL.Location = new System.Drawing.Point(17, 96);
+            this.labelPCL.Name = "labelPCL";
+            this.labelPCL.Size = new System.Drawing.Size(34, 17);
+            this.labelPCL.TabIndex = 18;
+            this.labelPCL.Text = "PCL";
             // 
-            // label19
+            // textBox1
             // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(34, 279);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(46, 17);
-            this.label19.TabIndex = 15;
-            this.label19.Text = "Intcon";
+            this.textBox1.Enabled = false;
+            this.textBox1.Location = new System.Drawing.Point(88, 91);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ReadOnly = true;
+            this.textBox1.Size = new System.Drawing.Size(181, 22);
+            this.textBox1.TabIndex = 19;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(163, 200);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(27, 17);
+            this.label21.TabIndex = 20;
+            this.label21.Text = "PD";
+            // 
+            // pdTextBox
+            // 
+            this.pdTextBox.Location = new System.Drawing.Point(162, 220);
+            this.pdTextBox.Name = "pdTextBox";
+            this.pdTextBox.ReadOnly = true;
+            this.pdTextBox.Size = new System.Drawing.Size(24, 22);
+            this.pdTextBox.TabIndex = 21;
+            // 
+            // toLabel
+            // 
+            this.toLabel.AutoSize = true;
+            this.toLabel.Location = new System.Drawing.Point(128, 200);
+            this.toLabel.Name = "toLabel";
+            this.toLabel.Size = new System.Drawing.Size(28, 17);
+            this.toLabel.TabIndex = 22;
+            this.toLabel.Text = "TO";
+            // 
+            // toTextBox
+            // 
+            this.toTextBox.Location = new System.Drawing.Point(131, 220);
+            this.toTextBox.Name = "toTextBox";
+            this.toTextBox.ReadOnly = true;
+            this.toTextBox.Size = new System.Drawing.Size(24, 22);
+            this.toTextBox.TabIndex = 23;
+            // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(95, 200);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(35, 17);
+            this.label22.TabIndex = 24;
+            this.label22.Text = "RP0";
+            // 
+            // rp0TextBox
+            // 
+            this.rp0TextBox.Location = new System.Drawing.Point(98, 220);
+            this.rp0TextBox.Name = "rp0TextBox";
+            this.rp0TextBox.ReadOnly = true;
+            this.rp0TextBox.Size = new System.Drawing.Size(24, 22);
+            this.rp0TextBox.TabIndex = 25;
+            // 
+            // label23
+            // 
+            this.label23.AutoSize = true;
+            this.label23.Location = new System.Drawing.Point(60, 200);
+            this.label23.Name = "label23";
+            this.label23.Size = new System.Drawing.Size(35, 17);
+            this.label23.TabIndex = 26;
+            this.label23.Text = "RP1";
+            // 
+            // rp1TextBox
+            // 
+            this.rp1TextBox.Location = new System.Drawing.Point(63, 220);
+            this.rp1TextBox.Name = "rp1TextBox";
+            this.rp1TextBox.ReadOnly = true;
+            this.rp1TextBox.Size = new System.Drawing.Size(24, 22);
+            this.rp1TextBox.TabIndex = 27;
+            // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(29, 200);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(30, 17);
+            this.label24.TabIndex = 28;
+            this.label24.Text = "IRP";
+            // 
+            // irpTextBox
+            // 
+            this.irpTextBox.Location = new System.Drawing.Point(32, 220);
+            this.irpTextBox.Name = "irpTextBox";
+            this.irpTextBox.ReadOnly = true;
+            this.irpTextBox.Size = new System.Drawing.Size(24, 22);
+            this.irpTextBox.TabIndex = 29;
+            // 
+            // optionTextBox
+            // 
+            this.optionTextBox.Enabled = false;
+            this.optionTextBox.Location = new System.Drawing.Point(88, 256);
+            this.optionTextBox.Name = "optionTextBox";
+            this.optionTextBox.Size = new System.Drawing.Size(181, 22);
+            this.optionTextBox.TabIndex = 30;
+            // 
+            // funcGenPinComboBox
+            // 
+            this.funcGenPinComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.funcGenPinComboBox.FormattingEnabled = true;
+            this.funcGenPinComboBox.Location = new System.Drawing.Point(80, 60);
+            this.funcGenPinComboBox.Name = "funcGenPinComboBox";
+            this.funcGenPinComboBox.Size = new System.Drawing.Size(94, 24);
+            this.funcGenPinComboBox.TabIndex = 6;
             // 
             // PicSimulatorForm
             // 
@@ -774,6 +944,22 @@
         private System.Windows.Forms.TextBox statusRegContentTextBox;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.TextBox optionTextBox;
+        private System.Windows.Forms.TextBox irpTextBox;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.TextBox rp1TextBox;
+        private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.TextBox rp0TextBox;
+        private System.Windows.Forms.Label label22;
+        private System.Windows.Forms.TextBox toTextBox;
+        private System.Windows.Forms.Label toLabel;
+        private System.Windows.Forms.TextBox pdTextBox;
+        private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.Label labelPCL;
+        private System.Windows.Forms.TextBox fsrTextBox;
+        private System.Windows.Forms.ComboBox funcGenPinComboBox;
     }
 }
 

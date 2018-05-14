@@ -32,6 +32,7 @@ namespace PicSimulator.UI
             InitializeComponent();
             InitBackgroundWorker();
             InitRegisterMemoryListView();
+            InitFuncGenPortDropDown();
             WindowState = FormWindowState.Maximized;
 
             //prepare some items
@@ -53,12 +54,31 @@ namespace PicSimulator.UI
             funcActive1.CheckedChanged += FuncActive1_CheckedChanged;
         }
 
+        private void InitFuncGenPortDropDown()
+        {
+            funcGenPinComboBox.Items.Add("RA0");
+            funcGenPinComboBox.Items.Add("RA1");
+            funcGenPinComboBox.Items.Add("RA2");
+            funcGenPinComboBox.Items.Add("RA3");
+            funcGenPinComboBox.Items.Add("RA4");
+            funcGenPinComboBox.Items.Add("RB0");
+            funcGenPinComboBox.Items.Add("RB1");
+            funcGenPinComboBox.Items.Add("RB2");
+            funcGenPinComboBox.Items.Add("RB3");
+            funcGenPinComboBox.Items.Add("RB4");
+            funcGenPinComboBox.Items.Add("RB5");
+            funcGenPinComboBox.Items.Add("RB6");
+            funcGenPinComboBox.Items.Add("RB7");
+
+            funcGenPinComboBox.SelectedIndex = 4;
+        }
+
         private void FuncActive1_CheckedChanged(object sender, EventArgs e)
         {
             if (funcActive1.Checked)
             {
                 funcGenFreqTextBox.Text = _microController.Frequency.ToString();
-                _microController.FuncGen = new FunctionGenerator(double.Parse(funcGenFreqTextBox.Text));
+                _microController.FuncGen = new FunctionGenerator(double.Parse(funcGenFreqTextBox.Text), funcGenPinComboBox.Text);
             }
             else
             {
@@ -174,6 +194,7 @@ namespace PicSimulator.UI
             stopedTextBox.Visible = false;
             runningTextBox.Visible = true;
             funcActive1.Enabled = false;
+            funcGenPinComboBox.Enabled = false;
         }
 
         private void InitBackgroundWorker()
@@ -258,6 +279,11 @@ namespace PicSimulator.UI
             wregDataBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith2Digits);
             wregTextBox.DataBindings.Add(wregDataBinding);
 
+            var statusDataBinding = new Binding(nameof(statusRegContentTextBox.Text), _microController, nameof(_microController.StatusRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            statusDataBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith2Digits);
+            statusRegContentTextBox.DataBindings.Add(statusDataBinding);
+
             var pcDataBinding = new Binding(nameof(pcTextBox.Text), _microController, nameof(_microController.ProgramCounterContent),
                 true, DataSourceUpdateMode.OnPropertyChanged);
             pcDataBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith4Digits);
@@ -341,6 +367,7 @@ namespace PicSimulator.UI
             frequencyTextBox.DataBindings.RemoveAt(0);
             cycleDurationTextBox.DataBindings.RemoveAt(0);
             runtimeTextBox.DataBindings.RemoveAt(0);
+            statusRegContentTextBox.DataBindings.RemoveAt(0);
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)
@@ -360,6 +387,7 @@ namespace PicSimulator.UI
             runningTextBox.Visible = false;
             stopedTextBox.Visible = true;
             funcActive1.Enabled = true;
+            funcGenPinComboBox.Enabled = true;
         }
 
         private void singleStepToolStripMenuItem_Click(object sender, EventArgs e)
@@ -675,5 +703,6 @@ namespace PicSimulator.UI
                 }
             }
         }
+
     }
 }
