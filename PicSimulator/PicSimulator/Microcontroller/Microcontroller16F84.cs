@@ -24,6 +24,10 @@ namespace PicSimulator.Microcontroller
         private Register _tmr0Register;
         private Register _optionRegister;
         private Register _intconRegister;
+        private Register _portA;
+        private Register _portB;
+        private Register _trisA;
+        private Register _trisB;
 
         private SynchronizationContext _syncContext; //for synchronisation with UI
         private ProgramCounterStack _programCounterStack;
@@ -49,7 +53,190 @@ namespace PicSimulator.Microcontroller
         public FunctionGenerator FuncGen
         {
             get { return _funcGen; }
-            set { _funcGen = value; }
+            set {
+                _funcGen = value;
+                _funcGen.EdgeChanged += _funcGen_EdgeChanged;
+            }
+        }
+
+        private void _funcGen_EdgeChanged(object sender, FunctionGeneratorEventArguments e)
+        {
+            //Value changed on any port due to external function generator 
+            //check which port is affected, check if tris is set to input and perform changes 
+            switch (e.AffectedPin)
+            {
+                case "RA0":
+                    if ((_trisA.Content & 1) == 1)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content | 1, 5);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content & 254, 5);
+                        }
+                    }
+                    break;
+
+                case "RA1":
+                    if ((_trisA.Content & 2) == 2)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content | 2, 5);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content & 253, 5);
+                        }
+                    }
+                    break;
+                case "RA2":
+                    if ((_trisA.Content & 4) == 4)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content | 4, 5);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content & 251, 5);
+                        }
+                    }
+                    break;
+                case "RA3":
+                    if ((_trisA.Content & 8) == 8)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content | 8, 5);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content & 247, 5);
+                        }
+                    }
+                    break;
+                case "RA4":
+                    if ((_trisA.Content & 16) == 16)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content | 16, 5);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portA.Content & 239, 5);
+                        }
+                    }
+                    break;
+                case "RB0":
+                    if ((_trisB.Content & 1) == 1)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 1, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 254, 6);
+                        }
+                    }
+                    break;
+
+                case "RB1":
+                    if ((_trisB.Content & 2) == 2)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 2, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 253, 6);
+                        }
+                    }
+                    break;
+                case "RB2":
+                    if ((_trisB.Content & 4) == 4)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 4, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 251, 6);
+                        }
+                    }
+                    break;
+                case "RB3":
+                    if ((_trisB.Content & 8) == 8)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 8, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 247, 6);
+                        }
+                    }
+                    break;
+                case "RB4":
+                    if ((_trisB.Content & 16) == 16)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 16, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 239, 6);
+                        }
+                    }
+                    break;
+                case "RB5":
+                    if ((_trisB.Content & 32) == 32)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 32, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 223, 6);
+                        }
+                    }
+                    break;
+                case "RB6":
+                    if ((_trisB.Content & 64) == 64)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 64, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 191, 6);
+                        }
+                    }
+                    break;
+                case "RB7":
+                    if ((_trisB.Content & 128) == 128)
+                    {
+                        if (e.Value == 1)
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content | 128, 6);
+                        }
+                        else
+                        {
+                            WriteResultToRegisterWithGivenAddress(_portB.Content & 127, 6);
+                        }
+                    }
+                    break;
+            }
         }
 
         public double RuntimeDuration
@@ -252,7 +439,7 @@ namespace PicSimulator.Microcontroller
             _alu.ResultNotZero += SetZeroBitTo0;
         }
 
-        //called when any propertychanged to inform the UI 
+        //called when any property changed to inform the UI 
         public void InvokePropertyChanged(PropertyChangedEventArgs e)
         {
             PropertyChangedEventHandler handler = PropertyChanged;
@@ -905,11 +1092,29 @@ namespace PicSimulator.Microcontroller
 
         private void ProcessTimer0()
         {
+            var timerIncreaseValue = 0;
+            var numberOfRisingEdgesInExtFuncGen = 0;
+            var numberOfFallingEdgesInExtFuncGen = 0;
+            if (_funcGen != null)
+            {
+                _funcGen.GetNumberOfEdges(_cycleDuration, ref numberOfRisingEdgesInExtFuncGen, ref numberOfFallingEdgesInExtFuncGen);
+            }
             if (TimerModeSelected())
             {
-                var timerIncreaseValue = _tmr0.IncreaseTimer(IsPrescalerAssignedToTimer(), GetPrescalerValue());
+                //timer mode active, counts on internal clock
+                timerIncreaseValue = _tmr0.IncreaseTimer(IsPrescalerAssignedToTimer(), GetPrescalerValue());
+            }
+            else
+            {
+                //counte mode active, needs external frequency on RA4
+                timerIncreaseValue = _tmr0.IncreaseCounter(numberOfRisingEdgesInExtFuncGen, numberOfFallingEdgesInExtFuncGen, CountOnRisingEdge(),
+                    IsPrescalerAssignedToTimer(), GetPrescalerValue());
+            }
+
+            if (timerIncreaseValue != 0)
+            {
                 var newTimerValue = _tmr0Register.Content + timerIncreaseValue;
-                if(newTimerValue > 255)
+                if (newTimerValue > 255)
                 {
                     newTimerValue = 0;
                     SetT0IFbit();
@@ -969,6 +1174,18 @@ namespace PicSimulator.Microcontroller
             return false;
         }
 
+        private bool CountOnRisingEdge()
+        {
+            //check TOSE bit in option register 
+            //return true if == 0, else false
+            if((_optionRegister.Content & 16) == 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private void InitRegisters()
         {
             _programCounter = new Register(0, "PC");
@@ -980,6 +1197,10 @@ namespace PicSimulator.Microcontroller
             _tmr0Register = new Register(0, "TMR0");
             _optionRegister = new Register(255, "OPTION_REG");
             _intconRegister = new Register(0, "INTCON");
+            _portA = new Register(0, "PORTA");
+            _portB = new Register(0, "PORTB");
+            _trisA = new Register(31, "TRISA");
+            _trisB = new Register(255, "TRISB");
 
             _sram = new SRAMRegisters();
 
@@ -995,8 +1216,8 @@ namespace PicSimulator.Microcontroller
             _registerAdressTable.Add(2, _pclRegister);
             _registerAdressTable.Add(3, _statusRegister);
             _registerAdressTable.Add(4, _fsrRegister);
-            _registerAdressTable.Add(5, new Register(0, "PORTA"));
-            _registerAdressTable.Add(6, new Register(0, "PORTB"));
+            _registerAdressTable.Add(5, _portA);
+            _registerAdressTable.Add(6, _portB);
             _registerAdressTable.Add(8, new Register(0, "EEDATA"));
             _registerAdressTable.Add(9, new Register(0, "EEADR"));
             _registerAdressTable.Add(10, _pclathRegister);
@@ -1146,8 +1367,8 @@ namespace PicSimulator.Microcontroller
             _registerAdressTable.Add(130, _pclRegister);
             _registerAdressTable.Add(131, _statusRegister);
             _registerAdressTable.Add(132, _fsrRegister);
-            _registerAdressTable.Add(133, new Register(31, "TRISA"));
-            _registerAdressTable.Add(134, new Register(255, "TRISB"));
+            _registerAdressTable.Add(133, _trisA);
+            _registerAdressTable.Add(134, _trisB);
             _registerAdressTable.Add(136, new Register(0, "EECON1"));
             _registerAdressTable.Add(137, new Register(0, "EECON2"));
             _registerAdressTable.Add(139, _intconRegister);

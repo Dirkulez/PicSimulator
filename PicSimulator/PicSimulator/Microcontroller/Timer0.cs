@@ -11,6 +11,7 @@ namespace PicSimulator.Microcontroller
     {
         private int _cyclesSinceLastIncrement = 0;
         private int _skipCycles = 0;
+        private int _edgesSinceLastIncrement = 0;
 
         public int SkipCycles
         {
@@ -18,6 +19,7 @@ namespace PicSimulator.Microcontroller
             set { _skipCycles = value; }
         }
 
+        //method is called when timer mode is active to get the new timer value
         public int IncreaseTimer(bool prescalerActive, int prescalerValue)
         {
             if(_skipCycles > 0)
@@ -47,6 +49,7 @@ namespace PicSimulator.Microcontroller
             }
         }
 
+        //method is called to get the prescaler rate 
         private int DecodePrescalerRate(int prescalerValue)
         {
             if(prescalerValue == 0)
@@ -83,6 +86,45 @@ namespace PicSimulator.Microcontroller
             }
 
             return 0;
+        }
+
+        //method is called when counter mode is active to get the new timer value
+        internal int IncreaseCounter(int numberOfRisingEdgesInExtFuncGen, int numberOfFallingEdgesInExtFuncGen, bool countOnRisingEdge,
+            bool prescalerActive, int prescalerValue)
+        {
+            int edgesToCount = 0;
+
+            if (countOnRisingEdge)
+            {
+                edgesToCount = numberOfRisingEdgesInExtFuncGen;
+            }
+            else
+            {
+                edgesToCount = numberOfFallingEdgesInExtFuncGen;
+            }
+
+            if (!prescalerActive)
+            {
+                _edgesSinceLastIncrement = 0;
+                return edgesToCount;
+            }
+            else
+            {
+                var returnValue = 0;
+                var prescalerRate = DecodePrescalerRate(prescalerValue);
+                while(edgesToCount > 0)
+                {
+                    edgesToCount--;
+                    _edgesSinceLastIncrement++;
+                    if(_edgesSinceLastIncrement == prescalerRate)
+                    {
+                        _edgesSinceLastIncrement = 0;
+                        returnValue++;
+                    }
+                }
+
+                return returnValue;
+            }
         }
     }
 }
