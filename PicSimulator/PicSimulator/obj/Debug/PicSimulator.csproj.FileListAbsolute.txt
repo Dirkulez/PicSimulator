@@ -9,3 +9,15 @@ D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\
 D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.UI.PicSimulatorForm.resources
 D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.UI.FrequencyInputDialog.resources
 D:\DHBW\Theorie1\Rechnertechnik2\Projekt_PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.UI.RegisterContentChangeDialog.resources
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\bin\Debug\PicSimulator.exe.config
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\bin\Debug\PicSimulator.exe
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\bin\Debug\PicSimulator.pdb
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.csprojResolveAssemblyReference.cache
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.UI.FrequencyInputDialog.resources
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.UI.PicSimulatorForm.resources
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.Properties.Resources.resources
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.UI.RegisterContentChangeDialog.resources
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.csproj.GenerateResource.cache
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.csproj.CoreCompileInputs.cache
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.exe
+C:\Users\Adam Luke\Desktop\Uni\Rechnertechnik\PicSimulator\PicSimulator\PicSimulator\obj\Debug\PicSimulator.pdb
