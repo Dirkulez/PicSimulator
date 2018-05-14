@@ -188,7 +188,7 @@ namespace PicSimulator.UI
             while (!_backgroundWorker.CancellationPending)
             {
                 _microController.ExecuteOperation();
-                Thread.Sleep(500);
+                Thread.Sleep(10);
             }
         }
 

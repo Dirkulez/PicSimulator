@@ -14,6 +14,13 @@ namespace PicSimulator.Model
         private double _frequency;
         private int _currentState; // 0 or 1 
         private double _timeSinceLastEdgeChange; // microseconds
+        private double _edgeDuration; // microseconds
+
+        #endregion
+
+        #region Events
+
+        public event EventHandler<FunctionGeneratorEventArguments> EdgeChanged;
 
         #endregion
 
@@ -34,6 +41,7 @@ namespace PicSimulator.Model
             set
             {
                 _frequency = value;
+                _edgeDuration = (1 / Frequency) * 2;
             }
         }
 
@@ -46,7 +54,43 @@ namespace PicSimulator.Model
             Frequency = frequency;
             Pin = "RA4";
             _currentState = 0;
-            _timeSinceLastEdgeChange = 0.25;
+            _timeSinceLastEdgeChange = 0;
+        }
+
+        #endregion
+
+        #region Methods
+
+        public void GetNumberOfEdges(double microCycleDuration, ref int numberOfRisingEdges, ref int numberOfFallingEdges)
+        {
+            numberOfRisingEdges = 0;
+            numberOfFallingEdges = 0;
+            var timeNew = _timeSinceLastEdgeChange + microCycleDuration;
+
+            while(timeNew >= _edgeDuration)
+            {
+                if(_currentState == 0)
+                {
+                    _currentState = 1;
+                    timeNew = timeNew - _edgeDuration;
+                    OnEdgeChanged(new FunctionGeneratorEventArguments(Pin, 1));
+                    numberOfRisingEdges++;
+                }
+                else
+                {
+                    _currentState = 0;
+                    timeNew = timeNew - _edgeDuration;
+                    OnEdgeChanged(new FunctionGeneratorEventArguments(Pin, 0));
+                    numberOfFallingEdges++;
+                }
+            }
+
+            _timeSinceLastEdgeChange = timeNew;
+        }
+
+        public void OnEdgeChanged(FunctionGeneratorEventArguments e)
+        {
+            EdgeChanged?.Invoke(this, e);
         }
 
         #endregion
