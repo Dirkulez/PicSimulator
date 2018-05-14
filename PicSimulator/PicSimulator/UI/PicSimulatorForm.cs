@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -23,6 +24,7 @@ namespace PicSimulator.UI
         private FrequencyInputDialog _frequencyInputDialog;
         private RegisterContentChangeDialog _registerContentChangeDialog;
         private int _listViewDoubleClickCount = 0; //neccessary to avoid calling the event twice !?
+        private SerialPort _comPort;
 
         public event EventHandler<EventArgs> LstLoaded;
 
@@ -33,6 +35,7 @@ namespace PicSimulator.UI
             InitBackgroundWorker();
             InitRegisterMemoryListView();
             InitFuncGenPortDropDown();
+            InitHardwareConnection();
             WindowState = FormWindowState.Maximized;
 
             //prepare some items
@@ -52,6 +55,44 @@ namespace PicSimulator.UI
             LstContentBox.SelectedIndexChanged += LstContentBox_SelectedIndexChanged;
             LstLoaded += LstLoaded_Executed;
             funcActive1.CheckedChanged += FuncActive1_CheckedChanged;
+            hardwareCheckBox.CheckedChanged += HardwareCheckBox_CheckedChanged;
+        }
+
+        private void HardwareCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (hardwareCheckBox.Checked)
+            {
+                _comPort = new SerialPort(hardwareComboBox.Text, 4800, Parity.None, 8, StopBits.One);
+                _comPort.Open();
+                executeHardwareButton.Enabled = true;
+                hardwareComboBox.Enabled = false;
+            }
+            else
+            {
+                _comPort.Close();
+                _comPort = null;
+                executeHardwareButton.Enabled = false;
+                hardwareComboBox.Enabled = true;
+            }
+        }
+
+        private void InitHardwareConnection()
+        {
+            refreshComPortsButton.Enabled = false;
+            var availableComPortNames = SerialPort.GetPortNames();
+
+            foreach(var port in availableComPortNames)
+            {
+                hardwareComboBox.Items.Add(port);
+            }
+
+            if (hardwareComboBox.Items.Count > 0)
+            {
+                hardwareComboBox.SelectedIndex = 0;
+            }
+
+            hardwareCheckBox.Enabled = false;
+            executeHardwareButton.Enabled = false;
         }
 
         private void InitFuncGenPortDropDown()
@@ -128,6 +169,11 @@ namespace PicSimulator.UI
             singleStepButton.Enabled = true;
             resetButton.Enabled = true;
             funcActive1.Enabled = true;
+            if(hardwareComboBox.Items.Count > 0)
+            {
+                hardwareCheckBox.Enabled = true;
+            }
+            refreshComPortsButton.Enabled = true;
         }
 
         private void ZeroBitChanged_Executed(object sender, EventArgs e)
@@ -704,5 +750,18 @@ namespace PicSimulator.UI
             }
         }
 
+        private void refreshComPortsButton_Click(object sender, EventArgs e)
+        {
+            hardwareComboBox.Items.Clear();
+            InitHardwareConnection();
+            if(hardwareComboBox.Items.Count > 0)
+            {
+                hardwareCheckBox.Enabled = true;
+            }
+            else
+            {
+                hardwareComboBox.Enabled = false;
+            }
+        }
     }
 }

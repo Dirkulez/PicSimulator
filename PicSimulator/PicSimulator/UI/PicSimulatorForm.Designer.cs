@@ -106,12 +106,19 @@
             this.irpTextBox = new System.Windows.Forms.TextBox();
             this.optionTextBox = new System.Windows.Forms.TextBox();
             this.funcGenPinComboBox = new System.Windows.Forms.ComboBox();
+            this.hardwareConnectionGroup = new System.Windows.Forms.GroupBox();
+            this.label25 = new System.Windows.Forms.Label();
+            this.hardwareCheckBox = new System.Windows.Forms.CheckBox();
+            this.hardwareComboBox = new System.Windows.Forms.ComboBox();
+            this.refreshComPortsButton = new System.Windows.Forms.Button();
+            this.executeHardwareButton = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.controlGroupBox.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            this.hardwareConnectionGroup.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -847,11 +854,74 @@
             this.funcGenPinComboBox.Size = new System.Drawing.Size(94, 24);
             this.funcGenPinComboBox.TabIndex = 6;
             // 
+            // hardwareConnectionGroup
+            // 
+            this.hardwareConnectionGroup.Controls.Add(this.executeHardwareButton);
+            this.hardwareConnectionGroup.Controls.Add(this.refreshComPortsButton);
+            this.hardwareConnectionGroup.Controls.Add(this.hardwareComboBox);
+            this.hardwareConnectionGroup.Controls.Add(this.hardwareCheckBox);
+            this.hardwareConnectionGroup.Controls.Add(this.label25);
+            this.hardwareConnectionGroup.Location = new System.Drawing.Point(1607, 228);
+            this.hardwareConnectionGroup.Name = "hardwareConnectionGroup";
+            this.hardwareConnectionGroup.Size = new System.Drawing.Size(228, 140);
+            this.hardwareConnectionGroup.TabIndex = 10;
+            this.hardwareConnectionGroup.TabStop = false;
+            this.hardwareConnectionGroup.Text = "Hardwareansteuerung";
+            // 
+            // label25
+            // 
+            this.label25.AutoSize = true;
+            this.label25.Location = new System.Drawing.Point(19, 35);
+            this.label25.Name = "label25";
+            this.label25.Size = new System.Drawing.Size(70, 17);
+            this.label25.TabIndex = 0;
+            this.label25.Text = "COM-Port";
+            // 
+            // hardwareCheckBox
+            // 
+            this.hardwareCheckBox.AutoSize = true;
+            this.hardwareCheckBox.Location = new System.Drawing.Point(22, 71);
+            this.hardwareCheckBox.Name = "hardwareCheckBox";
+            this.hardwareCheckBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.hardwareCheckBox.Size = new System.Drawing.Size(60, 21);
+            this.hardwareCheckBox.TabIndex = 1;
+            this.hardwareCheckBox.Text = "Aktiv";
+            this.hardwareCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // hardwareComboBox
+            // 
+            this.hardwareComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.hardwareComboBox.FormattingEnabled = true;
+            this.hardwareComboBox.Location = new System.Drawing.Point(95, 32);
+            this.hardwareComboBox.Name = "hardwareComboBox";
+            this.hardwareComboBox.Size = new System.Drawing.Size(86, 24);
+            this.hardwareComboBox.TabIndex = 2;
+            // 
+            // refreshComPortsButton
+            // 
+            this.refreshComPortsButton.Location = new System.Drawing.Point(117, 108);
+            this.refreshComPortsButton.Name = "refreshComPortsButton";
+            this.refreshComPortsButton.Size = new System.Drawing.Size(99, 23);
+            this.refreshComPortsButton.TabIndex = 3;
+            this.refreshComPortsButton.Text = "Ports?";
+            this.refreshComPortsButton.UseVisualStyleBackColor = true;
+            this.refreshComPortsButton.Click += new System.EventHandler(this.refreshComPortsButton_Click);
+            // 
+            // executeHardwareButton
+            // 
+            this.executeHardwareButton.Location = new System.Drawing.Point(22, 108);
+            this.executeHardwareButton.Name = "executeHardwareButton";
+            this.executeHardwareButton.Size = new System.Drawing.Size(89, 23);
+            this.executeHardwareButton.TabIndex = 4;
+            this.executeHardwareButton.Text = "Senden";
+            this.executeHardwareButton.UseVisualStyleBackColor = true;
+            // 
             // PicSimulatorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1924, 954);
+            this.Controls.Add(this.hardwareConnectionGroup);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.controlGroupBox);
             this.Controls.Add(this.groupBox2);
@@ -876,6 +946,8 @@
             this.groupBox3.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            this.hardwareConnectionGroup.ResumeLayout(false);
+            this.hardwareConnectionGroup.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -960,6 +1032,12 @@
         private System.Windows.Forms.Label labelPCL;
         private System.Windows.Forms.TextBox fsrTextBox;
         private System.Windows.Forms.ComboBox funcGenPinComboBox;
+        private System.Windows.Forms.GroupBox hardwareConnectionGroup;
+        private System.Windows.Forms.ComboBox hardwareComboBox;
+        private System.Windows.Forms.CheckBox hardwareCheckBox;
+        private System.Windows.Forms.Label label25;
+        private System.Windows.Forms.Button refreshComPortsButton;
+        private System.Windows.Forms.Button executeHardwareButton;
     }
 }
 
