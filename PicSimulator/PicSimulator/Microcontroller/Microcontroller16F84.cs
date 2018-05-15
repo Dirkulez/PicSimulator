@@ -1114,6 +1114,10 @@ namespace PicSimulator.Microcontroller
         {
             var propChangedEventArgs = new PropertyChangedEventArgs(nameof(PclRegisterContent));
             _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
+            var higher5bitOfProgramCounter = _programCounter.Content & 7936;
+            _programCounter.Content = higher5bitOfProgramCounter | PclRegisterContent;
+            var propChangedEventArgs2 = new PropertyChangedEventArgs(nameof(ProgramCounterContent));
+            _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs2)), null);
         }
 
         private void FsrRegisterContentChanged()
