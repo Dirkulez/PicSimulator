@@ -926,12 +926,15 @@ namespace PicSimulator.Microcontroller
             }
             else
             {
-                //counte mode active, needs external frequency on RA4
-                if (((_trisA.Content & 16) == 16) && (_funcGen.Pin == "RA4"))
+                if (_funcGen != null)
                 {
-                    //RA4 is set to input and is choosen in function Generator
-                    timerIncreaseValue = _tmr0.IncreaseCounter(numberOfRisingEdgesInExtFuncGen, numberOfFallingEdgesInExtFuncGen, CountOnRisingEdge(),
-                    IsPrescalerAssignedToTimer(), GetPrescalerValue());
+                    //counte mode active, needs external frequency on RA4
+                    if (((_trisA.Content & 16) == 16) && (_funcGen.Pin == "RA4"))
+                    {
+                        //RA4 is set to input and is choosen in function Generator
+                        timerIncreaseValue = _tmr0.IncreaseCounter(numberOfRisingEdgesInExtFuncGen, numberOfFallingEdgesInExtFuncGen, CountOnRisingEdge(),
+                        IsPrescalerAssignedToTimer(), GetPrescalerValue());
+                    }
                 }
             }
 
