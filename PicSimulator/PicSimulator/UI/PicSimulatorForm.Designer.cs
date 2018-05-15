@@ -40,6 +40,7 @@
             this.resetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frequenzToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ausfuehrungToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.LstContentBox = new System.Windows.Forms.CheckedListBox();
@@ -112,7 +113,6 @@
             this.hardwareComboBox = new System.Windows.Forms.ComboBox();
             this.hardwareCheckBox = new System.Windows.Forms.CheckBox();
             this.label25 = new System.Windows.Forms.Label();
-            this.ausfuehrungToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -217,9 +217,16 @@
             // frequenzToolStripMenuItem
             // 
             this.frequenzToolStripMenuItem.Name = "frequenzToolStripMenuItem";
-            this.frequenzToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.frequenzToolStripMenuItem.Size = new System.Drawing.Size(159, 26);
             this.frequenzToolStripMenuItem.Text = "Frequenz";
             this.frequenzToolStripMenuItem.Click += new System.EventHandler(this.frequenzToolStripMenuItem_Click);
+            // 
+            // ausfuehrungToolStripMenuItem
+            // 
+            this.ausfuehrungToolStripMenuItem.Name = "ausfuehrungToolStripMenuItem";
+            this.ausfuehrungToolStripMenuItem.Size = new System.Drawing.Size(159, 26);
+            this.ausfuehrungToolStripMenuItem.Text = "Ausführung";
+            this.ausfuehrungToolStripMenuItem.Click += new System.EventHandler(this.ausfuehrungToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -878,6 +885,7 @@
             this.executeHardwareButton.TabIndex = 4;
             this.executeHardwareButton.Text = "Senden";
             this.executeHardwareButton.UseVisualStyleBackColor = true;
+            this.executeHardwareButton.Click += new System.EventHandler(this.executeHardwareButton_Click);
             // 
             // refreshComPortsButton
             // 
@@ -917,13 +925,6 @@
             this.label25.Size = new System.Drawing.Size(70, 17);
             this.label25.TabIndex = 0;
             this.label25.Text = "COM-Port";
-            // 
-            // ausfuehrungToolStripMenuItem
-            // 
-            this.ausfuehrungToolStripMenuItem.Name = "ausfuehrungToolStripMenuItem";
-            this.ausfuehrungToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
-            this.ausfuehrungToolStripMenuItem.Text = "Ausführung";
-            this.ausfuehrungToolStripMenuItem.Click += new System.EventHandler(this.ausfuehrungToolStripMenuItem_Click);
             // 
             // PicSimulatorForm
             // 

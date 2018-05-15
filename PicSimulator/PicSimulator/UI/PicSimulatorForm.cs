@@ -57,6 +57,15 @@ namespace PicSimulator.UI
             LstLoaded += LstLoaded_Executed;
             funcActive1.CheckedChanged += FuncActive1_CheckedChanged;
             hardwareCheckBox.CheckedChanged += HardwareCheckBox_CheckedChanged;
+            funcGenPinComboBox.SelectedIndexChanged += FuncGenPinComboBox_SelectedIndexChanged;
+        }
+
+        private void FuncGenPinComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(_microController.FuncGen != null)
+            {
+                _microController.FuncGen.Pin = funcGenPinComboBox.Text;
+            }
         }
 
         private void HardwareCheckBox_CheckedChanged(object sender, EventArgs e)
@@ -787,6 +796,19 @@ namespace PicSimulator.UI
             if(dialogResult == DialogResult.OK)
             {
                 _executionDelay = executionSettingsDialog.ExecutionDelay;
+            }
+        }
+
+        private void executeHardwareButton_Click(object sender, EventArgs e)
+        {
+            PicViewHardwareConnector.SendData(_microController.TrisA, _microController.PortA, _microController.TrisB, _microController.PortB, _comPort);
+            var newPortAContent = 0;
+            var newPortBContent = 0;
+            var readDataSuccessful = PicViewHardwareConnector.ReadData(ref newPortAContent, ref newPortBContent, _comPort);
+            if (readDataSuccessful)
+            {
+                _microController.PortA = newPortAContent;
+                _microController.PortB = newPortBContent;
             }
         }
     }

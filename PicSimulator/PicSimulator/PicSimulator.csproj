@@ -55,6 +55,7 @@
     <Compile Include="Model\FunctionGeneratorEventArguments.cs" />
     <Compile Include="Model\OperationsEnum.cs" />
     <Compile Include="Microcontroller\ProgramCounterStack.cs" />
+    <Compile Include="Model\PicViewHardwareConnector.cs" />
     <Compile Include="Model\Register.cs" />
     <Compile Include="Parser\LstParser.cs" />
     <Compile Include="UI\ExecutionSettingsDialog.cs">

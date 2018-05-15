@@ -49,7 +49,41 @@ namespace PicSimulator.Microcontroller
         #endregion
 
         #region Properties
+        public int TrisA
+        {
+            get { return _trisA.Content; }
+        }
 
+        public int TrisB
+        {
+            get { return _trisB.Content; }
+        }
+
+        public int PortA
+        {
+            get { return _portA.Content; }
+            set
+            {
+                if (value != _portA.Content)
+                {
+                    _portA.Content = value;
+                    InvokeMemoryChanged(5, value);
+                }
+            }
+        }
+
+        public int PortB
+        {
+            get { return _portB.Content; }
+            set
+            {
+                if (value != _portB.Content)
+                {
+                    _portB.Content = value;
+                    InvokeMemoryChanged(6, value);
+                }
+            }
+        }
         public FunctionGenerator FuncGen
         {
             get { return _funcGen; }
