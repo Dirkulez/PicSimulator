@@ -354,6 +354,36 @@ namespace PicSimulator.UI
             statusDataBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith2Digits);
             statusRegContentTextBox.DataBindings.Add(statusDataBinding);
 
+            var pdBitDataBinding = new Binding(nameof(pdTextBox.Text), _microController, nameof(_microController.StatusRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            pdBitDataBinding.Format += new ConvertEventHandler(ExtractBit3FromGivenRegisterContent);
+            pdTextBox.DataBindings.Add(pdBitDataBinding);
+
+            var toBitDataBinding = new Binding(nameof(toTextBox.Text), _microController, nameof(_microController.StatusRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            toBitDataBinding.Format += new ConvertEventHandler(ExtractBit4FromGivenRegisterContent);
+            toTextBox.DataBindings.Add(toBitDataBinding);
+
+            var rp0BitDataBinding = new Binding(nameof(rp0TextBox.Text), _microController, nameof(_microController.StatusRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            rp0BitDataBinding.Format += new ConvertEventHandler(ExtractBit5FromGivenRegisterContent);
+            rp0TextBox.DataBindings.Add(rp0BitDataBinding);
+
+            var rp1BitDataBinding = new Binding(nameof(rp1TextBox.Text), _microController, nameof(_microController.StatusRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            rp1BitDataBinding.Format += new ConvertEventHandler(ExtractBit6FromGivenRegisterContent);
+            rp1TextBox.DataBindings.Add(rp1BitDataBinding);
+
+            var irpBitDataBinding = new Binding(nameof(irpTextBox.Text), _microController, nameof(_microController.StatusRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            irpBitDataBinding.Format += new ConvertEventHandler(ExtractBit7FromGivenRegisterContent);
+            irpTextBox.DataBindings.Add(irpBitDataBinding);
+
+            var fsrDataBinding = new Binding(nameof(fsrTextBox.Text), _microController, nameof(_microController.FsrRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            fsrDataBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith2Digits);
+            fsrTextBox.DataBindings.Add(fsrDataBinding);
+
             var pcDataBinding = new Binding(nameof(pcTextBox.Text), _microController, nameof(_microController.ProgramCounterContent),
                 true, DataSourceUpdateMode.OnPropertyChanged);
             pcDataBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith4Digits);
@@ -363,6 +393,101 @@ namespace PicSimulator.UI
                 true, DataSourceUpdateMode.OnPropertyChanged);
             pclathDataBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith2Digits);
             pclathTextBox.DataBindings.Add(pclathDataBinding);
+
+            var pclDataBinding = new Binding(nameof(pclContentTextBox.Text), _microController, nameof(_microController.PclRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            pclDataBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith2Digits);
+            pclContentTextBox.DataBindings.Add(pclDataBinding);
+
+            var optionRegisterBinding = new Binding(nameof(optionTextBox.Text), _microController, nameof(_microController.OptionRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            optionRegisterBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith2Digits);
+            optionTextBox.DataBindings.Add(optionRegisterBinding);
+
+            var ps0BitDataBinding = new Binding(nameof(ps0TextBox.Text), _microController, nameof(_microController.OptionRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            ps0BitDataBinding.Format += new ConvertEventHandler(ExtractBit0FromGivenRegisterContent);
+            ps0TextBox.DataBindings.Add(ps0BitDataBinding);
+
+            var ps1BitDataBinding = new Binding(nameof(ps1TextBox.Text), _microController, nameof(_microController.OptionRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            ps1BitDataBinding.Format += new ConvertEventHandler(ExtractBit1FromGivenRegisterContent);
+            ps1TextBox.DataBindings.Add(ps1BitDataBinding);
+
+            var ps2BitDataBinding = new Binding(nameof(ps2TextBox.Text), _microController, nameof(_microController.OptionRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            ps2BitDataBinding.Format += new ConvertEventHandler(ExtractBit2FromGivenRegisterContent);
+            ps2TextBox.DataBindings.Add(ps2BitDataBinding);
+
+            var psaBitDataBinding = new Binding(nameof(psaTextBox.Text), _microController, nameof(_microController.OptionRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            psaBitDataBinding.Format += new ConvertEventHandler(ExtractBit3FromGivenRegisterContent);
+            psaTextBox.DataBindings.Add(psaBitDataBinding);
+
+            var toseBitDataBinding = new Binding(nameof(toseTextBox.Text), _microController, nameof(_microController.OptionRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            toseBitDataBinding.Format += new ConvertEventHandler(ExtractBit4FromGivenRegisterContent);
+            toseTextBox.DataBindings.Add(toseBitDataBinding);
+
+            var tocsBitDataBinding = new Binding(nameof(tocsTextBox.Text), _microController, nameof(_microController.OptionRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            tocsBitDataBinding.Format += new ConvertEventHandler(ExtractBit5FromGivenRegisterContent);
+            tocsTextBox.DataBindings.Add(tocsBitDataBinding);
+
+            var intedgBitDataBinding = new Binding(nameof(intedgTextBox.Text), _microController, nameof(_microController.OptionRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            intedgBitDataBinding.Format += new ConvertEventHandler(ExtractBit6FromGivenRegisterContent);
+            intedgTextBox.DataBindings.Add(intedgBitDataBinding);
+
+            var rbpuBitDataBinding = new Binding(nameof(rbpuTextBox.Text), _microController, nameof(_microController.OptionRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            rbpuBitDataBinding.Format += new ConvertEventHandler(ExtractBit7FromGivenRegisterContent);
+            rbpuTextBox.DataBindings.Add(rbpuBitDataBinding);
+
+            var intconRegisterBinding = new Binding(nameof(intconTextBox.Text), _microController, nameof(_microController.IntconRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            intconRegisterBinding.Format += new ConvertEventHandler(ConvertRegisterContentToHexWith2Digits);
+            intconTextBox.DataBindings.Add(intconRegisterBinding);
+
+            var rbifBitDataBinding = new Binding(nameof(rbifTextBox.Text), _microController, nameof(_microController.IntconRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            rbifBitDataBinding.Format += new ConvertEventHandler(ExtractBit0FromGivenRegisterContent);
+            rbifTextBox.DataBindings.Add(rbifBitDataBinding);
+
+            var intfBitDataBinding = new Binding(nameof(intfTextBox.Text), _microController, nameof(_microController.IntconRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            intfBitDataBinding.Format += new ConvertEventHandler(ExtractBit1FromGivenRegisterContent);
+            intfTextBox.DataBindings.Add(intfBitDataBinding);
+
+            var t0ifBitDataBinding = new Binding(nameof(t0ifTextBox.Text), _microController, nameof(_microController.IntconRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            t0ifBitDataBinding.Format += new ConvertEventHandler(ExtractBit2FromGivenRegisterContent);
+            t0ifTextBox.DataBindings.Add(t0ifBitDataBinding);
+
+            var rbieBitDataBinding = new Binding(nameof(rbieTextBox.Text), _microController, nameof(_microController.IntconRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            rbieBitDataBinding.Format += new ConvertEventHandler(ExtractBit3FromGivenRegisterContent);
+            rbieTextBox.DataBindings.Add(rbieBitDataBinding);
+
+            var inteBitDataBinding = new Binding(nameof(inteTextBox.Text), _microController, nameof(_microController.IntconRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            inteBitDataBinding.Format += new ConvertEventHandler(ExtractBit4FromGivenRegisterContent);
+            inteTextBox.DataBindings.Add(inteBitDataBinding);
+
+            var t0ieBitDataBinding = new Binding(nameof(t0ieTextBox.Text), _microController, nameof(_microController.IntconRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            t0ieBitDataBinding.Format += new ConvertEventHandler(ExtractBit5FromGivenRegisterContent);
+            t0ieTextBox.DataBindings.Add(t0ieBitDataBinding);
+
+            var eeieBitDataBinding = new Binding(nameof(eeieTextBox.Text), _microController, nameof(_microController.IntconRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            eeieBitDataBinding.Format += new ConvertEventHandler(ExtractBit6FromGivenRegisterContent);
+            eeieTextBox.DataBindings.Add(eeieBitDataBinding);
+
+            var gieBitDataBinding = new Binding(nameof(gieTextBox.Text), _microController, nameof(_microController.IntconRegisterContent),
+                true, DataSourceUpdateMode.OnPropertyChanged);
+            gieBitDataBinding.Format += new ConvertEventHandler(ExtractBit7FromGivenRegisterContent);
+            gieTextBox.DataBindings.Add(gieBitDataBinding);
 
             var cycleDataBinding = new Binding(nameof(cycleTextBox.Text), _microController, nameof(_microController.Cycle),
                 false, DataSourceUpdateMode.OnPropertyChanged);
@@ -425,6 +550,111 @@ namespace PicSimulator.UI
             }
         }
 
+        private void ExtractBit0FromGivenRegisterContent(object sender, ConvertEventArgs e)
+        {
+            var givenRegisterContent = (int)e.Value;
+            if ((givenRegisterContent & 1) != 0)
+            {
+                e.Value = "1";
+            }
+            else
+            {
+                e.Value = "0";
+            }
+        }
+
+        private void ExtractBit1FromGivenRegisterContent(object sender, ConvertEventArgs e)
+        {
+            var givenRegisterContent = (int)e.Value;
+            if ((givenRegisterContent & 2) != 0)
+            {
+                e.Value = "1";
+            }
+            else
+            {
+                e.Value = "0";
+            }
+        }
+
+        private void ExtractBit2FromGivenRegisterContent(object sender, ConvertEventArgs e)
+        {
+            var givenRegisterContent = (int)e.Value;
+            if ((givenRegisterContent & 4) != 0)
+            {
+                e.Value = "1";
+            }
+            else
+            {
+                e.Value = "0";
+            }
+        }
+
+
+        private void ExtractBit3FromGivenRegisterContent(object sender, ConvertEventArgs e)
+        {
+            var givenRegisterContent = (int)e.Value;
+            if((givenRegisterContent & 8) != 0)
+            {
+                e.Value = "1";
+            }
+            else
+            {
+                e.Value = "0";
+            }
+        }
+
+        private void ExtractBit4FromGivenRegisterContent(object sender, ConvertEventArgs e)
+        {
+            var givenRegisterContent = (int)e.Value;
+            if ((givenRegisterContent & 16) != 0)
+            {
+                e.Value = "1";
+            }
+            else
+            {
+                e.Value = "0";
+            }
+        }
+
+        private void ExtractBit5FromGivenRegisterContent(object sender, ConvertEventArgs e)
+        {
+            var givenRegisterContent = (int)e.Value;
+            if ((givenRegisterContent & 32) != 0)
+            {
+                e.Value = "1";
+            }
+            else
+            {
+                e.Value = "0";
+            }
+        }
+
+        private void ExtractBit6FromGivenRegisterContent(object sender, ConvertEventArgs e)
+        {
+            var givenRegisterContent = (int)e.Value;
+            if ((givenRegisterContent & 64) != 0)
+            {
+                e.Value = "1";
+            }
+            else
+            {
+                e.Value = "0";
+            }
+        }
+
+        private void ExtractBit7FromGivenRegisterContent(object sender, ConvertEventArgs e)
+        {
+            var givenRegisterContent = (int)e.Value;
+            if ((givenRegisterContent & 128) != 0)
+            {
+                e.Value = "1";
+            }
+            else
+            {
+                e.Value = "0";
+            }
+        }
+
         private void RemoveDataBindings()
         {
             wregTextBox.DataBindings.RemoveAt(0);
@@ -438,6 +668,31 @@ namespace PicSimulator.UI
             cycleDurationTextBox.DataBindings.RemoveAt(0);
             runtimeTextBox.DataBindings.RemoveAt(0);
             statusRegContentTextBox.DataBindings.RemoveAt(0);
+            fsrTextBox.DataBindings.RemoveAt(0);
+            pclContentTextBox.DataBindings.RemoveAt(0);
+            pdTextBox.DataBindings.RemoveAt(0);
+            toTextBox.DataBindings.RemoveAt(0);
+            rp0TextBox.DataBindings.RemoveAt(0);
+            rp1TextBox.DataBindings.RemoveAt(0);
+            irpTextBox.DataBindings.RemoveAt(0);
+            optionTextBox.DataBindings.RemoveAt(0);
+            ps0TextBox.DataBindings.RemoveAt(0);
+            ps1TextBox.DataBindings.RemoveAt(0);
+            ps2TextBox.DataBindings.RemoveAt(0);
+            psaTextBox.DataBindings.RemoveAt(0);
+            toseTextBox.DataBindings.RemoveAt(0);
+            tocsTextBox.DataBindings.RemoveAt(0);
+            intedgTextBox.DataBindings.RemoveAt(0);
+            rbpuTextBox.DataBindings.RemoveAt(0);
+            intconTextBox.DataBindings.RemoveAt(0);
+            rbifTextBox.DataBindings.RemoveAt(0);
+            intfTextBox.DataBindings.RemoveAt(0);
+            t0ifTextBox.DataBindings.RemoveAt(0);
+            rbieTextBox.DataBindings.RemoveAt(0);
+            inteTextBox.DataBindings.RemoveAt(0);
+            t0ieTextBox.DataBindings.RemoveAt(0);
+            eeieTextBox.DataBindings.RemoveAt(0);
+            gieTextBox.DataBindings.RemoveAt(0);
         }
 
         private void stopToolStripMenuItem_Click(object sender, EventArgs e)

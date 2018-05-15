@@ -56,7 +56,7 @@
             this.toLabel = new System.Windows.Forms.Label();
             this.pdTextBox = new System.Windows.Forms.TextBox();
             this.label21 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.pclContentTextBox = new System.Windows.Forms.TextBox();
             this.labelPCL = new System.Windows.Forms.Label();
             this.fsrTextBox = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
@@ -113,6 +113,39 @@
             this.hardwareComboBox = new System.Windows.Forms.ComboBox();
             this.hardwareCheckBox = new System.Windows.Forms.CheckBox();
             this.label25 = new System.Windows.Forms.Label();
+            this.rbpuTextBox = new System.Windows.Forms.TextBox();
+            this.label26 = new System.Windows.Forms.Label();
+            this.intedgTextBox = new System.Windows.Forms.TextBox();
+            this.label27 = new System.Windows.Forms.Label();
+            this.tocsTextBox = new System.Windows.Forms.TextBox();
+            this.label28 = new System.Windows.Forms.Label();
+            this.toseTextBox = new System.Windows.Forms.TextBox();
+            this.label29 = new System.Windows.Forms.Label();
+            this.psaTextBox = new System.Windows.Forms.TextBox();
+            this.label30 = new System.Windows.Forms.Label();
+            this.ps1TextBox = new System.Windows.Forms.TextBox();
+            this.label31 = new System.Windows.Forms.Label();
+            this.ps0TextBox = new System.Windows.Forms.TextBox();
+            this.label32 = new System.Windows.Forms.Label();
+            this.ps2TextBox = new System.Windows.Forms.TextBox();
+            this.label33 = new System.Windows.Forms.Label();
+            this.gieTextBox = new System.Windows.Forms.TextBox();
+            this.label34 = new System.Windows.Forms.Label();
+            this.eeieTextBox = new System.Windows.Forms.TextBox();
+            this.label35 = new System.Windows.Forms.Label();
+            this.t0ieTextBox = new System.Windows.Forms.TextBox();
+            this.label36 = new System.Windows.Forms.Label();
+            this.inteTextBox = new System.Windows.Forms.TextBox();
+            this.label37 = new System.Windows.Forms.Label();
+            this.rbieTextBox = new System.Windows.Forms.TextBox();
+            this.label38 = new System.Windows.Forms.Label();
+            this.intfTextBox = new System.Windows.Forms.TextBox();
+            this.label39 = new System.Windows.Forms.Label();
+            this.rbifTextBox = new System.Windows.Forms.TextBox();
+            this.label40 = new System.Windows.Forms.Label();
+            this.t0ifTextBox = new System.Windows.Forms.TextBox();
+            this.label41 = new System.Windows.Forms.Label();
+            this.intconTextBox = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -252,6 +285,39 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.gieTextBox);
+            this.groupBox1.Controls.Add(this.label34);
+            this.groupBox1.Controls.Add(this.eeieTextBox);
+            this.groupBox1.Controls.Add(this.label35);
+            this.groupBox1.Controls.Add(this.t0ieTextBox);
+            this.groupBox1.Controls.Add(this.label36);
+            this.groupBox1.Controls.Add(this.inteTextBox);
+            this.groupBox1.Controls.Add(this.label37);
+            this.groupBox1.Controls.Add(this.rbieTextBox);
+            this.groupBox1.Controls.Add(this.label38);
+            this.groupBox1.Controls.Add(this.intfTextBox);
+            this.groupBox1.Controls.Add(this.label39);
+            this.groupBox1.Controls.Add(this.rbifTextBox);
+            this.groupBox1.Controls.Add(this.label40);
+            this.groupBox1.Controls.Add(this.t0ifTextBox);
+            this.groupBox1.Controls.Add(this.label41);
+            this.groupBox1.Controls.Add(this.intconTextBox);
+            this.groupBox1.Controls.Add(this.rbpuTextBox);
+            this.groupBox1.Controls.Add(this.label26);
+            this.groupBox1.Controls.Add(this.intedgTextBox);
+            this.groupBox1.Controls.Add(this.label27);
+            this.groupBox1.Controls.Add(this.tocsTextBox);
+            this.groupBox1.Controls.Add(this.label28);
+            this.groupBox1.Controls.Add(this.toseTextBox);
+            this.groupBox1.Controls.Add(this.label29);
+            this.groupBox1.Controls.Add(this.psaTextBox);
+            this.groupBox1.Controls.Add(this.label30);
+            this.groupBox1.Controls.Add(this.ps1TextBox);
+            this.groupBox1.Controls.Add(this.label31);
+            this.groupBox1.Controls.Add(this.ps0TextBox);
+            this.groupBox1.Controls.Add(this.label32);
+            this.groupBox1.Controls.Add(this.ps2TextBox);
+            this.groupBox1.Controls.Add(this.label33);
             this.groupBox1.Controls.Add(this.optionTextBox);
             this.groupBox1.Controls.Add(this.irpTextBox);
             this.groupBox1.Controls.Add(this.label24);
@@ -263,7 +329,7 @@
             this.groupBox1.Controls.Add(this.toLabel);
             this.groupBox1.Controls.Add(this.pdTextBox);
             this.groupBox1.Controls.Add(this.label21);
-            this.groupBox1.Controls.Add(this.textBox1);
+            this.groupBox1.Controls.Add(this.pclContentTextBox);
             this.groupBox1.Controls.Add(this.labelPCL);
             this.groupBox1.Controls.Add(this.fsrTextBox);
             this.groupBox1.Controls.Add(this.label20);
@@ -383,14 +449,13 @@
             this.label21.TabIndex = 20;
             this.label21.Text = "PD";
             // 
-            // textBox1
+            // pclContentTextBox
             // 
-            this.textBox1.Enabled = false;
-            this.textBox1.Location = new System.Drawing.Point(88, 91);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(181, 22);
-            this.textBox1.TabIndex = 19;
+            this.pclContentTextBox.Location = new System.Drawing.Point(88, 91);
+            this.pclContentTextBox.Name = "pclContentTextBox";
+            this.pclContentTextBox.ReadOnly = true;
+            this.pclContentTextBox.Size = new System.Drawing.Size(181, 22);
+            this.pclContentTextBox.TabIndex = 19;
             // 
             // labelPCL
             // 
@@ -403,7 +468,6 @@
             // 
             // fsrTextBox
             // 
-            this.fsrTextBox.Enabled = false;
             this.fsrTextBox.Location = new System.Drawing.Point(88, 63);
             this.fsrTextBox.Name = "fsrTextBox";
             this.fsrTextBox.ReadOnly = true;
@@ -422,7 +486,7 @@
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(16, 324);
+            this.label19.Location = new System.Drawing.Point(16, 347);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(46, 17);
             this.label19.TabIndex = 15;
@@ -926,6 +990,302 @@
             this.label25.TabIndex = 0;
             this.label25.Text = "COM-Port";
             // 
+            // rbpuTextBox
+            // 
+            this.rbpuTextBox.Location = new System.Drawing.Point(32, 309);
+            this.rbpuTextBox.Name = "rbpuTextBox";
+            this.rbpuTextBox.ReadOnly = true;
+            this.rbpuTextBox.Size = new System.Drawing.Size(24, 22);
+            this.rbpuTextBox.TabIndex = 46;
+            // 
+            // label26
+            // 
+            this.label26.AutoSize = true;
+            this.label26.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label26.Location = new System.Drawing.Point(29, 289);
+            this.label26.Name = "label26";
+            this.label26.Size = new System.Drawing.Size(31, 12);
+            this.label26.TabIndex = 45;
+            this.label26.Text = "RBPU";
+            // 
+            // intedgTextBox
+            // 
+            this.intedgTextBox.Location = new System.Drawing.Point(63, 309);
+            this.intedgTextBox.Name = "intedgTextBox";
+            this.intedgTextBox.ReadOnly = true;
+            this.intedgTextBox.Size = new System.Drawing.Size(24, 22);
+            this.intedgTextBox.TabIndex = 44;
+            // 
+            // label27
+            // 
+            this.label27.AutoSize = true;
+            this.label27.Font = new System.Drawing.Font("Microsoft Sans Serif", 4.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label27.Location = new System.Drawing.Point(61, 292);
+            this.label27.Name = "label27";
+            this.label27.Size = new System.Drawing.Size(35, 9);
+            this.label27.TabIndex = 43;
+            this.label27.Text = "INTEDG";
+            // 
+            // tocsTextBox
+            // 
+            this.tocsTextBox.Location = new System.Drawing.Point(98, 309);
+            this.tocsTextBox.Name = "tocsTextBox";
+            this.tocsTextBox.ReadOnly = true;
+            this.tocsTextBox.Size = new System.Drawing.Size(24, 22);
+            this.tocsTextBox.TabIndex = 42;
+            // 
+            // label28
+            // 
+            this.label28.AutoSize = true;
+            this.label28.Font = new System.Drawing.Font("Microsoft Sans Serif", 4.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label28.Location = new System.Drawing.Point(98, 292);
+            this.label28.Name = "label28";
+            this.label28.Size = new System.Drawing.Size(27, 9);
+            this.label28.TabIndex = 41;
+            this.label28.Text = "TOCS";
+            // 
+            // toseTextBox
+            // 
+            this.toseTextBox.Location = new System.Drawing.Point(131, 309);
+            this.toseTextBox.Name = "toseTextBox";
+            this.toseTextBox.ReadOnly = true;
+            this.toseTextBox.Size = new System.Drawing.Size(24, 22);
+            this.toseTextBox.TabIndex = 40;
+            // 
+            // label29
+            // 
+            this.label29.AutoSize = true;
+            this.label29.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label29.Location = new System.Drawing.Point(128, 289);
+            this.label29.Name = "label29";
+            this.label29.Size = new System.Drawing.Size(29, 12);
+            this.label29.TabIndex = 39;
+            this.label29.Text = "TOSE";
+            // 
+            // psaTextBox
+            // 
+            this.psaTextBox.Location = new System.Drawing.Point(162, 309);
+            this.psaTextBox.Name = "psaTextBox";
+            this.psaTextBox.ReadOnly = true;
+            this.psaTextBox.Size = new System.Drawing.Size(24, 22);
+            this.psaTextBox.TabIndex = 38;
+            // 
+            // label30
+            // 
+            this.label30.AutoSize = true;
+            this.label30.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label30.Location = new System.Drawing.Point(163, 289);
+            this.label30.Name = "label30";
+            this.label30.Size = new System.Drawing.Size(24, 12);
+            this.label30.TabIndex = 37;
+            this.label30.Text = "PSA";
+            // 
+            // ps1TextBox
+            // 
+            this.ps1TextBox.Location = new System.Drawing.Point(222, 309);
+            this.ps1TextBox.Name = "ps1TextBox";
+            this.ps1TextBox.ReadOnly = true;
+            this.ps1TextBox.Size = new System.Drawing.Size(24, 22);
+            this.ps1TextBox.TabIndex = 36;
+            // 
+            // label31
+            // 
+            this.label31.AutoSize = true;
+            this.label31.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label31.Location = new System.Drawing.Point(219, 289);
+            this.label31.Name = "label31";
+            this.label31.Size = new System.Drawing.Size(22, 12);
+            this.label31.TabIndex = 35;
+            this.label31.Text = "PS1";
+            // 
+            // ps0TextBox
+            // 
+            this.ps0TextBox.Location = new System.Drawing.Point(252, 309);
+            this.ps0TextBox.Name = "ps0TextBox";
+            this.ps0TextBox.ReadOnly = true;
+            this.ps0TextBox.Size = new System.Drawing.Size(24, 22);
+            this.ps0TextBox.TabIndex = 34;
+            // 
+            // label32
+            // 
+            this.label32.AutoSize = true;
+            this.label32.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label32.Location = new System.Drawing.Point(252, 289);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(22, 12);
+            this.label32.TabIndex = 33;
+            this.label32.Text = "PS0";
+            // 
+            // ps2TextBox
+            // 
+            this.ps2TextBox.Location = new System.Drawing.Point(192, 309);
+            this.ps2TextBox.Name = "ps2TextBox";
+            this.ps2TextBox.ReadOnly = true;
+            this.ps2TextBox.Size = new System.Drawing.Size(24, 22);
+            this.ps2TextBox.TabIndex = 32;
+            // 
+            // label33
+            // 
+            this.label33.AutoSize = true;
+            this.label33.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label33.Location = new System.Drawing.Point(196, 289);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(22, 12);
+            this.label33.TabIndex = 31;
+            this.label33.Text = "PS2";
+            // 
+            // gieTextBox
+            // 
+            this.gieTextBox.Location = new System.Drawing.Point(31, 402);
+            this.gieTextBox.Name = "gieTextBox";
+            this.gieTextBox.ReadOnly = true;
+            this.gieTextBox.Size = new System.Drawing.Size(24, 22);
+            this.gieTextBox.TabIndex = 63;
+            // 
+            // label34
+            // 
+            this.label34.AutoSize = true;
+            this.label34.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label34.Location = new System.Drawing.Point(28, 382);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(21, 12);
+            this.label34.TabIndex = 62;
+            this.label34.Text = "GIE";
+            // 
+            // eeieTextBox
+            // 
+            this.eeieTextBox.Location = new System.Drawing.Point(62, 402);
+            this.eeieTextBox.Name = "eeieTextBox";
+            this.eeieTextBox.ReadOnly = true;
+            this.eeieTextBox.Size = new System.Drawing.Size(24, 22);
+            this.eeieTextBox.TabIndex = 61;
+            // 
+            // label35
+            // 
+            this.label35.AutoSize = true;
+            this.label35.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label35.Location = new System.Drawing.Point(65, 382);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(26, 12);
+            this.label35.TabIndex = 60;
+            this.label35.Text = "EEIE";
+            // 
+            // t0ieTextBox
+            // 
+            this.t0ieTextBox.Location = new System.Drawing.Point(97, 402);
+            this.t0ieTextBox.Name = "t0ieTextBox";
+            this.t0ieTextBox.ReadOnly = true;
+            this.t0ieTextBox.Size = new System.Drawing.Size(24, 22);
+            this.t0ieTextBox.TabIndex = 59;
+            // 
+            // label36
+            // 
+            this.label36.AutoSize = true;
+            this.label36.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label36.Location = new System.Drawing.Point(101, 382);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(24, 12);
+            this.label36.TabIndex = 58;
+            this.label36.Text = "T0IE";
+            // 
+            // inteTextBox
+            // 
+            this.inteTextBox.Location = new System.Drawing.Point(130, 402);
+            this.inteTextBox.Name = "inteTextBox";
+            this.inteTextBox.ReadOnly = true;
+            this.inteTextBox.Size = new System.Drawing.Size(24, 22);
+            this.inteTextBox.TabIndex = 57;
+            // 
+            // label37
+            // 
+            this.label37.AutoSize = true;
+            this.label37.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label37.Location = new System.Drawing.Point(127, 382);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(26, 12);
+            this.label37.TabIndex = 56;
+            this.label37.Text = "INTE";
+            // 
+            // rbieTextBox
+            // 
+            this.rbieTextBox.Location = new System.Drawing.Point(161, 402);
+            this.rbieTextBox.Name = "rbieTextBox";
+            this.rbieTextBox.ReadOnly = true;
+            this.rbieTextBox.Size = new System.Drawing.Size(24, 22);
+            this.rbieTextBox.TabIndex = 55;
+            // 
+            // label38
+            // 
+            this.label38.AutoSize = true;
+            this.label38.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label38.Location = new System.Drawing.Point(162, 382);
+            this.label38.Name = "label38";
+            this.label38.Size = new System.Drawing.Size(27, 12);
+            this.label38.TabIndex = 54;
+            this.label38.Text = "RBIE";
+            // 
+            // intfTextBox
+            // 
+            this.intfTextBox.Location = new System.Drawing.Point(221, 402);
+            this.intfTextBox.Name = "intfTextBox";
+            this.intfTextBox.ReadOnly = true;
+            this.intfTextBox.Size = new System.Drawing.Size(24, 22);
+            this.intfTextBox.TabIndex = 53;
+            // 
+            // label39
+            // 
+            this.label39.AutoSize = true;
+            this.label39.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label39.Location = new System.Drawing.Point(218, 382);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(26, 12);
+            this.label39.TabIndex = 52;
+            this.label39.Text = "INTF";
+            // 
+            // rbifTextBox
+            // 
+            this.rbifTextBox.Location = new System.Drawing.Point(251, 402);
+            this.rbifTextBox.Name = "rbifTextBox";
+            this.rbifTextBox.ReadOnly = true;
+            this.rbifTextBox.Size = new System.Drawing.Size(24, 22);
+            this.rbifTextBox.TabIndex = 51;
+            // 
+            // label40
+            // 
+            this.label40.AutoSize = true;
+            this.label40.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label40.Location = new System.Drawing.Point(251, 382);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(27, 12);
+            this.label40.TabIndex = 50;
+            this.label40.Text = "RBIF";
+            // 
+            // t0ifTextBox
+            // 
+            this.t0ifTextBox.Location = new System.Drawing.Point(191, 402);
+            this.t0ifTextBox.Name = "t0ifTextBox";
+            this.t0ifTextBox.ReadOnly = true;
+            this.t0ifTextBox.Size = new System.Drawing.Size(24, 22);
+            this.t0ifTextBox.TabIndex = 49;
+            // 
+            // label41
+            // 
+            this.label41.AutoSize = true;
+            this.label41.Font = new System.Drawing.Font("Microsoft Sans Serif", 5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label41.Location = new System.Drawing.Point(195, 382);
+            this.label41.Name = "label41";
+            this.label41.Size = new System.Drawing.Size(24, 12);
+            this.label41.TabIndex = 48;
+            this.label41.Text = "T0IF";
+            // 
+            // intconTextBox
+            // 
+            this.intconTextBox.Location = new System.Drawing.Point(87, 349);
+            this.intconTextBox.Name = "intconTextBox";
+            this.intconTextBox.ReadOnly = true;
+            this.intconTextBox.Size = new System.Drawing.Size(181, 22);
+            this.intconTextBox.TabIndex = 47;
+            // 
             // PicSimulatorForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -1038,7 +1398,7 @@
         private System.Windows.Forms.Label toLabel;
         private System.Windows.Forms.TextBox pdTextBox;
         private System.Windows.Forms.Label label21;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox pclContentTextBox;
         private System.Windows.Forms.Label labelPCL;
         private System.Windows.Forms.TextBox fsrTextBox;
         private System.Windows.Forms.ComboBox funcGenPinComboBox;
@@ -1049,6 +1409,39 @@
         private System.Windows.Forms.Button refreshComPortsButton;
         private System.Windows.Forms.Button executeHardwareButton;
         private System.Windows.Forms.ToolStripMenuItem ausfuehrungToolStripMenuItem;
+        private System.Windows.Forms.TextBox rbpuTextBox;
+        private System.Windows.Forms.Label label26;
+        private System.Windows.Forms.TextBox intedgTextBox;
+        private System.Windows.Forms.Label label27;
+        private System.Windows.Forms.TextBox tocsTextBox;
+        private System.Windows.Forms.Label label28;
+        private System.Windows.Forms.TextBox toseTextBox;
+        private System.Windows.Forms.Label label29;
+        private System.Windows.Forms.TextBox psaTextBox;
+        private System.Windows.Forms.Label label30;
+        private System.Windows.Forms.TextBox ps1TextBox;
+        private System.Windows.Forms.Label label31;
+        private System.Windows.Forms.TextBox ps0TextBox;
+        private System.Windows.Forms.Label label32;
+        private System.Windows.Forms.TextBox ps2TextBox;
+        private System.Windows.Forms.Label label33;
+        private System.Windows.Forms.TextBox gieTextBox;
+        private System.Windows.Forms.Label label34;
+        private System.Windows.Forms.TextBox eeieTextBox;
+        private System.Windows.Forms.Label label35;
+        private System.Windows.Forms.TextBox t0ieTextBox;
+        private System.Windows.Forms.Label label36;
+        private System.Windows.Forms.TextBox inteTextBox;
+        private System.Windows.Forms.Label label37;
+        private System.Windows.Forms.TextBox rbieTextBox;
+        private System.Windows.Forms.Label label38;
+        private System.Windows.Forms.TextBox intfTextBox;
+        private System.Windows.Forms.Label label39;
+        private System.Windows.Forms.TextBox rbifTextBox;
+        private System.Windows.Forms.Label label40;
+        private System.Windows.Forms.TextBox t0ifTextBox;
+        private System.Windows.Forms.Label label41;
+        private System.Windows.Forms.TextBox intconTextBox;
     }
 }
 

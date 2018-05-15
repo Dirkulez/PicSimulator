@@ -192,6 +192,48 @@ namespace PicSimulator.Microcontroller
             }
         }
 
+        public int FsrRegisterContent
+        {
+            get { return _fsrRegister.Content; }
+            private set
+            {
+                if(value != _fsrRegister.Content)
+                {
+                    _fsrRegister.Content = value;
+                    FsrRegisterContentChanged();
+                    InvokeMemoryChanged(4, value);
+                }
+            }
+        }
+
+        public int OptionRegisterContent
+        {
+            get { return _optionRegister.Content; }
+            private set
+            {
+                if(value != _optionRegister.Content)
+                {
+                    _optionRegister.Content = value;
+                    OptionRegisterContentChanged();
+                    InvokeMemoryChanged(129, value);
+                }
+            }
+        }
+
+        public int IntconRegisterContent
+        {
+            get { return _intconRegister.Content; }
+            private set
+            {
+                if(value != _intconRegister.Content)
+                {
+                    _intconRegister.Content = value;
+                    IntconRegisterContentChanged();
+                    InvokeMemoryChanged(11, value);
+                }
+            }
+        }
+
         public int StatusRegisterContent
         {
             get { return _statusRegister.Content; }
@@ -234,11 +276,8 @@ namespace PicSimulator.Microcontroller
                 if(value != _pclRegister.Content)
                 {
                     _pclRegister.Content = value;
-                    var propChangedEventArgs = new PropertyChangedEventArgs(nameof(PclRegisterContent));
-                    _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
-
+                    PclRegisterContenChanged();
                     InvokeMemoryChanged(130, value);
-
                 }
             }
         }
@@ -906,13 +945,54 @@ namespace PicSimulator.Microcontroller
             if(fileRegisterAddress == 3 || fileRegisterAddress == 131)
             {
                 StatusRegisterContentChanged();
-            }else if(fileRegisterAddress == 10 || fileRegisterAddress == 138){
+            }
+            else if(fileRegisterAddress == 2 || fileRegisterAddress == 130)
+            {
+                PclRegisterContenChanged();
+            }
+            else if(fileRegisterAddress == 4 || fileRegisterAddress == 132)
+            {
+                FsrRegisterContentChanged();
+            }
+            else if(fileRegisterAddress == 10 || fileRegisterAddress == 138){
                 PCLATHRegisterContentChanged();
+            }
+            else if(fileRegisterAddress == 11 || fileRegisterAddress == 139)
+            {
+                IntconRegisterContentChanged();
+            }
+            else if(fileRegisterAddress == 129)
+            {
+                OptionRegisterContentChanged();
             }
             if (fileRegisterAddress == 1)
             {
                 _tmr0.SkipCycles = 2;
             }
+        }
+
+        private void IntconRegisterContentChanged()
+        {
+            var propChangedEventArgs = new PropertyChangedEventArgs(nameof(IntconRegisterContent));
+            _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
+        }
+
+        private void OptionRegisterContentChanged()
+        {
+            var propChangedEventArgs = new PropertyChangedEventArgs(nameof(OptionRegisterContent));
+            _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
+        }
+
+        private void PclRegisterContenChanged()
+        {
+            var propChangedEventArgs = new PropertyChangedEventArgs(nameof(PclRegisterContent));
+            _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
+        }
+
+        private void FsrRegisterContentChanged()
+        {
+            var propChangedEventArgs = new PropertyChangedEventArgs(nameof(FsrRegisterContent));
+            _syncContext.Post(new SendOrPostCallback((o) => InvokePropertyChanged(propChangedEventArgs)), null);
         }
 
         private void PCLATHRegisterContentChanged()
