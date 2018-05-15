@@ -611,6 +611,10 @@ namespace PicSimulator.Microcontroller
             {
                 ExecuteSLEEP();
             }
+            else if (operationToExecute == OperationsEnum.RETFIE)
+            {
+                ExecuteRETFIE();
+            }
         }
 
         private void ExecuteSLEEP()
@@ -938,8 +942,17 @@ namespace PicSimulator.Microcontroller
             IncreaseCycle(2);
         }
 
+        private void ExecuteRETFIE()
+        {
+            //set GIE flag in intcon register and write tos to PC
+            IntconRegisterContent = (IntconRegisterContent | 128);
+            IncreaseCycle(2);
+            ProgramCounterContent = _programCounterStack.PopFromStack();
+        }
+
         public void WriteResultToRegisterWithGivenAddress(int result, int fileRegisterAddress)
         {
+            var originRegisterContent = _registerAdressTable[fileRegisterAddress].Content;
             _registerAdressTable[fileRegisterAddress].Content = result;
             InvokeMemoryChanged(fileRegisterAddress, result);
             if(fileRegisterAddress == 3 || fileRegisterAddress == 131)
@@ -965,10 +978,124 @@ namespace PicSimulator.Microcontroller
             {
                 OptionRegisterContentChanged();
             }
+            else if(fileRegisterAddress == 6)
+            {
+                CheckForRBInterrupt(originRegisterContent);
+            }
             if (fileRegisterAddress == 1)
             {
                 _tmr0.SkipCycles = 2;
             }
+        }
+
+        private void CheckForRBInterrupt(int originRegisterContent)
+        {
+            if (GlobalInterruptEnabled())
+            {
+                if (RB0InterruptEnabled())
+                {
+                    if (RB0InterruptOnRisingEdge())
+                    {
+                        if (RisingEdgeOnRB0(originRegisterContent))
+                        {
+                            RB0InterruptResponded();
+                        }
+                    }
+                    else
+                    {
+                        if (FallingEdgeOnRB0(originRegisterContent))
+                        {
+                            RB0InterruptResponded();
+                        }
+                    }
+                }
+                else if (RB4RB7InterruptEnabled())
+                {
+                    if (AnyRB4RB7PinsChanged(originRegisterContent))
+                    {
+                        RB4RB7InterruptResponded();
+                    }
+                }
+            }
+        }
+
+        private bool AnyRB4RB7PinsChanged(int originRegisterContent)
+        {
+            var originContentHigherNibble = originRegisterContent & 240;
+            var currentContentHigherNibble = PortB & 240;
+
+            if(originContentHigherNibble != currentContentHigherNibble)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool RB4RB7InterruptEnabled()
+        {
+            if ((_intconRegister.Content & 8) != 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private void RB4RB7InterruptResponded()
+        {
+            IntconRegisterContent = (IntconRegisterContent | 1);
+            ExtInterruptResponded();
+        }
+
+        private void RB0InterruptResponded()
+        {
+            IntconRegisterContent = (IntconRegisterContent | 2);
+            ExtInterruptResponded();
+        }
+
+        private void ExtInterruptResponded()
+        {
+            IntconRegisterContent = (IntconRegisterContent & 127);
+            _programCounterStack.PushToStack(ProgramCounterContent + 1);
+            ProgramCounterContent = 4;
+            IncreaseCycle(2);
+        }
+
+        private bool FallingEdgeOnRB0(int originRegisterContent)
+        {
+            if ((originRegisterContent & 1) == 1)
+            {
+                if ((PortB & 1) == 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool RisingEdgeOnRB0(int originRegisterContent)
+        {
+            if((originRegisterContent & 1) == 0)
+            {
+                if((PortB & 1) == 1)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool RB0InterruptOnRisingEdge()
+        {
+            if((OptionRegisterContent & 64) != 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void IntconRegisterContentChanged()
@@ -1058,11 +1185,21 @@ namespace PicSimulator.Microcontroller
                 if (newTimerValue > 255)
                 {
                     newTimerValue = 0;
-                    SetT0IFbit();
                 }
                 _registerAdressTable[1].Content = newTimerValue;
                 InvokeMemoryChanged(1, newTimerValue);
+                if(newTimerValue == 0)
+                {
+                    SetT0IFbit();
+                }
             }
+        }
+
+        private void InterruptResponded()
+        {
+            IntconRegisterContent = (IntconRegisterContent & 127);
+            _programCounterStack.PushToStack(ProgramCounterContent + 1);
+            ProgramCounterContent = 4;
         }
 
         private void SetT0IFbit()
@@ -1070,6 +1207,40 @@ namespace PicSimulator.Microcontroller
             var intconContent = _intconRegister.Content;
             intconContent = intconContent | 4;
             WriteResultToRegisterWithGivenAddress(intconContent, 11);
+            if(GlobalInterruptEnabled() && TimerInterruptEnabled())
+            {
+                InterruptResponded();
+            }
+        }
+
+        private bool GlobalInterruptEnabled()
+        {
+            if((_intconRegister.Content & 128) != 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool TimerInterruptEnabled()
+        {
+            if((_intconRegister.Content & 32) != 0)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool RB0InterruptEnabled()
+        {
+            if((_intconRegister.Content & 16) != 0)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private bool IsPrescalerAssignedToTimer()
