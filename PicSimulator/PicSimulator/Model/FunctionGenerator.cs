@@ -61,7 +61,7 @@ namespace PicSimulator.Model
 
         #region Methods
 
-        public void GetNumberOfEdges(double microCycleDuration, ref int numberOfRisingEdges, ref int numberOfFallingEdges)
+        public void ProcessFunction(double microCycleDuration, ref int numberOfRisingEdges, ref int numberOfFallingEdges)
         {
             numberOfRisingEdges = 0;
             numberOfFallingEdges = 0;

@@ -41,6 +41,9 @@ namespace PicSimulator.Microcontroller
         private double _frequency; //MHZ
         private double _cycleDuration; //microseconds
         private double _runtimeDuration; //microseconds
+        private bool _isSleeping = false;
+
+        private WatchDogTimer _watchDogTimer;
         #endregion
 
         #region Events
@@ -52,11 +55,27 @@ namespace PicSimulator.Microcontroller
         public int TrisA
         {
             get { return _trisA.Content; }
+            private set
+            {
+                if(value != _trisA.Content)
+                {
+                    _trisA.Content = value;
+                    InvokeMemoryChanged(133, value);
+                }
+            }
         }
 
         public int TrisB
         {
             get { return _trisB.Content; }
+            private set
+            {
+                if (value != _trisB.Content)
+                {
+                    _trisB.Content = value;
+                    InvokeMemoryChanged(134, value);
+                }
+            }
         }
 
         public int PortA
@@ -310,6 +329,7 @@ namespace PicSimulator.Microcontroller
             _tmr0 = new Timer0();
             _frequency = 4.0;
             SetCycleDuration();
+            _watchDogTimer = new WatchDogTimer(this);
         }
         #endregion
 
@@ -428,28 +448,89 @@ namespace PicSimulator.Microcontroller
             StatusRegisterContentChanged();
             _tmr0 = new Timer0();
             _programCounterStack = new ProgramCounterStack();
+            _isSleeping = false;
+            _watchDogTimer.Reset();
         }
 
-        public void ExecuteOperation()
+        public void MCLRReset()
         {
-            var operationToExeute = _operationStack[ProgramCounterContent];
-            var operationEnum = OperationDecoder.DecodeOperation(operationToExeute);
-            var destinationSelect = OperationDecoder.DecodeDestinationSelect(operationToExeute);
-            var literal8Bit = OperationDecoder.Decode8BitLiteral(operationToExeute);
-            var literal11Bit = OperationDecoder.Decode11BitLiteral(operationToExeute);
-            var fileRegisterAddress = OperationDecoder.DecodeFileRegisterAdress7Bit(operationToExeute);
-            if(fileRegisterAddress == 0)
+            ProgramCounterContent = 0;
+            PclathRegisterContent = 0;
+            IntconRegisterContent = IntconRegisterContent & 1;
+            OptionRegisterContent = 255;
+            TrisA = 31;
+            TrisB = 255;
+            _watchDogTimer.Reset();
+
+            if (IsSleeping())
             {
-                var bankSelect = (StatusRegisterContent & 128) << 1;
-                fileRegisterAddress = _fsrRegister.Content + bankSelect;
+                StatusRegisterContent = StatusRegisterContent & 7;
+                StatusRegisterContent = StatusRegisterContent | 16;
             }
             else
             {
-                var bankSelect = (StatusRegisterContent & 96) << 2;
-                fileRegisterAddress = fileRegisterAddress + bankSelect;
+                StatusRegisterContent = StatusRegisterContent & 31;
             }
-            var bitAdress3Bit = OperationDecoder.DecodeBitAdress3Bit(operationToExeute);
-            ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit, fileRegisterAddress, bitAdress3Bit);
+
+            _isSleeping = false;
+        }
+
+        public void ExecuteOperation(int programCuonterToExecute = -1)
+        {
+            //check if micro is in sleep
+            if (IsSleeping())
+            {
+                var numberOfRisingEdges = 0;
+                var numberOfFallingEdges = 0;
+                if (_funcGen != null)
+                {
+                    _funcGen.ProcessFunction(_cycleDuration, ref numberOfRisingEdges, ref numberOfFallingEdges);
+                }
+                ProcessWatchDogTimer();
+            }
+            else
+            {
+                var operationToExecute = 0;
+                if (programCuonterToExecute == -1)
+                {
+                    operationToExecute = _operationStack[ProgramCounterContent];
+                }
+                else
+                {
+                    operationToExecute = _operationStack[programCuonterToExecute];
+                }
+
+                var operationEnum = OperationDecoder.DecodeOperation(operationToExecute);
+                var destinationSelect = OperationDecoder.DecodeDestinationSelect(operationToExecute);
+                var literal8Bit = OperationDecoder.Decode8BitLiteral(operationToExecute);
+                var literal11Bit = OperationDecoder.Decode11BitLiteral(operationToExecute);
+                var fileRegisterAddress = OperationDecoder.DecodeFileRegisterAdress7Bit(operationToExecute);
+                if (fileRegisterAddress == 0)
+                {
+                    var bankSelect = (StatusRegisterContent & 128) << 1;
+                    fileRegisterAddress = _fsrRegister.Content + bankSelect;
+                }
+                else
+                {
+                    var bankSelect = (StatusRegisterContent & 96) << 2;
+                    fileRegisterAddress = fileRegisterAddress + bankSelect;
+                }
+                var bitAdress3Bit = OperationDecoder.DecodeBitAdress3Bit(operationToExecute);
+                ExecuteOperationInt(operationEnum, destinationSelect, literal8Bit, literal11Bit, fileRegisterAddress, bitAdress3Bit);
+            }
+        }
+
+        private bool IsSleeping()
+        {
+            if((StatusRegisterContent & 8) == 0)
+            {
+                if((StatusRegisterContent & 16) != 0)
+                {
+                    return _isSleeping;
+                }
+            }
+
+            return false;
         }
 
         private void ExecuteOperationInt(OperationsEnum operationToExecute, int destinationSelect, int literal8Bit, int literal11Bit,
@@ -626,6 +707,12 @@ namespace PicSimulator.Microcontroller
             The processor is put into SLEEP
             mode with the oscillator stopped. See
             Section 14.8 for more details.*/
+            //clear PD
+            StatusRegisterContent = StatusRegisterContent & 247;
+            //set TO
+            StatusRegisterContent = StatusRegisterContent | 16;
+            _isSleeping = true;
+            _watchDogTimer.Reset();
         }
 
         private void ExecuteBTFSS(int bitAdress3Bit, int fileRegisterAddress)
@@ -990,7 +1077,7 @@ namespace PicSimulator.Microcontroller
 
         private void CheckForRBInterrupt(int originRegisterContent)
         {
-            if (GlobalInterruptEnabled())
+            if (GlobalInterruptEnabled() || IsSleeping())
             {
                 if (RB0InterruptEnabled())
                 {
@@ -1056,10 +1143,28 @@ namespace PicSimulator.Microcontroller
 
         private void ExtInterruptResponded()
         {
-            IntconRegisterContent = (IntconRegisterContent & 127);
-            _programCounterStack.PushToStack(ProgramCounterContent + 1);
-            ProgramCounterContent = 4;
-            IncreaseCycle(2);
+            if (IsSleeping())
+            {
+                _isSleeping = false;
+                StatusRegisterContent = StatusRegisterContent & 231;
+                StatusRegisterContent = StatusRegisterContent | 16;
+                _registerAdressTable[136].Content = _registerAdressTable[136].Content & 15; //eecon1
+                ProgramCounterContent = ProgramCounterContent + 1;
+
+                if (GlobalInterruptEnabled())
+                {
+                    ExecuteOperation();
+                    ExtInterruptResponded();
+                }
+            }
+            else
+            {
+                _programCounterStack.PushToStack(ProgramCounterContent + 1);
+                ProgramCounterContent = 4;
+                IncreaseCycle(2);
+            }
+
+            IntconRegisterContent = (IntconRegisterContent & 127); // disable GIE
         }
 
         private bool FallingEdgeOnRB0(int originRegisterContent)
@@ -1152,6 +1257,40 @@ namespace PicSimulator.Microcontroller
                 RuntimeDuration += CycleDuration;
                 cycleIncrease--;
                 ProcessTimer0();
+                ProcessWatchDogTimer();
+            }
+        }
+
+        private void ProcessWatchDogTimer()
+        {
+            if (_watchDogTimer.Enabled)
+            {
+                if (_watchDogTimer.ProcessWDT((CycleDuration / 1000), !IsPrescalerAssignedToTimer(), GetPrescalerValue()))
+                {
+                    WatchDogTimeOutResponded();
+                }
+            }
+        }
+
+        private void WatchDogTimeOutResponded()
+        {
+            if (IsSleeping())
+            {
+                _isSleeping = false;
+                ProgramCounterContent = ProgramCounterContent + 1;
+                StatusRegisterContent = StatusRegisterContent & 231;
+                _registerAdressTable[136].Content = _registerAdressTable[136].Content & 15; //eecon1
+            }
+            else
+            {
+                ProgramCounterContent = 0;
+                StatusRegisterContent = StatusRegisterContent & 7;
+                StatusRegisterContent = StatusRegisterContent | 8;
+                PclathRegisterContent = 0;
+                IntconRegisterContent = IntconRegisterContent & 1;
+                OptionRegisterContent = 255;
+                TrisA = 31;
+                TrisB = 255;
             }
         }
 
@@ -1162,7 +1301,7 @@ namespace PicSimulator.Microcontroller
             var numberOfFallingEdgesInExtFuncGen = 0;
             if (_funcGen != null)
             {
-                _funcGen.GetNumberOfEdges(_cycleDuration, ref numberOfRisingEdgesInExtFuncGen, ref numberOfFallingEdgesInExtFuncGen);
+                _funcGen.ProcessFunction(_cycleDuration, ref numberOfRisingEdgesInExtFuncGen, ref numberOfFallingEdgesInExtFuncGen);
             }
             if (TimerModeSelected())
             {
@@ -1726,6 +1865,16 @@ namespace PicSimulator.Microcontroller
                     }
                     break;
             }
+        }
+
+        public void EnableWatchDogTimer()
+        {
+            _watchDogTimer.Enabled = true;
+        }
+
+        public void DisableWatchDogTimer()
+        {
+            _watchDogTimer.Enabled = false;
         }
 
         #endregion

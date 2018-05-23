@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
@@ -50,6 +51,8 @@ namespace PicSimulator.UI
             stopButton.Enabled = false;
             singleStepButton.Enabled = false;
             resetButton.Enabled = false;
+            mclrButton.Enabled = false;
+            wdtEnabledCheckBox.Enabled = false;
 
             //subscribe events
             wregTextBox.DoubleClick += WregTextBox_DoubleClick;
@@ -58,6 +61,19 @@ namespace PicSimulator.UI
             funcActive1.CheckedChanged += FuncActive1_CheckedChanged;
             hardwareCheckBox.CheckedChanged += HardwareCheckBox_CheckedChanged;
             funcGenPinComboBox.SelectedIndexChanged += FuncGenPinComboBox_SelectedIndexChanged;
+            wdtEnabledCheckBox.CheckedChanged += WdtEnabledCheckBox_CheckedChanged;
+        }
+
+        private void WdtEnabledCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (wdtEnabledCheckBox.Checked)
+            {
+                _microController.EnableWatchDogTimer();
+            }
+            else
+            {
+                _microController.DisableWatchDogTimer();
+            }
         }
 
         private void FuncGenPinComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -191,7 +207,9 @@ namespace PicSimulator.UI
             execButton.Enabled = true;
             singleStepButton.Enabled = true;
             resetButton.Enabled = true;
+            mclrButton.Enabled = true;
             funcActive1.Enabled = true;
+            wdtEnabledCheckBox.Enabled = true;
             if(hardwareComboBox.Items.Count > 0)
             {
                 hardwareCheckBox.Enabled = true;
@@ -265,6 +283,7 @@ namespace PicSimulator.UI
             funcActive1.Enabled = false;
             funcGenPinComboBox.Enabled = false;
             settingToolStripMenuItem.Enabled = false;
+            wdtEnabledCheckBox.Enabled = false;
         }
 
         private void InitBackgroundWorker()
@@ -714,6 +733,7 @@ namespace PicSimulator.UI
             funcActive1.Enabled = true;
             funcGenPinComboBox.Enabled = true;
             settingToolStripMenuItem.Enabled = true;
+            wdtEnabledCheckBox.Enabled = true;
         }
 
         private void singleStepToolStripMenuItem_Click(object sender, EventArgs e)
@@ -996,10 +1016,10 @@ namespace PicSimulator.UI
 
         private void resetToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ResetInt();
+            PowerOnResetInt();
         }
 
-        private void ResetInt()
+        private void PowerOnResetInt()
         {
             if (_backgroundWorker.IsBusy)
             {
@@ -1011,9 +1031,21 @@ namespace PicSimulator.UI
             SelectCurrentLineOfLstContentBox(_microController.ProgramCounterContent);
         }
 
+        private void MCLRResetInt()
+        {
+            if (_backgroundWorker.IsBusy)
+            {
+                _backgroundWorker.CancelAsync();
+            }
+            StopExecutionInt();
+            _microController.MCLRReset();
+            FillRegisterMemoryListView();
+            SelectCurrentLineOfLstContentBox(_microController.ProgramCounterContent);
+        }
+
         private void resetButton_Click(object sender, EventArgs e)
         {
-            ResetInt();
+            PowerOnResetInt();
         }
 
         private void textBox1_Click(object sender, EventArgs e)
@@ -1064,6 +1096,54 @@ namespace PicSimulator.UI
             {
                 _microController.PortA = newPortAContent;
                 _microController.PortB = newPortBContent;
+            }
+        }
+
+        private void mclrButton_Click(object sender, EventArgs e)
+        {
+            MCLRResetInt();
+        }
+
+        private void mCLRToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MCLRResetInt();
+        }
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("PicSimulator für die Vorlesung von Herr Lehmann.\nVon Dirk Watteroth und Luke Adam.\n",
+                "Über PicSimulator", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void pICDokumentationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (File.Exists("PIC16F8x.pdf"))
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                process.EnableRaisingEvents = false;
+                process.StartInfo.FileName = "PIC16F8x.pdf";
+                process.Start();
+            }
+            else
+            {
+                MessageBox.Show("Die PIC Dokumentation PIC16F8x.pdf konnte nicht geöffnet werden. Bitte stellen Sie sicher, dass die entsprechende Datei vorhanden ist und im gleichen Verzeichnis wie die Anwendung liegt.",
+                    "PIC Dokumentation konnte nicht gefunden werden", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void projektDokumentationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (File.Exists("Doku.pdf"))
+            {
+                System.Diagnostics.Process process = new System.Diagnostics.Process();
+                process.EnableRaisingEvents = false;
+                process.StartInfo.FileName = "Doku.pdf";
+                process.Start();
+            }
+            else
+            {
+                MessageBox.Show("Die Projekt Dokumentation Doku.pdf konnte nicht geöffnet werden. Bitte stellen Sie sicher, dass die entsprechende Datei vorhanden ist und im gleichen Verzeichnis wie die Anwendung liegt.",
+                    "Projekt Dokumentation konnte nicht gefunden werden", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

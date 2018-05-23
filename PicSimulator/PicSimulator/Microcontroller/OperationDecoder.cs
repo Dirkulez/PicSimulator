@@ -24,6 +24,10 @@ namespace PicSimulator.Microcontroller
             {
                 return OperationsEnum.RETFIE;
             }
+            if (binaryOperationCode == 99)
+            {
+                return OperationsEnum.SLEEP;
+            }
 
             var operationCode7Bit = binaryOperationCode & 16256;
             var operationCode6bit = binaryOperationCode & 16128;
@@ -151,10 +155,6 @@ namespace PicSimulator.Microcontroller
             if (operationCode4bit == 13312)
             {
                 return OperationsEnum.RETLW;
-            }
-            if (binaryOperationCode == 99)
-            {
-                return OperationsEnum.SLEEP;
             }
             if (operationCode5bit == 15360)
             {
